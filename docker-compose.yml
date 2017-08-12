@@ -1,0 +1,16 @@
+version: '2'
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: python -Wd manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    environment:
+      DEBUG: "true"
+      SECRET_KEY: "not secure only use for development"

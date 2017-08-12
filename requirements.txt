@@ -1,0 +1,6 @@
+Django==1.11.4
+psycopg2==2.7.3
+django-environ==0.4.3
+gunicorn==19.7.1
+whitenoise==3.3.0
+eventlet==0.21.0
