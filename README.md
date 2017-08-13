@@ -17,4 +17,4 @@ Your app is now available at [http://localhost:8000](http://localhost:8000). The
 
 ## Running tests
 
-    $ docker-compose run web ./manage.py test
+    $ script/test
