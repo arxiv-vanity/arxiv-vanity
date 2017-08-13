@@ -1,0 +1,4 @@
+#!/bin/bash
+package_name=$1
+docker-compose run --no-deps web sh -c "pip install --upgrade $package_name && pip freeze | grep -i $package_name >> requirements.txt"
+docker-compose build
