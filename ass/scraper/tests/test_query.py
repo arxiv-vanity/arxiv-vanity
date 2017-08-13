@@ -46,6 +46,7 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(Paper.objects.count(), 10)
         # Duplicates should be ignored
         create_papers(papers)
+        self.assertEqual(Paper.objects.count(), 10)
 
         latest = Paper.objects.latest()
         self.assertEqual(latest.title, "Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese")
