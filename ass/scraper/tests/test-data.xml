@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <link href="http://arxiv.org/api/query?search_query%3Dcat%3Acs.CV%20OR%20cat%3Acs.AI%20OR%20cat%3Acs.LG%20OR%20cat%3Acs.CL%20OR%20cat%3Acs.NE%20OR%20cat%3Astat.ML%26id_list%3D%26start%3D0%26max_results%3D10" rel="self" type="application/atom+xml"/>
+  <title type="html">ArXiv Query: search_query=cat:cs.CV OR cat:cs.AI OR cat:cs.LG OR cat:cs.CL OR cat:cs.NE OR cat:stat.ML&amp;id_list=&amp;start=0&amp;max_results=10</title>
+  <id>http://arxiv.org/api/bjXEmNBLHRcrAqQdoY7+kdIyb3o</id>
+  <updated>2017-08-13T00:00:00-04:00</updated>
+  <opensearch:totalResults xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">46083</opensearch:totalResults>
+  <opensearch:startIndex xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">0</opensearch:startIndex>
+  <opensearch:itemsPerPage xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">10</opensearch:itemsPerPage>
+  <entry>
+    <id>http://arxiv.org/abs/1708.03312v1</id>
+    <updated>2017-08-10T17:46:28Z</updated>
+    <published>2017-08-10T17:46:28Z</published>
+    <title>Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of
+  Chinese and Japanese</title>
+    <summary>  The character vocabulary can be very large in non-alphabetic languages such
+as Chinese and Japanese, which makes neural network models huge to process such
+languages. We explored a model for sentiment classification that takes the
+embeddings of the radicals of the Chinese characters, i.e, hanzi of Chinese and
+kanji of Japanese. Our model is composed of a CNN word feature encoder and a
+bi-directional RNN document feature encoder. The results achieved are on par
+with the character embedding-based models, and close to the state-of-the-art
+word embedding-based models, with 90% smaller vocabulary, and at least 13% and
+80% fewer parameters than the character embedding-based models and word
+embedding-based models respectively. The results suggest that the radical
+embedding-based approach is cost-effective for machine learning on Chinese and
+Japanese.
+</summary>
+    <author>
+      <name>Yuanzhi Ke</name>
+    </author>
+    <author>
+      <name>Masafumi Hagiwara</name>
+    </author>
+    <arxiv:comment xmlns:arxiv="http://arxiv.org/schemas/atom">12 pages, 4 figures</arxiv:comment>
+    <link href="http://arxiv.org/abs/1708.03312v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1708.03312v1" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1708.03310v1</id>
+    <updated>2017-08-10T17:39:55Z</updated>
+    <published>2017-08-10T17:39:55Z</published>
+    <title>Thinking Fast, Thinking Slow! Combining Knowledge Graphs and Vector
+  Spaces</title>
+    <summary>  Knowledge graphs and vector space models are both robust knowledge
+representation techniques with their individual strengths and weaknesses.
+Vector space models excel at determining similarity between concepts, but they
+are severely constrained when evaluating complex dependency relations and other
+logic based operations that are a forte of knowledge graphs. In this paper, we
+propose the V-KG structure that helps us unify knowledge graphs and vector
+representation of entities, and allows us to develop powerful inference methods
+and search capabilities that combine their complementary strengths. We
+analogize this to thinking `fast' in vector space along with thinking `deeply'
+and `slowly' by reasoning over the knowledge graph.
+  We have also created a query processing engine that takes complex queries and
+decomposes them into subqueries optimized to run on the respective knowledge
+graph part or the vector part of V-KG. We show that the V-KG structure can
+process specific queries that are not efficiently handled by vector spaces or
+knowledge graphs alone.
+  We also demonstrate and evaluate the V-KG structure and the query processing
+engine by developing a system called Cyber-All-Intel for knowledge extraction,
+representation and querying in an end-to-end pipeline grounded in the
+cybersecurity informatics domain.
+</summary>
+    <author>
+      <name>Sudip Mittal</name>
+    </author>
+    <author>
+      <name>Anupam Joshi</name>
+    </author>
+    <author>
+      <name>Tim Finin</name>
+    </author>
+    <link href="http://arxiv.org/abs/1708.03310v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1708.03310v1" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1708.03309v1</id>
+    <updated>2017-08-10T17:33:52Z</updated>
+    <published>2017-08-10T17:33:52Z</published>
+    <title>Systematic Testing of Convolutional Neural Networks for Autonomous
+  Driving</title>
+    <summary>  We present a framework to systematically analyze convolutional neural
+networks (CNNs) used in classification of cars in autonomous vehicles. Our
+analysis procedure comprises an image generator that produces synthetic
+pictures by sampling in a lower dimension image modification subspace and a
+suite of visualization tools. The image generator produces images which can be
+used to test the CNN and hence expose its vulnerabilities. The presented
+framework can be used to extract insights of the CNN classifier, compare across
+classification models, or generate training and validation datasets.
+</summary>
+    <author>
+      <name>Tommaso Dreossi</name>
+    </author>
+    <author>
+      <name>Shromona Ghosh</name>
+    </author>
+    <author>
+      <name>Alberto Sangiovanni-Vincentelli</name>
+    </author>
+    <author>
+      <name>Sanjit A. Seshia</name>
+    </author>
+    <link href="http://arxiv.org/abs/1708.03309v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1708.03309v1" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1708.03307v1</id>
+    <updated>2017-08-10T17:27:09Z</updated>
+    <published>2017-08-10T17:27:09Z</published>
+    <title>Cell Detection with Deep Convolutional Neural Network and Compressed
+  Sensing</title>
+    <summary>  The ability to automatically detect certain types of cells in microscopy
+images is of significant interest to a wide range of biomedical research and
+clinical practices. Cell detection methods have evolved from employing
+hand-crafted features to deep learning-based techniques to locate target cells.
+The essential idea of these methods is that their cell classifiers or detectors
+are trained in the pixel space, where the locations of target cells are
+labeled. In this paper, we seek a different route and propose a convolutional
+neural network (CNN)-based cell detection method that uses encoding of the
+output pixel space. For the cell detection problem, the output space is the
+sparsely labeled pixel locations indicating cell centers. Consequently, we
+employ random projections to encode the output space to a compressed vector of
+fixed dimension. Then, CNN regresses this compressed vector from the input
+pixels. Using $L_1$-norm optimization, we recover sparse cell locations on the
+output pixel space from the predicted compressed vector. In the past, output
+space encoding using compressed sensing (CS) has been used in conjunction with
+linear and non-linear predictors. To the best of our knowledge, this is the
+first successful use of CNN with CS-based output space encoding. We
+experimentally demonstrate that proposed CNN + CS framework (referred to as
+CNNCS) exceeds the accuracy of the state-of-the-art methods on many benchmark
+datasets for microscopy cell detection. Additionally, we show that CNNCS can
+exploit ensemble average by using more than one random encodings of the output
+space.
+</summary>
+    <author>
+      <name>Yao Xue</name>
+    </author>
+    <author>
+      <name>Nilanjan Ray</name>
+    </author>
+    <link href="http://arxiv.org/abs/1708.03307v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1708.03307v1" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1705.00594v2</id>
+    <updated>2017-08-10T17:14:14Z</updated>
+    <published>2017-05-01T17:11:48Z</published>
+    <title>A System for Accessible Artificial Intelligence</title>
+    <summary>  While artificial intelligence (AI) has become widespread, many commercial AI
+systems are not yet accessible to individual researchers nor the general public
+due to the deep knowledge of the systems required to use them. We believe that
+AI has matured to the point where it should be an accessible technology for
+everyone. We present an ongoing project whose ultimate goal is to deliver an
+open source, user-friendly AI system that is specialized for machine learning
+analysis of complex data in the biomedical and health care domains. We discuss
+how genetic programming can aid in this endeavor, and highlight specific
+examples where genetic programming has automated machine learning analyses in
+previous projects.
+</summary>
+    <author>
+      <name>Randal S. Olson</name>
+    </author>
+    <author>
+      <name>Moshe Sipper</name>
+    </author>
+    <author>
+      <name>William La Cava</name>
+    </author>
+    <author>
+      <name>Sharon Tartarone</name>
+    </author>
+    <author>
+      <name>Steven Vitale</name>
+    </author>
+    <author>
+      <name>Weixuan Fu</name>
+    </author>
+    <author>
+      <name>Patryk Orzechowski</name>
+    </author>
+    <author>
+      <name>Ryan J. Urbanowicz</name>
+    </author>
+    <author>
+      <name>John H. Holmes</name>
+    </author>
+    <author>
+      <name>Jason H. Moore</name>
+    </author>
+    <arxiv:comment xmlns:arxiv="http://arxiv.org/schemas/atom">14 pages, 5 figures, submitted to Genetic Programming Theory and
+  Practice 2017 workshop</arxiv:comment>
+    <link href="http://arxiv.org/abs/1705.00594v2" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1705.00594v2" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1609.06753v3</id>
+    <updated>2017-08-10T17:00:50Z</updated>
+    <published>2016-09-21T21:03:36Z</published>
+    <title>How should we evaluate supervised hashing?</title>
+    <summary>  Hashing produces compact representations for documents, to perform tasks like
+classification or retrieval based on these short codes. When hashing is
+supervised, the codes are trained using labels on the training data. This paper
+first shows that the evaluation protocols used in the literature for supervised
+hashing are not satisfactory: we show that a trivial solution that encodes the
+output of a classifier significantly outperforms existing supervised or
+semi-supervised methods, while using much shorter codes. We then propose two
+alternative protocols for supervised hashing: one based on retrieval on a
+disjoint set of classes, and another based on transfer learning to new classes.
+We provide two baseline methods for image-related tasks to assess the
+performance of (semi-)supervised hashing: without coding and with unsupervised
+codes. These baselines give a lower- and upper-bound on the performance of a
+supervised hashing scheme.
+</summary>
+    <author>
+      <name>Alexandre Sablayrolles</name>
+    </author>
+    <author>
+      <name>Matthijs Douze</name>
+    </author>
+    <author>
+      <name>Hervé Jégou</name>
+    </author>
+    <author>
+      <name>Nicolas Usunier</name>
+    </author>
+    <link href="http://arxiv.org/abs/1609.06753v3" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1609.06753v3" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1708.03292v1</id>
+    <updated>2017-08-10T16:50:29Z</updated>
+    <published>2017-08-10T16:50:29Z</published>
+    <title>Learning to Synthesize a 4D RGBD Light Field from a Single Image</title>
+    <summary>  We present a machine learning algorithm that takes as input a 2D RGB image
+and synthesizes a 4D RGBD light field (color and depth of the scene in each ray
+direction). For training, we introduce the largest public light field dataset,
+consisting of over 3300 plenoptic camera light fields of scenes containing
+flowers and plants. Our synthesis pipeline consists of a convolutional neural
+network (CNN) that estimates scene geometry, a stage that renders a Lambertian
+light field using that geometry, and a second CNN that predicts occluded rays
+and non-Lambertian effects. Our algorithm builds on recent view synthesis
+methods, but is unique in predicting RGBD for each light field ray and
+improving unsupervised single image depth estimation by enforcing consistency
+of ray depths that should intersect the same scene point. Please see our
+supplementary video at https://youtu.be/yLCvWoQLnms
+</summary>
+    <author>
+      <name>Pratul P. Srinivasan</name>
+    </author>
+    <author>
+      <name>Tongzhou Wang</name>
+    </author>
+    <author>
+      <name>Ashwin Sreelal</name>
+    </author>
+    <author>
+      <name>Ravi Ramamoorthi</name>
+    </author>
+    <author>
+      <name>Ren Ng</name>
+    </author>
+    <arxiv:comment xmlns:arxiv="http://arxiv.org/schemas/atom">International Conference on Computer Vision (ICCV) 2017</arxiv:comment>
+    <link href="http://arxiv.org/abs/1708.03292v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1708.03292v1" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.GR" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1412.1913v2</id>
+    <updated>2017-08-10T16:48:09Z</updated>
+    <published>2014-12-05T07:58:30Z</published>
+    <title>A Portfolio Approach to Algorithm Selection for Discrete Time-Cost
+  Trade-off Problem</title>
+    <summary>  It is a known fact that the performance of optimization algorithms for
+NP-Hard problems vary from instance to instance. We observed the same trend
+when we comprehensively studied multi-objective evolutionary algorithms (MOEAs)
+on a six benchmark instances of discrete time-cost trade-off problem (DTCTP) in
+a construction project. In this paper, instead of using a single algorithm to
+solve DTCTP, we use a portfolio approach that takes multiple algorithms as its
+constituent. We proposed portfolio comprising of four MOEAs, Non-dominated
+Sorting Genetic Algorithm II (NSGA-II), the strength Pareto Evolutionary
+Algorithm II (SPEA-II), Pareto archive evolutionary strategy (PAES) and Niched
+Pareto Genetic Algorithm II (NPGA-II) to solve DTCTP. The result shows that the
+portfolio approach is computationally fast and qualitatively superior to its
+constituent algorithms for all benchmark instances. Moreover, portfolio
+approach provides an insight in selecting the best algorithm for all benchmark
+instances of DTCTP.
+</summary>
+    <author>
+      <name>Santosh Mungle</name>
+    </author>
+    <link href="http://arxiv.org/abs/1412.1913v2" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1412.1913v2" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1708.03288v1</id>
+    <updated>2017-08-10T16:28:39Z</updated>
+    <published>2017-08-10T16:28:39Z</published>
+    <title>Subset Selection with Shrinkage: Sparse Linear Modeling when the SNR is
+  low</title>
+    <summary>  We study the behavior of a fundamental tool in sparse statistical modeling
+--the best-subset selection procedure (aka "best-subsets"). Assuming that the
+underlying linear model is sparse, it is well known, both in theory and in
+practice, that the best-subsets procedure works extremely well in terms of
+several statistical metrics (prediction, estimation and variable selection)
+when the signal to noise ratio (SNR) is high. However, its performance degrades
+substantially when the SNR is low -- it is outperformed in predictive accuracy
+by continuous shrinkage methods, such as ridge regression and the Lasso. We
+explain why this behavior should not come as a surprise, and contend that the
+original version of the classical best-subsets procedure was, perhaps, not
+designed to be used in the low SNR regimes. We propose a close cousin of
+best-subsets, namely, its $\ell_{q}$-regularized version, for $q \in\{1, 2\}$,
+which (a) mitigates, to a large extent, the poor predictive performance of
+best-subsets in the low SNR regimes; (b) performs favorably and generally
+delivers a substantially sparser model when compared to the best predictive
+models available via ridge regression and the Lasso. Our estimator can be
+expressed as a solution to a mixed integer second order conic optimization
+problem and, hence, is amenable to modern computational tools from mathematical
+optimization. We explore the theoretical properties of the predictive
+capabilities of the proposed estimator and complement our findings via several
+numerical experiments.
+</summary>
+    <author>
+      <name>Rahul Mazumder</name>
+    </author>
+    <author>
+      <name>Peter Radchenko</name>
+    </author>
+    <author>
+      <name>Antoine Dedieu</name>
+    </author>
+    <link href="http://arxiv.org/abs/1708.03288v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1708.03288v1" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="stat.ME" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ME" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.OC" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.ST" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.CO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ML" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.TH" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1708.03280v1</id>
+    <updated>2017-08-10T16:07:16Z</updated>
+    <published>2017-08-10T16:07:16Z</published>
+    <title>TPC: Temporal Preservation Convolutional Networks for Precise Temporal
+  Action Localization</title>
+    <summary>  Temporal action localization is an important task of computer vision. Though
+a variety of methods have been proposed, it still remains an open question how
+to predict the temporal boundaries of action segments precisely. Most works use
+segment-level classifiers to select video segments pre-determined by action
+proposal or dense sliding windows. However, in order to achieve more precise
+action boundaries, a temporal localization system should make dense predictions
+at a fine granularity. A newly proposed work exploits
+Convolutional-Deconvolutional-Convolutional (CDC) filters to upsample the
+predictions of 3D ConvNets, making it possible to perform per-frame action
+predictions and achieving promising performance in terms of temporal action
+localization. However, CDC network loses temporal information partially due to
+the temporal downsampling operation. In this paper, we propose an elegant and
+powerful Temporal Preservation Convolutional (TPC) Network that equips 3D
+ConvNets with TPC filters. TPC network can fully preserve temporal resolution
+and downsample the spatial resolution simultaneously, enabling frame-level
+granularity action localization. TPC network can be trained in an end-to-end
+manner. Experiment results on public datasets show that TPC network achieves
+significant improvement on per-frame action prediction and competing results on
+segment-level temporal action localization.
+</summary>
+    <author>
+      <name>Ke Yang</name>
+    </author>
+    <author>
+      <name>Peng Qiao</name>
+    </author>
+    <author>
+      <name>Dongsheng Li</name>
+    </author>
+    <author>
+      <name>Shaohe Lv</name>
+    </author>
+    <author>
+      <name>Yong Dou</name>
+    </author>
+    <link href="http://arxiv.org/abs/1708.03280v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/1708.03280v1" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+</feed>

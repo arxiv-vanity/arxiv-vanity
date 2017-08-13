@@ -4,3 +4,5 @@ django-environ==0.4.3
 gunicorn==19.7.1
 whitenoise==3.3.0
 eventlet==0.21.0
+requests==2.18.3
+python-dateutil==2.6.1
