@@ -19,6 +19,7 @@ class Paper(models.Model):
 
     class Meta:
         get_latest_by = 'updated'
+        ordering = ['-updated']
 
     def __str__(self):
         return self.title

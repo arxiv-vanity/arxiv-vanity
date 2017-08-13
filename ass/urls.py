@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.views.generic import TemplateView
+from .papers.views import PaperListView
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name="home.html")),
+    url(r'^$', PaperListView.as_view()),
     url(r'^admin/', admin.site.urls),
 ]

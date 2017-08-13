@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <h2>Latest papers</h2>
+        <hr>
+        {% for paper in object_list %}
+          <div class="paper-list-item">
+            <h3><a href="{{ paper.arxiv_url }}">{{ paper.title }}</a></h3>
+            <p class="author">{% for author in paper.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+            <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
+            <p>
+              {% for category in paper.categories %}
+                <span class="badge badge-success">{{ category }}</span>
+              {% endfor %}
+            </p>
+          </div>
+          <hr>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

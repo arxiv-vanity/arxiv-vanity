@@ -1,0 +1,69 @@
+body {
+  color: rgba(0,0,0,0.8);
+  font-family: Georgia, serif;
+  font-size: 18px;
+}
+
+h1, h2, h3, h3, h5, h6 {
+  font-family: Baskerville, Georgia, serif;
+}
+
+.badge {
+  padding: 0.4rem 0.5rem;
+  margin-right: 0.5rem;
+  font-weight: normal;
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+}
+
+.navbar {
+  padding: 1rem 2rem;
+  font-family: sans-serif;
+  background-color: hsl(0, 59%, 40%);
+}
+
+.navbar .navbar-brand {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 1.2em;
+  letter-spacing: 0.05rem;
+}
+
+.navbar .navbar-brand .logo {
+  color: rgba(255, 255, 255, 1.0) !important;
+  font-size: 1.4em;
+}
+
+.navbar .navbar-brand:hover {
+  color: rgba(255, 255, 255, 1.0) !important;
+}
+
+.content {
+  margin-top: 4rem;
+}
+
+.paper-list-item {
+  margin-bottom: 2rem;
+}
+.paper-list-item img {
+  width: 100%;
+  margin-top: 2rem;
+}
+.paper-list-item h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.25rem;
+}
+.paper-list-item h3 a {
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: normal;
+}
+
+.paper-list-item .abstract,
+.paper-list-item .abstract a {
+  color: rgba(0, 0, 0, 0.8);
+}
+.paper-list-item .author {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5);
+}
+.paper-list-item.abstract a {
+  text-decoration: underline;
+}
