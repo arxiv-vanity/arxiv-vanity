@@ -6,8 +6,8 @@ Install Docker for Mac or Windows.
 
 Do the initial database migration and set up a user:
 
-    $ docker-compose run web ./manage.py migrate
-    $ docker-compose run web ./manage.py createsuperuser
+    $ script/manage migrate
+    $ script/manage createsuperuser
 
 Then to run the app:
 
