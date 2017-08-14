@@ -2,9 +2,9 @@ import datetime
 from ..models import Paper
 
 
-def create_paper(title=None):
+def create_paper(arxiv_id=None, title=None):
     return Paper.objects.create(**{
-        'arxiv_id': 'http://arxiv.org/abs/1708.03312v1',
+        'arxiv_id': arxiv_id or 'http://arxiv.org/abs/1708.03312v1',
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
         'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
         'updated': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),

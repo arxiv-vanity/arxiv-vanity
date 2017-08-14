@@ -23,3 +23,7 @@ class Paper(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_short_arxiv_id(self):
+        return self.arxiv_id.split('/')[-1]
+
