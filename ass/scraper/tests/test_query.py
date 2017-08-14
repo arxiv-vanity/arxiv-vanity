@@ -1,13 +1,13 @@
 import datetime
 import os
-import unittest
+from django.test import TestCase
 from ...papers.models import Paper
 from ..query import create_papers, parse
 
 TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), 'test-data.xml')
 
 
-class QueryTest(unittest.TestCase):
+class QueryTest(TestCase):
     maxDiff = None
 
     def test_parse(self):
