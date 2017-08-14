@@ -6,15 +6,9 @@ services:
     build:
       dockerfile: Dockerfile
       image: registry.heroku.com/arxiv-vanity-ass/web
-    command: python -Wd manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
-    ports:
-      - "8000:8000"
     links:
       - db
     environment:
-      DEBUG: "true"
       SECRET_KEY: "not secure only use for development"
     cached: true
   dockercfg_generator:
