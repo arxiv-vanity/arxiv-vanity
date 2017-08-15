@@ -1,3 +1,4 @@
 .git
 *.pyc
 .env
+renders

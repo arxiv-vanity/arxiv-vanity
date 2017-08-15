@@ -42,10 +42,10 @@ class QueryTest(TestCase):
 
     def test_create_papers(self):
         papers = parse(open(TEST_DATA_PATH).read())
-        create_papers(papers)
+        self.assertEqual(len(list(create_papers(papers))), 10)
         self.assertEqual(Paper.objects.count(), 10)
         # Duplicates should be ignored
-        create_papers(papers)
+        self.assertEqual(len(list(create_papers(papers))), 0)
         self.assertEqual(Paper.objects.count(), 10)
 
         latest = Paper.objects.latest()

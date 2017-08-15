@@ -17,7 +17,10 @@ def scrape_papers():
     Download papers from Arxiv's API and insert new ones into the database.
     """
     papers = query()
-    create_papers(papers)
+    for paper in create_papers(papers):
+        print("Downloading and rendering {}...".format(paper.get_short_arxiv_id()))
+        paper.download()
+        paper.render()
 
 
 def query():
@@ -86,8 +89,11 @@ def convert_entry_to_paper(entry):
 
 def create_papers(papers):
     """
-    Create papers which don't already exist.
+    Create papers that don't already exist. Returns an iterator of papers
+    that have been created.
     """
     for paper in papers:
-        _, _ = Paper.objects.get_or_create(arxiv_id=paper['arxiv_id'],
-                                          defaults=paper)
+        obj, created = Paper.objects.get_or_create(arxiv_id=paper['arxiv_id'],
+                                                    defaults=paper)
+        if created:
+            yield obj

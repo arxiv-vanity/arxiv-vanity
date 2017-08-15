@@ -6,3 +6,4 @@ whitenoise==3.3.0
 eventlet==0.21.0
 requests==2.18.3
 python-dateutil==2.6.1
+docker==2.4.2

@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from .papers.views import PaperListView
+from .papers.views import PaperListView, paper_serve
 
 urlpatterns = [
     url(r'^$', PaperListView.as_view()),
+    url(r'^papers/(?P<id>\d+)/(?P<path>.*)$', paper_serve),
     url(r'^admin/', admin.site.urls),
 ]
