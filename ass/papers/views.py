@@ -20,7 +20,7 @@ def paper_detail(request, pk):
         raise Http404("Paper is not rendered")
     filename = os.path.join("renders/output/", str(r.pk), "index.html")
     with open(filename) as fh:
-        soup = BeautifulSoup(fh)
+        soup = BeautifulSoup(fh, "lxml")
     styles = soup.head.find_all('style')
     scripts = soup.head.find_all('script')
     return render(request, "papers/paper_detail.html", {
