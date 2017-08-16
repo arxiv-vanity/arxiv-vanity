@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "css/main.css" %}" media="screen" title="no title" charset="utf-8">
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block whole_title %}{% block title %}{% endblock %} – Arxiv Vanity{% endblock %}</title>
     {% block extra_head %}{% endblock %}
   </head>
   <body>
