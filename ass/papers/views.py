@@ -18,7 +18,7 @@ def paper_detail(request, pk):
         r = paper.renders.latest()
     except Render.DoesNotExist:
         raise Http404("Paper is not rendered")
-    filename = os.path.join("renders/output/", str(r.pk), "index.html")
+    filename = os.path.join(settings.MEDIA_ROOT, "render-output", str(r.pk), "index.html")
     with open(filename) as fh:
         soup = BeautifulSoup(fh, "lxml")
     styles = soup.head.find_all('style')
@@ -33,8 +33,12 @@ def paper_detail(request, pk):
 
 
 def paper_serve_static(request, pk, path):
-    render = Paper.objects.get(pk=pk).renders.latest()
+    paper = get_object_or_404(Paper, pk=pk)
+    try:
+        r = paper.renders.latest()
+    except Render.DoesNotExist:
+        raise Http404("Paper is not rendered")
     if path == "":
         path = "index.html"
-    document_root = os.path.join("renders/output/", str(render.pk))
+    document_root = os.path.join(settings.MEDIA_ROOT, "render-output", str(r.pk))
     return static.serve(request, path, document_root=document_root)

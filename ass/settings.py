@@ -129,6 +129,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "ass/static_root")
 
+# Uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 # Log everything to the console, including tracebacks
 LOGGING = {
     'version': 1,

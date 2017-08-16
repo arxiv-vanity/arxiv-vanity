@@ -1,4 +1,4 @@
 .git
 *.pyc
 .env
-renders
+media

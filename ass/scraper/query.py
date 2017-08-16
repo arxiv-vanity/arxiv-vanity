@@ -19,7 +19,6 @@ def scrape_papers():
     papers = query()
     for paper in create_papers(papers):
         print("Downloading and rendering {}...".format(paper.get_short_arxiv_id()))
-        paper.download()
         paper.render()
 
 

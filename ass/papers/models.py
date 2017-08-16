@@ -1,12 +1,15 @@
 import datetime
+from django.conf import settings
 from django.db import models
 from django.contrib.postgres.fields import ArrayField, JSONField
+from django.core.files.base import ContentFile
 import os
-import urllib
+import requests
 from .renderer import render_paper
 
 
 class Paper(models.Model):
+    # ArXiV fields
     arxiv_id = models.CharField(max_length=200, unique=True)
     title = models.TextField()
     published = models.DateTimeField()
@@ -20,6 +23,9 @@ class Paper(models.Model):
     comment = models.TextField(null=True, blank=True)
     doi = models.CharField(null=True, blank=True, max_length=100)
     journal_ref = models.TextField(null=True, blank=True, max_length=100)
+
+    # ASS fields
+    source_file = models.FileField(upload_to='paper-sources/', null=True, blank=True)
 
     class Meta:
         get_latest_by = 'updated'
@@ -38,21 +44,25 @@ class Paper(models.Model):
     def get_source_url(self):
         return 'https://arxiv.org/e-print/' + self.get_short_arxiv_id()
 
-    def get_downloaded_source_path(self):
-        return 'renders/source/{}.tar.gz'.format(self.get_short_arxiv_id())
-
-    def is_downloaded(self):
-        return os.path.exists(self.get_downloaded_source_path())
-
     def download(self):
-        download_path = self.get_downloaded_source_path()
-        try:
-            os.makedirs(os.path.dirname(download_path))
-        except FileExistsError:
-            pass
-        urllib.request.urlretrieve(self.get_source_url(), download_path)
+        """
+        Download the LaTeX source of this paper and save to storage.
+
+        You should call save() after running this method.
+        """
+        res = requests.get(self.get_source_url())
+        res.raise_for_status()
+        content = ContentFile(res.content)
+        self.source_file.save(self.get_short_arxiv_id() + '.tar.gz', content)
 
     def render(self):
+        """
+        Make a new render of this paper. Will download the source file and save
+        itself if it hasn't already.
+        """
+        if not self.source_file.name:
+            self.download()
+            self.save()
         render = Render.objects.create(paper=self)
         render.run()
 
@@ -91,7 +101,7 @@ class Render(models.Model):
         super(Render, self).save(*args, **kwargs)
 
     def get_output_path(self):
-        return 'renders/output/{}/'.format(self.id)
+        return os.path.join('render-output', str(self.id))
 
     def run(self):
         """
@@ -100,8 +110,9 @@ class Render(models.Model):
         if self.state != Render.STATE_UNSTARTED:
             raise RenderAlreadyStartedError("Render {} has already been started".format(self.id))
         self.container_id = render_paper(
-            self.paper.get_downloaded_source_path(),
-            self.get_output_path()
+            # HACK: needs relative "media" so it works in Docker
+            os.path.join('media', self.paper.source_file.name),
+            os.path.join('media', self.get_output_path())
         )
         self.state = Render.STATE_RUNNING
         self.save()
