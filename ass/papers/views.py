@@ -9,8 +9,9 @@ class PaperListView(ListView):
     paginate_by = 25
 
 
-def paper_serve(request, id, path):
+def paper_serve(request, pk, path):
+    render = Paper.objects.get(pk=pk).renders.latest()
     if path == "":
         path = "index.html"
-    document_root = os.path.join("renders/output/", id)
+    document_root = os.path.join("renders/output/", str(render.pk))
     return static.serve(request, path, document_root=document_root)

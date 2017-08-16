@@ -71,7 +71,7 @@ class Render(models.Model):
     STATE_SUCCESS = 'success'
     STATE_FAILURE = 'failure'
 
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name='renders')
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, default=STATE_UNSTARTED, choices=(
         (STATE_UNSTARTED, 'Unstarted'),

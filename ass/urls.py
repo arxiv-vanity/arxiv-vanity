@@ -19,6 +19,6 @@ from .papers.views import PaperListView, paper_serve
 
 urlpatterns = [
     url(r'^$', PaperListView.as_view()),
-    url(r'^papers/(?P<id>\d+)/(?P<path>.*)$', paper_serve),
+    url(r'^papers/(?P<pk>\d+)/(?P<path>.*)$', paper_serve),
     url(r'^admin/', admin.site.urls),
 ]
