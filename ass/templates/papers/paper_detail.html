@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ paper.title }}{% endblock %}
+{% block extra_head %}
+  {{ styles|safe }}
+  {{ scripts|safe }}
+{% endblock %}
+{% block content %}
+  {{ body|safe }}
+{% endblock %}

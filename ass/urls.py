@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from .papers.views import PaperListView, paper_serve
+from .papers.views import PaperListView, paper_detail, paper_serve_static
 
 urlpatterns = [
     url(r'^$', PaperListView.as_view()),
-    url(r'^papers/(?P<pk>\d+)/(?P<path>.*)$', paper_serve),
+    url(r'^papers/(?P<pk>\d+)/$', paper_detail),
+    url(r'^papers/(?P<pk>\d+)/(?P<path>.+)$', paper_serve_static),
     url(r'^admin/', admin.site.urls),
 ]
