@@ -1,8 +1,7 @@
 import datetime
 import os
 from django.test import TestCase
-from ...papers.models import Paper
-from ..query import create_papers, parse
+from ..query import parse
 
 TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), 'test-data.xml')
 
@@ -39,14 +38,3 @@ class QueryTest(TestCase):
                 'embedding-based approach is cost-effective for machine learning on Chinese and\n'
                 'Japanese.\n',
         })
-
-    def test_create_papers(self):
-        papers = parse(open(TEST_DATA_PATH).read())
-        self.assertEqual(len(list(create_papers(papers))), 10)
-        self.assertEqual(Paper.objects.count(), 10)
-        # Duplicates should be ignored
-        self.assertEqual(len(list(create_papers(papers))), 0)
-        self.assertEqual(Paper.objects.count(), 10)
-
-        latest = Paper.objects.latest()
-        self.assertEqual(latest.title, "Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese")

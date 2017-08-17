@@ -1,25 +1,14 @@
-import dateutil.parser
-import re
-import requests
 from urllib.parse import urlencode
 from xml.etree import ElementTree
-from ..papers.models import Paper
+import dateutil.parser
+import requests
+
 
 ROOT_URL = 'http://export.arxiv.org/api/'
 NS = {
     'atom': 'http://www.w3.org/2005/Atom',
     'arxiv': 'http://arxiv.org/schemas/atom',
 }
-
-
-def scrape_papers():
-    """
-    Download papers from Arxiv's API and insert new ones into the database.
-    """
-    papers = query()
-    for paper in create_papers(papers):
-        print("Downloading and rendering {}...".format(paper.get_short_arxiv_id()))
-        paper.render()
 
 
 def query():
@@ -84,15 +73,3 @@ def convert_entry_to_paper(entry):
         'arxiv:journal_ref', NS), 'text', None)
 
     return d
-
-
-def create_papers(papers):
-    """
-    Create papers that don't already exist. Returns an iterator of papers
-    that have been created.
-    """
-    for paper in papers:
-        obj, created = Paper.objects.get_or_create(arxiv_id=paper['arxiv_id'],
-                                                    defaults=paper)
-        if created:
-            yield obj
