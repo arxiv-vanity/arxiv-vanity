@@ -7,6 +7,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from django.core.exceptions import ImproperlyConfigured
 import environ
 
 env = environ.Env()
@@ -169,4 +170,12 @@ if ENABLE_SSL:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Paper rendering
-ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='engrafo')
+ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='bfirsh/engrafo:latest')
+ENGRAFO_USE_HYPER_SH = env.bool('ENGRAFO_USE_HYPER_SH', default=False)
+if ENGRAFO_USE_HYPER_SH:
+    if not MEDIA_USE_S3:
+        raise ImproperlyConfigured('When the setting ENGRAFO_USE_HYPER_SH is True, MEDIA_USE_S3 must also be True.')
+    HYPER_ACCESS_KEY = env('HYPER_ACCESS_KEY')
+    HYPER_SECRET_KEY = env('HYPER_SECRET_KEY')
+    HYPER_ENDPOINT = env('HYPER_ENDPOINT', default='https://us-west-1.hyper.sh:443/v1.23')
+    HYPER_INSTANCE_TYPE = env('HYPER_INSTANCE_TYPE', default='s4')

@@ -1,14 +1,39 @@
-import docker
-from django.conf import settings
 import os
+import docker
+import hyper_sh
+from django.conf import settings
+
+
+def create_client():
+    """
+    Create a client to either a local Docker instance or Hyper.sh.
+    """
+    client = docker.from_env()
+    if os.environ.get('ENGRAFO_USE_HYPER_SH'):
+        client.api = hyper_sh.Client({
+            'clouds': {
+                settings.HYPER_ENDPOINT: {
+                    'accesskey': settings.HYPER_ACCESS_KEY,
+                    'secretkey': settings.HYPER_SECRET_KEY,
+                }
+            }
+        })
+    return client
 
 
 def render_paper(source, output_path):
+    """
+    Render a source directory using Engrafo.
+    """
     try:
         os.makedirs(output_path)
     except FileExistsError:
         pass
-    client = docker.from_env()
+    client = create_client()
+
+    labels = {}
+    environment = {}
+    volumes = {}
 
     # Production
     if settings.MEDIA_USE_S3:
@@ -16,12 +41,9 @@ def render_paper(source, output_path):
                                      source)
         output_path = "s3://{}/{}".format(settings.AWS_STORAGE_BUCKET_NAME,
                                           output_path)
-        volumes = {}
-        environment = {
-            'AWS_ACCESS_KEY_ID': settings.AWS_ACCESS_KEY_ID,
-            'AWS_SECRET_ACCESS_KEY': settings.AWS_SECRET_ACCESS_KEY,
-            'AWS_S3_REGION_NAME': settings.AWS_S3_REGION_NAME,
-        }
+        environment['AWS_ACCESS_KEY_ID'] = settings.AWS_ACCESS_KEY_ID
+        environment['AWS_SECRET_ACCESS_KEY'] = settings.AWS_SECRET_ACCESS_KEY
+        environment['AWS_S3_REGION_NAME'] = settings.AWS_S3_REGION_NAME
     # Development
     else:
         # HACK(bfirsh): MEDIA_ROOT is an absolute path to something on
@@ -34,14 +56,17 @@ def render_paper(source, output_path):
         source = os.path.join(docker_media_root, source)
         output_path = os.path.join(docker_media_root, output_path)
         # HOST_PWD is set in docker-compose.yml
-        volumes = {os.environ['HOST_PWD']: {'bind': '/mnt', 'mode': 'rw'}}
-        environment = {}
+        volumes[os.environ['HOST_PWD']] = {'bind': '/mnt', 'mode': 'rw'}
+
+    if settings.ENGRAFO_USE_HYPER_SH:
+        labels['sh_hyper_instancetype'] = settings.HYPER_INSTANCE_TYPE
 
     container = client.containers.run(
         settings.ENGRAFO_IMAGE,
         ["engrafo", "-o", output_path, source],
         volumes=volumes,
         environment=environment,
+        labels=labels,
         detach=True,
     )
     return container.id
