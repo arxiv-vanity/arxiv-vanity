@@ -9,3 +9,5 @@ python-dateutil==2.6.1
 docker==2.4.2
 beautifulsoup4==4.6.0
 lxml==3.8.0
+django-storages==1.6.5
+boto3==1.4.6

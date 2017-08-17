@@ -13,13 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
-from .papers.views import PaperListView, paper_detail, paper_serve_static
+from .papers.views import PaperListView, paper_detail
 
 urlpatterns = [
     url(r'^$', PaperListView.as_view()),
     url(r'^papers/(?P<pk>\d+)/$', paper_detail),
-    url(r'^papers/(?P<pk>\d+)/(?P<path>.+)$', paper_serve_static),
     url(r'^admin/', admin.site.urls),
 ]
+
+# Serve uploaded files in development
+if settings.DEBUG and settings.MEDIA_URL:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

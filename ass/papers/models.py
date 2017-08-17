@@ -3,8 +3,10 @@ from django.conf import settings
 from django.db import models
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 import os
 import requests
+from .processor import process_render
 from .renderer import render_paper
 
 
@@ -101,7 +103,22 @@ class Render(models.Model):
         super(Render, self).save(*args, **kwargs)
 
     def get_output_path(self):
+        """
+        Path to the directory that this render is in.
+        """
         return os.path.join('render-output', str(self.id))
+
+    def get_html_path(self):
+        """
+        Path to the HTML file of this render.
+        """
+        return os.path.join(self.get_output_path(), "index.html")
+
+    def get_output_url(self):
+        """
+        Returns the URL to the output path.
+        """
+        return settings.MEDIA_URL + self.get_output_path()
 
     def run(self):
         """
@@ -110,9 +127,16 @@ class Render(models.Model):
         if self.state != Render.STATE_UNSTARTED:
             raise RenderAlreadyStartedError("Render {} has already been started".format(self.id))
         self.container_id = render_paper(
-            # HACK: needs relative "media" so it works in Docker
-            os.path.join('media', self.paper.source_file.name),
-            os.path.join('media', self.get_output_path())
+            self.paper.source_file.name,
+            self.get_output_path()
         )
         self.state = Render.STATE_RUNNING
         self.save()
+
+    def get_processed_render(self):
+        """
+        Do final processing on this render and returns it as a dictionary of
+        {"body", "script", "styles"}.
+        """
+        with default_storage.open(self.get_html_path()) as fh:
+            return process_render(fh, self.get_output_url())
