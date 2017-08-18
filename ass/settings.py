@@ -170,7 +170,7 @@ if ENABLE_SSL:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Paper rendering
-ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='bfirsh/engrafo:latest')
+ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='engrafo:latest')
 ENGRAFO_USE_HYPER_SH = env.bool('ENGRAFO_USE_HYPER_SH', default=False)
 if ENGRAFO_USE_HYPER_SH:
     if not MEDIA_USE_S3:
