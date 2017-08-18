@@ -9,7 +9,7 @@ def create_client():
     Create a client to either a local Docker instance or Hyper.sh.
     """
     client = docker.from_env()
-    if os.environ.get('ENGRAFO_USE_HYPER_SH'):
+    if settings.ENGRAFO_USE_HYPER_SH:
         client.api = hyper_sh.Client({
             'clouds': {
                 settings.HYPER_ENDPOINT: {
