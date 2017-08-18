@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'ass.scraper',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -179,3 +179,10 @@ if ENGRAFO_USE_HYPER_SH:
     HYPER_SECRET_KEY = env('HYPER_SECRET_KEY')
     HYPER_ENDPOINT = env('HYPER_ENDPOINT', default='https://us-west-1.hyper.sh:443/v1.23')
     HYPER_INSTANCE_TYPE = env('HYPER_INSTANCE_TYPE', default='s4')
+
+# Basic auth
+if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD'):
+    BASICAUTH_USERS = {
+        env('BASICAUTH_USERNAME'): env('BASICAUTH_PASSWORD')
+    }
+    MIDDLEWARE_CLASSES.append('basicauth.middleware.BasicAuthMiddleware')
