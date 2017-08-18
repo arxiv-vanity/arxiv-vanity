@@ -1,2 +1,2 @@
 #!/bin/bash
-exec docker-compose run web ./manage.py "$@"
+exec docker-compose run --rm web ./manage.py "$@"
