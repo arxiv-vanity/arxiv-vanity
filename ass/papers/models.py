@@ -7,7 +7,7 @@ from django.core.files.storage import default_storage
 import os
 import requests
 from .processor import process_render
-from .renderer import render_paper
+from .renderer import render_paper, create_client
 
 
 class Paper(models.Model):
@@ -77,6 +77,10 @@ class RenderAlreadyStartedError(RenderError):
     pass
 
 
+class RenderWrongStateError(RenderError):
+    pass
+
+
 class Render(models.Model):
     STATE_UNSTARTED = 'unstarted'
     STATE_RUNNING = 'running'
@@ -92,6 +96,8 @@ class Render(models.Model):
         (STATE_FAILURE, 'Failure'),
     ))
     container_id = models.CharField(max_length=64, null=True, blank=True)
+    container_inspect = JSONField(null=True, blank=True)
+    container_logs = models.TextField(null=True, blank=True)
 
     class Meta:
         get_latest_by = 'created_at'
@@ -131,6 +137,26 @@ class Render(models.Model):
             self.get_output_path()
         )
         self.state = Render.STATE_RUNNING
+        self.save()
+
+    def update_state(self):
+        """
+        Update state of this render from the container.
+        """
+        if self.state == Render.STATE_UNSTARTED:
+            raise RenderWrongStateError("Render {} has not been started".format(self.id))
+        if self.state in (Render.STATE_SUCCESS, Render.STATE_FAILURE):
+            raise RenderWrongStateError("Render {} has already had state set".format(self.id))
+        client = create_client()
+        container = client.containers.get(self.container_id)
+        self.container_inspect = container.attrs
+        if container.status == 'exited':
+            self.container_logs = container.logs()
+            if container.attrs['State']['ExitCode'] == 0:
+                self.state = Render.STATE_SUCCESS
+            else:
+                self.state = Render.STATE_FAILURE
+            container.remove()
         self.save()
 
     def get_processed_render(self):
