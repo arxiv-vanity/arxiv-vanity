@@ -4,7 +4,7 @@
 - name: Deploy
   service: web
   type: push
-  image_name: registry.heroku.com/arxiv-vanity-ass/web
+  image_name: registry.heroku.com/arxiv-vanity/web
   registry: registry.heroku.com
   dockercfg_service: dockercfg_generator
   tag: master

@@ -5,7 +5,7 @@ services:
   web:
     build:
       dockerfile: Dockerfile
-      image: registry.heroku.com/arxiv-vanity-ass/web
+      image: registry.heroku.com/arxiv-vanity/web
     links:
       - db
     environment:
