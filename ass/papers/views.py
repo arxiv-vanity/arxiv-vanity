@@ -8,6 +8,10 @@ class PaperListView(ListView):
     model = Paper
     paginate_by = 25
 
+    def get_queryset(self):
+        qs = super(PaperListView, self).get_queryset()
+        return qs.rendered()
+
 
 def paper_detail(request, pk):
     paper = get_object_or_404(Paper, pk=pk)

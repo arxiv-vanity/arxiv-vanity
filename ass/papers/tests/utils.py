@@ -1,10 +1,11 @@
 import datetime
-from ..models import Paper
+import uuid
+from ..models import Paper, Render
 
 
 def create_paper(arxiv_id=None, title=None):
     return Paper.objects.create(**{
-        'arxiv_id': arxiv_id or 'http://arxiv.org/abs/1708.03312v1',
+        'arxiv_id': arxiv_id or 'http://arxiv.org/abs/{}'.format(uuid.uuid4()),
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
         'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
         'updated': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
@@ -30,3 +31,9 @@ def create_paper(arxiv_id=None, title=None):
             'embedding-based approach is cost-effective for machine learning on Chinese and\n'
             'Japanese.\n',
     })
+
+def create_render(paper=None, state=None):
+    return Render.objects.create(
+        paper=paper or create_paper(),
+        state=state or Render.STATE_UNSTARTED
+    )

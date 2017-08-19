@@ -10,6 +10,14 @@ from .processor import process_render
 from .renderer import render_paper, create_client
 
 
+class PaperQuerySet(models.QuerySet):
+    def rendered(self):
+        renders = Render.objects.filter(paper=models.OuterRef('pk'),
+                                        state=Render.STATE_SUCCESS)
+        qs = self.annotate(has_succeeded_render=models.Exists(renders))
+        return qs.filter(has_succeeded_render=True)
+
+
 class Paper(models.Model):
     # ArXiV fields
     arxiv_id = models.CharField(max_length=200, unique=True)
@@ -28,6 +36,8 @@ class Paper(models.Model):
 
     # ASS fields
     source_file = models.FileField(upload_to='paper-sources/', null=True, blank=True)
+
+    objects = PaperQuerySet.as_manager()
 
     class Meta:
         get_latest_by = 'updated'
@@ -81,6 +91,11 @@ class RenderWrongStateError(RenderError):
     pass
 
 
+class RenderQuerySet(models.QuerySet):
+    def succeeded(self):
+        return self.filter(state=Render.STATE_SUCCESS)
+
+
 class Render(models.Model):
     STATE_UNSTARTED = 'unstarted'
     STATE_RUNNING = 'running'
@@ -98,6 +113,8 @@ class Render(models.Model):
     container_id = models.CharField(max_length=64, null=True, blank=True)
     container_inspect = JSONField(null=True, blank=True)
     container_logs = models.TextField(null=True, blank=True)
+
+    objects = RenderQuerySet.as_manager()
 
     class Meta:
         get_latest_by = 'created_at'
