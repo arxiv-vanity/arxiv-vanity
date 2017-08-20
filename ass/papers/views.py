@@ -16,7 +16,7 @@ class PaperListView(ListView):
 def paper_detail(request, pk):
     paper = get_object_or_404(Paper, pk=pk)
     try:
-        r = paper.renders.latest()
+        r = paper.renders.succeeded().latest()
     except Render.DoesNotExist:
         raise Http404("Paper is not rendered")
 
