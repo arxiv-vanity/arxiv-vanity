@@ -50,10 +50,10 @@
 }
 
 #feedback-lip {
-    display: block;
+    display: none;
     position: fixed;
     bottom: 0;
-    right: 20%;
+    right: 50px;
     background-color: black;
     padding: 10px 20px;
     z-index: 100;
@@ -61,6 +61,12 @@
     opacity: 0.5;
     transition: padding 0.2s, opacity 0.2s;
     text-decoration: none;
+}
+
+@media (min-width: 1024px) {
+  #feedback-lip {
+    display: block;
+  }
 }
 
 #feedback-lip:hover {
