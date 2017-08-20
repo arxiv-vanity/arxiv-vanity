@@ -13,3 +13,4 @@ django-storages==1.6.5
 boto3==1.4.6
 git+https://github.com/bfirsh/hyper_sh.git@fad2f5430bac79395feceab7292cefd05ff07717#egg=hyper-sh
 django-basicauth==0.2
+PyGithub==1.35

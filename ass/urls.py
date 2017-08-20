@@ -17,11 +17,13 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
+from .feedback.views import submit_feedback
 from .papers.views import PaperListView, paper_detail
 
 urlpatterns = [
     url(r'^$', PaperListView.as_view()),
     url(r'^papers/(?P<pk>\d+)/$', paper_detail),
+    url(r'^submit-feedback/$', submit_feedback),
     url(r'^admin/', admin.site.urls),
 ]
 

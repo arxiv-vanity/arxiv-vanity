@@ -1,0 +1,95 @@
+#feedback-form {
+    /* display: none; */
+    width: 300px;
+    background-color: black;
+    color: white;
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    margin-left: -150px;
+}
+
+#feedback-close {
+    color: white;
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    text-decoration: none;
+}
+
+#feedback-current-screenshot {
+    max-height: 100px;
+    max-width: 200px;
+    overflow: hidden;
+}
+
+#feedback-current-screenshot canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#feedback-screenshot {
+    color: black;
+    background-color: white;
+    padding: 5px;
+}
+
+#feedback-form p {
+    margin: 20px;
+}
+
+#feedback-text {
+    width: 200px;
+    height: 100px;
+}
+
+#feedback-submit {
+    cursor: pointer;
+
+}
+
+#feedback-lip {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    right: 20%;
+    background-color: black;
+    padding: 10px 20px;
+    z-index: 100;
+    color: white;
+    opacity: 0.5;
+    transition: padding 0.2s, opacity 0.2s;
+    text-decoration: none;
+}
+
+#feedback-lip:hover {
+    padding: 10px 20px 30px 20px;
+    opacity: 1.0;
+    transition: all 0.2s;
+    text-decoration: underline;
+}
+
+#screenshot-rect {
+    position: fixed;
+    border: 1px solid white;
+    background-color: rgba(0, 0, 0, .1);
+}
+
+#screenshot-rect.processing {
+    border: none;
+    background-color: transparent;
+    animation: animateRectBorder 1s infinite;
+    outline: 5px dotted black;
+    box-shadow: 0px 0px 0px 2000px white;
+    transition: box-shadow 0.5s linear
+}
+
+@keyframes animateRectBorder {
+    0% {
+        outline-width: 5px;
+    }
+    50% {
+        outline-width: 10px;
+    }
+}

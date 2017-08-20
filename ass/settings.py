@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ass.feedback',
     'ass.papers',
     'ass.scraper',
 ]
@@ -186,3 +187,6 @@ if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD'):
         env('BASICAUTH_USERNAME'): env('BASICAUTH_PASSWORD')
     }
     MIDDLEWARE_CLASSES.append('basicauth.middleware.BasicAuthMiddleware')
+
+# Paper feedback
+GITHUB_ACCESS_TOKEN = env('GITHUB_ACCESS_TOKEN', default='')

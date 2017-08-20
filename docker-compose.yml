@@ -17,6 +17,7 @@ services:
       SECRET_KEY: "not secure only use for development"
       DOCKER_HOST: "unix:///var/run/docker.sock"
       HOST_PWD: "${PWD}"
+      GITHUB_ACCESS_TOKEN: "${GITHUB_ACCESS_TOKEN}"
       # Set these envvars in a .env file to test S3 in development
       MEDIA_USE_S3: "${MEDIA_USE_S3}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
