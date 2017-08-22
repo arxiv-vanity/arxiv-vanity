@@ -1,3 +1,31 @@
+/* Layout */
+
+/* Make stuff the same width as distill */
+
+.container {
+  width: auto;
+  margin-left: 24px;
+  margin-right: 24px;
+  padding: 0;
+}
+@media (min-width: 768px) {
+  .container {
+    margin-left: 72px;
+    margin-right: 72px;
+  }
+}
+
+@media (min-width: 1080px) {
+  .container {
+    /* 984 (distill width) + 15 * 2 (padding in bootstrap) */
+    width: 984px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Type */
+
 body {
   color: rgba(0,0,0,0.8);
   font-family: Georgia, serif;
@@ -21,7 +49,7 @@ dt-appendix h3 {
 }
 
 .navbar {
-  padding: 1rem 2rem;
+  padding: 1rem 0;
   font-family: sans-serif;
   background-color: hsla(0, 59%, 40%, 0.9);
 }
@@ -30,6 +58,7 @@ dt-appendix h3 {
   color: rgba(255, 255, 255, 1.0) !important;
   font-size: 1.1em;
   letter-spacing: 0.05rem;
+  margin-right: 0;
 }
 
 .navbar .navbar-brand .logo {
