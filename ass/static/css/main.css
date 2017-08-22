@@ -41,6 +41,12 @@ dt-appendix h3 {
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
 }
 
+/* override bootstrap setting stuff we don't want */
+a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
 .badge {
   padding: 0.4rem 0.5rem;
   margin-right: 0.5rem;
