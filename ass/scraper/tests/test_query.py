@@ -12,7 +12,7 @@ class QueryTest(TestCase):
     def test_parse(self):
         papers = parse(open(TEST_DATA_PATH).read())
         self.assertEqual(list(papers)[0], {
-            'arxiv_id': 'http://arxiv.org/abs/1708.03312v1',
+            'arxiv_id': '1708.03312v1',
             'title': 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
             'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
             'updated': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),

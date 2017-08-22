@@ -45,7 +45,7 @@ def convert_entry_to_paper(entry):
     with.
     """
     d = {}
-    d['arxiv_id'] = entry.find("atom:id", NS).text
+    d['arxiv_id'] = entry.find("atom:id", NS).text.split('/')[-1]
     d['title'] = entry.find("atom:title", NS).text
     d['title'] = d['title'].replace('\n', '').replace('  ', ' ')
     d['published'] = dateutil.parser.parse(

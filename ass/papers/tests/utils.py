@@ -5,7 +5,7 @@ from ..models import Paper, Render
 
 def create_paper(arxiv_id=None, title=None):
     return Paper.objects.create(**{
-        'arxiv_id': arxiv_id or 'http://arxiv.org/abs/{}'.format(uuid.uuid4()),
+        'arxiv_id': arxiv_id or uuid.uuid4(),
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
         'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
         'updated': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),

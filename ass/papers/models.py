@@ -20,7 +20,7 @@ class PaperQuerySet(models.QuerySet):
 
 class Paper(models.Model):
     # ArXiV fields
-    arxiv_id = models.CharField(max_length=200, unique=True)
+    arxiv_id = models.CharField(max_length=50, unique=True)
     title = models.TextField()
     published = models.DateTimeField()
     updated = models.DateTimeField()
@@ -50,11 +50,8 @@ class Paper(models.Model):
         # TODO(bfirsh): use reverse()
         return "/papers/{}/".format(self.id)
 
-    def get_short_arxiv_id(self):
-        return self.arxiv_id.split('/')[-1]
-
     def get_source_url(self):
-        return 'https://arxiv.org/e-print/' + self.get_short_arxiv_id()
+        return 'https://arxiv.org/e-print/' + self.arxiv_id
 
     def download(self):
         """
@@ -65,7 +62,7 @@ class Paper(models.Model):
         res = requests.get(self.get_source_url())
         res.raise_for_status()
         content = ContentFile(res.content)
-        self.source_file.save(self.get_short_arxiv_id() + '.tar.gz', content)
+        self.source_file.save(self.arxiv_id + '.tar.gz', content)
 
     def render(self):
         """

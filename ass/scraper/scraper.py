@@ -8,8 +8,7 @@ def scrape_papers():
     """
     papers = query()
     for paper in create_papers(papers):
-        print("Downloading and rendering {}...".format(
-            paper.get_short_arxiv_id()))
+        print("Downloading and rendering {}...".format(paper.arxiv_id))
         paper.render()
 
 
