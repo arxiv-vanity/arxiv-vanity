@@ -13,8 +13,8 @@ class PaperListView(ListView):
         return qs.rendered()
 
 
-def paper_detail(request, pk):
-    paper = get_object_or_404(Paper, pk=pk)
+def paper_detail(request, arxiv_id):
+    paper = get_object_or_404(Paper, arxiv_id=arxiv_id)
     try:
         r = paper.renders.succeeded().latest()
     except Render.DoesNotExist:

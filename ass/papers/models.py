@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.urls import reverse
 import os
 import requests
 from .processor import process_render
@@ -47,8 +48,7 @@ class Paper(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        # TODO(bfirsh): use reverse()
-        return "/papers/{}/".format(self.id)
+        return reverse('paper_detail', args=(self.arxiv_id,))
 
     def get_source_url(self):
         return 'https://arxiv.org/e-print/' + self.arxiv_id

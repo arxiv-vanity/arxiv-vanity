@@ -1,5 +1,8 @@
 import datetime
+import os
+import shutil
 import uuid
+from django.conf import settings
 from ..models import Paper, Render
 
 
@@ -32,8 +35,18 @@ def create_paper(arxiv_id=None, title=None):
             'Japanese.\n',
     })
 
+
 def create_render(paper=None, state=None):
     return Render.objects.create(
         paper=paper or create_paper(),
         state=state or Render.STATE_UNSTARTED
     )
+
+
+def create_render_with_html(paper=None):
+    render = create_render(paper=paper, state=Render.STATE_SUCCESS)
+    source_path = os.path.join(os.path.dirname(__file__), 'fixtures', 'render.html')
+    output_dir = os.path.join(settings.MEDIA_ROOT, 'render-output', str(render.id))
+    os.makedirs(output_dir)
+    shutil.copyfile(source_path, os.path.join(output_dir, 'index.html'))
+    return render

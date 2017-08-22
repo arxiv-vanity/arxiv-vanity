@@ -22,7 +22,7 @@ from .papers.views import PaperListView, paper_detail
 
 urlpatterns = [
     url(r'^$', PaperListView.as_view()),
-    url(r'^papers/(?P<pk>\d+)/$', paper_detail),
+    url(r'^papers/(?P<arxiv_id>.+)/$', paper_detail, name='paper_detail'),
     url(r'^submit-feedback/$', submit_feedback),
     url(r'^admin/', admin.site.urls),
 ]
