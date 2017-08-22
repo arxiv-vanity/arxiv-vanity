@@ -18,12 +18,12 @@ h1, h2, h3, h3, h5, h6 {
 .navbar {
   padding: 1rem 2rem;
   font-family: sans-serif;
-  background-color: hsl(0, 59%, 40%);
+  background-color: hsla(0, 59%, 40%, 0.9);
 }
 
 .navbar .navbar-brand {
-  color: rgba(255, 255, 255, 0.9) !important;
-  font-size: 1.2em;
+  color: rgba(255, 255, 255, 1.0) !important;
+  font-size: 1.1em;
   letter-spacing: 0.05rem;
 }
 
