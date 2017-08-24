@@ -16,7 +16,7 @@ class Command(BaseCommand):
 
             # Update render state periodically so we don't create too many
             # containers
-            if i % 100 == 100:
+            if i % 100 == 99:
                 print()
                 print("Updating render state...")
                 update_render_state()
