@@ -29,7 +29,13 @@
 body {
   color: rgba(0,0,0,0.8);
   font-family: Georgia, serif;
-  font-size: 18px;
+  font-size: 16px;
+}
+
+@media (min-width: 1080px) {
+  body {
+    font-size: 18px;
+  }
 }
 
 h1, h2, h3 {
@@ -98,9 +104,16 @@ a:hover {
   margin-top: 2rem;
 }
 .paper-list-item h3 {
+  font-size: 1.5rem;
   margin-top: 2rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
+@media (min-width: 1080px) {
+  .paper-list-item h3 {
+    font-size: 1.75rem;
+  }
+}
+
 .paper-list-item h3 a {
   color: rgba(0, 0, 0, 0.8);
   font-weight: normal;
@@ -111,7 +124,7 @@ a:hover {
   color: rgba(0, 0, 0, 0.8);
 }
 .paper-list-item .author {
-  font-size: 16px;
+  font-size: 0.8em;
   color: rgba(0, 0, 0, 0.5);
 }
 .paper-list-item.abstract a {
