@@ -80,6 +80,11 @@ a:hover {
 
 .content {
   margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+.paper-list .pagination {
+  margin-top: 4rem;
 }
 
 .paper-list-item {
