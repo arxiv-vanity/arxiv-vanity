@@ -20,6 +20,7 @@
           </div>
           <hr>
         {% endfor %}
+        {% include "includes/pagination.html" with page_obj=page_obj only %}
       </div>
     </div>
   </div>

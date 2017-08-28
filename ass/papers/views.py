@@ -6,7 +6,7 @@ from .models import Paper, Render
 
 class PaperListView(ListView):
     model = Paper
-    paginate_by = 25
+    paginate_by = 50
 
     def get_queryset(self):
         qs = super(PaperListView, self).get_queryset()
