@@ -6,7 +6,8 @@ from .models import Paper, Render
 
 class PaperAdmin(admin.ModelAdmin):
     actions = ['download', 'render']
-    list_display = ['title', 'is_downloaded', 'render_state']
+    list_display = ['arxiv_id', 'title', 'is_downloaded', 'render_state']
+    search_fields = ['arxiv_id', 'title']
 
     def is_downloaded(self, obj):
         return bool(obj.source_file.name)
