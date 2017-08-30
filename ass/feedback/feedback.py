@@ -21,6 +21,8 @@ class Feedback(object):
         body = text
 
         body += '\n\nArxiv ID: ' + arxiv_id
+        body += '\n\nhttps://www.arxiv-vanity.com/papers/' + arxiv_id + '/'
+        body += '\n\nhttp://localhost:8010/html/' + arxiv_id + '/'
 
         if jpg_data:
             image_path = self.commit_image(jpg_data)
