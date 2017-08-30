@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load papers %}
 {% load typogrify_tags %}
 
 {% block whole_title %}Arxiv Vanity{% endblock %}
@@ -20,7 +21,7 @@
               <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
               <p>
                 {% for category in paper.categories %}
-                  <span class="badge badge-success">{{ category }}</span>
+                  {% category_badge category %}
                 {% endfor %}
               </p>
             </div>
