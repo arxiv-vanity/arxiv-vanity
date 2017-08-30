@@ -92,8 +92,8 @@ a:hover {
   margin-bottom: 4rem;
 }
 
-.paper-list .pagination {
-  margin-top: 4rem;
+.paper-list > .row {
+  margin-bottom: 4rem;
 }
 
 .paper-list-item {

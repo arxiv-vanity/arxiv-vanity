@@ -1,27 +1,36 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% load typogrify_tags %}
 
 {% block whole_title %}Arxiv Vanity{% endblock %}
 
+
 {% block content %}
+{% regroup object_list by updated|naturalday:"j F Y"|capfirst as objects_by_date %}
   <div class="container paper-list">
+    {% for date, papers in objects_by_date %}
+      <div class="row justify-content-left">
+        <div class="col-lg-9">
+          <h2>{{ date }}</h2>
+          <hr>
+          {% for paper in papers %}
+            <div class="paper-list-item">
+              <h3><a href="{{ paper.get_absolute_url }}">{{ paper.title|widont }}</a></h3>
+              <!-- <p class="author">{% for author in paper.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
+              <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
+              <p>
+                {% for category in paper.categories %}
+                  <span class="badge badge-success">{{ category }}</span>
+                {% endfor %}
+              </p>
+            </div>
+            <hr>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
     <div class="row justify-content-left">
       <div class="col-lg-9">
-        <h2>Latest papers</h2>
-        <hr>
-        {% for paper in object_list %}
-          <div class="paper-list-item">
-            <h3><a href="{{ paper.get_absolute_url }}">{{ paper.title|widont }}</a></h3>
-            <!-- <p class="author">{% for author in paper.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
-            <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
-            <p>
-              {% for category in paper.categories %}
-                <span class="badge badge-success">{{ category }}</span>
-              {% endfor %}
-            </p>
-          </div>
-          <hr>
-        {% endfor %}
         {% include "includes/pagination.html" with page_obj=page_obj only %}
       </div>
     </div>
