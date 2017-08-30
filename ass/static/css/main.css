@@ -108,7 +108,7 @@ a:hover {
   margin-top: 2rem;
   margin-bottom: 0.5rem;
 }
-@media (min-width: 1080px) {
+@media (min-width: 768px) {
   .paper-list-item h3 {
     font-size: 1.75rem;
   }
