@@ -11,18 +11,26 @@ NS = {
 }
 
 
-def query():
+def category_search_query(categories):
+    """
+    Download papers from ArXiV from a given list of categories.
+    """
+    search_query = ' OR '.join('cat:' + cat for cat in categories)
+    return query(search_query=search_query)
+
+
+def query(search_query=None, id_list=None, start=0, max_results=100):
     """
     Download and parse papers from Arxiv's API.
     """
-    search_query = "cat:cs.CV OR cat:cs.AI OR cat:cs.LG OR cat:cs.CL OR cat:cs.NE OR cat:stat.ML"
-    start = 0
-    max_results = 100
-    url_args = urlencode({"search_query": search_query,
-                          "start": start,
-                          "max_results": max_results,
-                          "sortBy": "lastUpdatedDate"})
-    response = requests.get(ROOT_URL + 'query?' + url_args)
+    url_args = {"start": start,
+                "max_results": max_results,
+                "sortBy": "lastUpdatedDate"}
+    if search_query is not None:
+        url_args["search_query"] = search_query
+    if id_list is not None:
+        url_args["id_list"] = ','.join(id_list)
+    response = requests.get(ROOT_URL + 'query?' + urlencode(url_args))
     response.raise_for_status()
     return parse(response.text)
 

@@ -1,12 +1,21 @@
 from ..papers.models import Paper
-from .query import query
+from .query import category_search_query
+
+CATEGORIES = [
+    "cs.CV",
+    "cs.AI",
+    "cs.LG",
+    "cs.CL",
+    "cs.NE",
+    "stat.ML"
+]
 
 
 def scrape_papers():
     """
     Download papers from Arxiv's API and insert new ones into the database.
     """
-    papers = query()
+    papers = category_search_query(CATEGORIES)
     for paper in create_papers(papers):
         print("Downloading and rendering {}...".format(paper.arxiv_id))
         paper.render()
