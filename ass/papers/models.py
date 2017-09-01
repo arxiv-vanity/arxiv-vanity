@@ -178,5 +178,9 @@ class Render(models.Model):
         Do final processing on this render and returns it as a dictionary of
         {"body", "script", "styles"}.
         """
+        context = {
+            'render': self,
+            'paper': self.paper,
+        }
         with default_storage.open(self.get_html_path()) as fh:
-            return process_render(fh, self.get_output_url())
+            return process_render(fh, self.get_output_url(), context=context)

@@ -1,3 +1,4 @@
+import datetime
 import os
 import shutil
 from django.conf import settings
@@ -31,10 +32,16 @@ class PaperDetailViewTest(TestCase):
         shutil.rmtree(TEST_MEDIA_ROOT)
 
     def test_view(self):
-        paper = create_paper(arxiv_id="1234.5678", title="Some paper")
+        paper = create_paper(
+            arxiv_id="1234.5678",
+            title="Some paper",
+            updated=datetime.datetime(2017, 8, 5, 17, 46, 28,
+                                      tzinfo=datetime.timezone.utc),
+        )
         render = create_render_with_html(paper=paper)
         res = self.client.get('/papers/1234.5678/')
         self.assertIn('Some paper', str(res.content))
         self.assertIn('script was inserted', str(res.content))
         self.assertIn('style-was-inserted', str(res.content))
         self.assertIn('body was inserted', str(res.content))
+        self.assertIn('Submitted on 5 August 2017', str(res.content))

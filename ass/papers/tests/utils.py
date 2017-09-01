@@ -6,12 +6,12 @@ from django.conf import settings
 from ..models import Paper, Render
 
 
-def create_paper(arxiv_id=None, title=None):
+def create_paper(arxiv_id=None, title=None, updated=None):
     return Paper.objects.create(**{
         'arxiv_id': arxiv_id or uuid.uuid4(),
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
         'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
-        'updated': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
+        'updated': updated or datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
         'arxiv_url': 'http://arxiv.org/abs/1708.03312v1',
         'authors': [{'affiliation': [], 'name': 'Yuanzhi Ke'},
                     {'affiliation': [], 'name': 'Masafumi Hagiwara'}],
