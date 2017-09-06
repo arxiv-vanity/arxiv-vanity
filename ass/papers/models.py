@@ -7,6 +7,7 @@ from django.core.files.storage import default_storage
 from django.urls import reverse
 import os
 import requests
+from ..scraper.query import query_single_paper
 from .processor import process_render
 from .renderer import render_paper, create_client
 
@@ -76,6 +77,16 @@ class PaperQuerySet(models.QuerySet):
     def update_or_create_from_api(self, result):
         return self.update_or_create(arxiv_id=result['arxiv_id'],
                                      defaults=result)
+
+    def update_or_create_from_arxiv_id(self, arxiv_id):
+        """
+        Query the Arxiv API and create a Paper from it.
+
+        Raises:
+            `ass.scraper.query.PaperNotFoundError`: If paper does not exist on
+                arxiv.
+        """
+        return self.update_or_create_from_api(query_single_paper(arxiv_id))
 
 
 class Paper(models.Model):
@@ -263,6 +274,13 @@ class Render(models.Model):
                 self.state = Render.STATE_FAILURE
             container.remove()
         self.save()
+
+    def wait(self):
+        """
+        Wait for this render to finish. Returns the exit code.
+        """
+        client = create_client()
+        return client.containers.get(self.container_id).wait()
 
     def get_processed_render(self):
         """

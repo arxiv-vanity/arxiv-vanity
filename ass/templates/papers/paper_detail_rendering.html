@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ paper.title }}{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>{{ paper.title }}</h1>
+    <p>This paper is rendering! Your browser will automatically refresh when it is finished. It should take less than a minute.</p>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js" integrity="sha256-aB35laj7IZhLTx58xw/Gm1EKOoJJKZt6RY+bH1ReHxs=" crossorigin="anonymous"></script>
+  <script>
+    function ArxivVanityWaiter(waitURL) {
+      this.waitURL = waitURL;
+    }
+    ArxivVanityWaiter.prototype.wait = function() {
+      var _this = this;
+      var options = {
+        method: 'POST',
+        credentials: "same-origin",
+        headers: {
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+      };
+      fetch(this.waitURL, options).then(function(response) {
+        // Hit Heroku timeout
+        if (response.status == 503) {
+          _this.wait();
+        } else if (response.status == 200) {
+          window.location.reload();
+        } else {
+          console.error("Unexpected response. Status: " + response.status);
+          response.text().then(function(text) {
+            console.error("Response: " + text);
+            _this.waitTimeout();
+          });
+        }
+      }, function(error) {
+        console.error(error);
+        console.error("Encountered error waiting, retrying...");
+        _this.waitTimeout();
+      });
+    };
+    ArxivVanityWaiter.prototype.waitTimeout = function() {
+      var _this = this;
+      setTimeout(function() { _this.wait(); }, 500);
+    };
+
+    window.arxivVanityWaiter = new ArxivVanityWaiter("{% url 'paper_wait' paper.arxiv_id %}");
+    window.arxivVanityWaiter.wait();
+  </script>
+{% endblock %}

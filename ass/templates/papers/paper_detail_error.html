@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ paper.title }}{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>{{ paper.title }}</h1>
+    <p>{{ message }}</p>
+    <p>Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
+  </div>
+{% endblock %}

@@ -29,12 +29,16 @@ TEST_MEDIA_ROOT = os.path.join(settings.MEDIA_ROOT, 'test')
 @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
 class PaperDetailViewTest(TestCase):
     def tearDown(self):
-        shutil.rmtree(TEST_MEDIA_ROOT)
+        try:
+            shutil.rmtree(TEST_MEDIA_ROOT)
+        except FileNotFoundError:
+            pass
 
-    def test_view(self):
+    def test_it_outputs_rendered_papers(self):
         paper = create_paper(
             arxiv_id="1234.5678",
             title="Some paper",
+            source_file='foo.tar.gz',
             updated=datetime.datetime(2017, 8, 5, 17, 46, 28,
                                       tzinfo=datetime.timezone.utc),
         )
@@ -45,3 +49,31 @@ class PaperDetailViewTest(TestCase):
         self.assertIn('style-was-inserted', str(res.content))
         self.assertIn('body was inserted', str(res.content))
         self.assertIn('Submitted on 5 August 2017', str(res.content))
+
+    def test_it_shows_an_error_if_a_paper_is_not_renderable(self):
+        paper = create_paper(
+            arxiv_id="1234.5678",
+            pdf_url="http://arxiv.org/pdf/1708.03312v1",
+            source_file="foo.pdf"
+        )
+        res = self.client.get('/papers/1234.5678/')
+        self.assertEqual(res.status_code, 404)
+        self.assertIn('This paper doesn&#39;t have LaTeX source code, so it can&#39;t be rendered as a web page', str(res.content))
+        self.assertIn('https://arxiv.org/pdf/1708.03312v1', str(res.content))
+
+    def test_it_creates_new_papers_if_they_dont_exist(self):
+        # TODO(bfirsh): needs mocking of the arxiv API and creating new renders
+        pass
+
+    def test_it_shows_a_message_if_the_paper_is_being_rendered(self):
+        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        render = create_render(paper=paper, state=Render.STATE_RUNNING)
+        res = self.client.get('/papers/1234.5678/')
+        self.assertIn('This paper is rendering', str(res.content))
+
+    def test_it_shows_an_error_if_the_paper_has_failed_to_render(self):
+        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        render = create_render(paper=paper, state=Render.STATE_FAILURE)
+        res = self.client.get('/papers/1234.5678/')
+        self.assertEqual(res.status_code, 500)
+        self.assertIn('This paper failed to render', str(res.content))
