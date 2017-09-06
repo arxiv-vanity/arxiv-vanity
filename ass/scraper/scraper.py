@@ -1,4 +1,4 @@
-from ..papers.models import Paper
+from ..papers.models import Paper, PaperIsNotRenderableError
 from .query import category_search_query
 
 CATEGORIES = [
@@ -17,8 +17,13 @@ def scrape_papers():
     """
     papers = category_search_query(CATEGORIES)
     for paper in create_papers(papers):
-        print("Downloading and rendering {}...".format(paper.arxiv_id))
-        paper.render()
+        print("Downloading and rendering {}... ".format(paper.arxiv_id), end="")
+        try:
+            paper.render()
+        except PaperIsNotRenderableError:
+            print("not renderable")
+        else:
+            print("success")
 
 
 def create_papers(papers):

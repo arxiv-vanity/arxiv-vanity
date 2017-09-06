@@ -1,17 +1,21 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 import json
-from .models import Paper, Render
+from .models import Paper, Render, PaperIsNotRenderableError
 
 
 class PaperAdmin(admin.ModelAdmin):
     actions = ['download', 'render']
-    list_display = ['arxiv_id', 'title', 'is_downloaded', 'render_state']
+    list_display = ['arxiv_id', 'title', 'is_downloaded', 'is_renderable', 'render_state']
     search_fields = ['arxiv_id', 'title']
 
     def is_downloaded(self, obj):
         return bool(obj.source_file.name)
     is_downloaded.boolean = True
+
+    def is_renderable(self, obj):
+        return obj.is_renderable()
+    is_renderable.boolean = True
 
     def render_state(self, obj):
         try:
@@ -27,8 +31,19 @@ class PaperAdmin(admin.ModelAdmin):
     download.short_description = 'Download selected papers'
 
     def render(self, request, queryset):
+        rendered = 0
+        not_renderable = 0
         for paper in queryset:
-            paper.render()
+            try:
+                paper.render()
+            except PaperIsNotRenderableError:
+                not_renderable += 1
+            else:
+                rendered += 1
+        s = "{} successfully rendered.".format(rendered)
+        if not_renderable > 0:
+            s += " {} not renderable.".format(not_renderable)
+        self.message_user(request, s)
     render.short_description = 'Render selected papers'
 
 admin.site.register(Paper, PaperAdmin)

@@ -6,7 +6,7 @@ from django.conf import settings
 from ..models import Paper, Render
 
 
-def create_paper(arxiv_id=None, title=None, updated=None):
+def create_paper(arxiv_id=None, title=None, updated=None, source_file=None):
     return Paper.objects.create(**{
         'arxiv_id': arxiv_id or uuid.uuid4(),
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
@@ -33,6 +33,7 @@ def create_paper(arxiv_id=None, title=None, updated=None):
             'embedding-based models respectively. The results suggest that the radical\n'
             'embedding-based approach is cost-effective for machine learning on Chinese and\n'
             'Japanese.\n',
+        'source_file': source_file,
     })
 
 

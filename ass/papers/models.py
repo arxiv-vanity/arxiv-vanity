@@ -11,6 +11,47 @@ from .processor import process_render
 from .renderer import render_paper, create_client
 
 
+class DownloadError(Exception):
+    """Error downloading a paper."""
+
+
+class RenderError(Exception):
+    pass
+
+
+class PaperIsNotRenderableError(RenderError):
+    """Paper cannot be rendered."""
+
+
+class RenderAlreadyStartedError(RenderError):
+    """Render started when render has already been started."""
+
+
+class RenderWrongStateError(RenderError):
+    """The state of a render is being updated when it has not been started."""
+
+
+def guess_extension_from_headers(h):
+    """
+    Given headers from an ArXiV e-print response, try and guess what the file
+    extension should be.
+
+    Based on: https://arxiv.org/help/mimetypes
+    """
+    if h.get('content-type') == 'application/pdf':
+        return '.pdf'
+    if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/postscript':
+        return '.ps.gz'
+    if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/x-eprint-tar':
+        return '.tar.gz'
+    # content-encoding is x-gzip but this appears to normally be a lie - it's
+    # just plain text
+    if h.get('content-type') == 'application/x-eprint':
+        return '.tex'
+    if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/x-dvi':
+        return '.dvi.gz'
+    return None
+
 class PaperQuerySet(models.QuerySet):
     def rendered(self):
         renders = Render.objects.filter(paper=models.OuterRef('pk'),
@@ -51,18 +92,43 @@ class Paper(models.Model):
         return reverse('paper_detail', args=(self.arxiv_id,))
 
     def get_source_url(self):
+        # This URL is normally a tarball, but sometimes something else.
+        # ArXiV provides a /src/ URL which always serves up a tarball,
+        # but if we used this, we'd have to untar the file to figure out
+        # whether it's renderable or not. By using the /e-print/ endpoint
+        # we can figure out straight away whether we should bother rendering
+        # it or not.
+        # https://arxiv.org/help/mimetypes has more info
         return 'https://arxiv.org/e-print/' + self.arxiv_id
 
     def download(self):
         """
-        Download the LaTeX source of this paper and save to storage.
-
-        You should call save() after running this method.
+        Download the LaTeX source of this paper and save to storage. It will
+        save the model.
         """
+        # Delete an existing file if it exists so we don't clutter up storage
+        # with dupes. This might mean we lose a file the download fails,
+        # but we can just download it again.
+        if self.source_file.name:
+            self.source_file.delete()
+
         res = requests.get(self.get_source_url())
         res.raise_for_status()
+        extension = guess_extension_from_headers(res.headers)
+        if not extension:
+            raise DownloadError("Could not determine file extension from "
+                                "headers: Content-Type: {}; "
+                                "Content-Encoding: {}".format(
+                                    res.headers.get('content-type'),
+                                    res.headers.get('content-encoding')))
         content = ContentFile(res.content)
-        self.source_file.save(self.arxiv_id + '.tar.gz', content)
+        self.source_file.save(self.arxiv_id + extension, content)
+
+    def is_renderable(self):
+        """
+        Returns whether it is possible to render this paper.
+        """
+        return self.source_file.name is not None and self.source_file.name.endswith('.tar.gz')
 
     def render(self):
         """
@@ -71,21 +137,10 @@ class Paper(models.Model):
         """
         if not self.source_file.name:
             self.download()
-            self.save()
+        if not self.is_renderable():
+            raise PaperIsNotRenderableError("This paper is not renderable.")
         render = Render.objects.create(paper=self)
         render.run()
-
-
-class RenderError(Exception):
-    pass
-
-
-class RenderAlreadyStartedError(RenderError):
-    pass
-
-
-class RenderWrongStateError(RenderError):
-    pass
 
 
 class RenderQuerySet(models.QuerySet):
