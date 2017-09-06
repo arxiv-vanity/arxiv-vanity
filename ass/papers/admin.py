@@ -1,12 +1,49 @@
 from django.contrib import admin
+from django.contrib.admin.templatetags.admin_list import _boolean_icon
+from django.template.defaultfilters import truncatechars
 from django.utils.safestring import mark_safe
 import json
 from .models import Paper, Render, PaperIsNotRenderableError
 
+class IsDownloadedListFilter(admin.SimpleListFilter):
+    title = 'is downloaded'
+    parameter_name = 'is_downloaded'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('1', 'Yes'),
+            ('0', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '1':
+            return queryset.downloaded()
+        if self.value() == '0':
+            return queryset.not_downloaded()
+
+
+class HasSuccessfulRenderListFilter(admin.SimpleListFilter):
+    title = 'has successful render'
+    parameter_name = 'has_successful_render'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('1', 'Yes'),
+            ('0', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '1':
+            return queryset.has_successful_render()
+        if self.value() == '0':
+            return queryset.has_no_successful_render()
+
 
 class PaperAdmin(admin.ModelAdmin):
     actions = ['download', 'render']
-    list_display = ['arxiv_id', 'title', 'is_downloaded', 'is_renderable', 'render_state']
+    list_display = ['arxiv_id', 'title', 'is_downloaded', 'is_renderable', 'has_successful_render']
+    list_filter = [IsDownloadedListFilter, HasSuccessfulRenderListFilter]
+    list_per_page = 250
     search_fields = ['arxiv_id', 'title']
 
     def is_downloaded(self, obj):
@@ -17,13 +54,26 @@ class PaperAdmin(admin.ModelAdmin):
         return obj.is_renderable()
     is_renderable.boolean = True
 
-    def render_state(self, obj):
+    def has_successful_render(self, obj):
+        has_successful_render = obj.renders.succeeded().exists()
+        s = _boolean_icon(has_successful_render)
+        if not has_successful_render:
+            try:
+                last_failure = obj.renders.failed().latest()
+            except Render.DoesNotExist:
+                pass
+            else:
+                s += ' <a href="../render/{}">view failure</a>'.format(last_failure.id)
+        return s
+    has_successful_render.allow_tags = True
+
+    def last_render_state(self, obj):
         try:
             render = obj.renders.latest()
         except Render.DoesNotExist:
             return ""
         return '<a href="../render/{}/">{}</a>'.format(render.id, render.state)
-    render_state.allow_tags = True
+    last_render_state.allow_tags = True
 
     def download(self, request, queryset):
         for paper in queryset:
@@ -50,7 +100,11 @@ admin.site.register(Paper, PaperAdmin)
 
 
 class RenderAdmin(admin.ModelAdmin):
-    list_display = ('created_at', 'paper', 'state', 'container_id')
+    list_display = ['created_at', 'short_paper_title', 'state', 'short_container_id']
+    list_filter = ['state']
+    list_per_page = 250
+    list_select_related = ['paper']
+
     # The fields except the ones we're formatting
     RENDER_FIELDS = [
         f.name for f in Render._meta.get_fields()
@@ -68,5 +122,8 @@ class RenderAdmin(admin.ModelAdmin):
         return mark_safe("<pre>{}</pre>".format(formatted))
     formatted_container_inspect.short_description = 'Container inspect'
 
+    def short_paper_title(self, obj):
+        return truncatechars(obj.paper.title, 70)
+    short_paper_title.short_description = 'Paper'
 
 admin.site.register(Render, RenderAdmin)

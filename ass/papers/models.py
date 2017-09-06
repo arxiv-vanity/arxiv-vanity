@@ -52,12 +52,26 @@ def guess_extension_from_headers(h):
         return '.dvi.gz'
     return None
 
+
 class PaperQuerySet(models.QuerySet):
-    def rendered(self):
+    def _with_has_successful_render_annotation(self):
         renders = Render.objects.filter(paper=models.OuterRef('pk'),
                                         state=Render.STATE_SUCCESS)
-        qs = self.annotate(has_succeeded_render=models.Exists(renders))
-        return qs.filter(has_succeeded_render=True)
+        return self.annotate(has_successful_render=models.Exists(renders))
+
+    def has_successful_render(self):
+        qs = self._with_has_successful_render_annotation()
+        return qs.filter(has_successful_render=True)
+
+    def has_no_successful_render(self):
+        qs = self._with_has_successful_render_annotation()
+        return qs.filter(has_successful_render=False)
+
+    def downloaded(self):
+        return self.filter(source_file__isnull=False)
+
+    def not_downloaded(self):
+        return self.filter(source_file__isnull=True)
 
 
 class Paper(models.Model):
@@ -147,6 +161,8 @@ class RenderQuerySet(models.QuerySet):
     def succeeded(self):
         return self.filter(state=Render.STATE_SUCCESS)
 
+    def failed(self):
+        return self.filter(state=Render.STATE_FAILURE)
 
 class Render(models.Model):
     STATE_UNSTARTED = 'unstarted'
@@ -194,6 +210,10 @@ class Render(models.Model):
         Returns the URL to the output path.
         """
         return settings.MEDIA_URL + self.get_output_path()
+
+    def short_container_id(self):
+        if self.container_id:
+            return self.container_id[:12]
 
     def run(self):
         """

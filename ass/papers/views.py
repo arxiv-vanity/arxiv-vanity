@@ -10,7 +10,7 @@ class PaperListView(ListView):
 
     def get_queryset(self):
         qs = super(PaperListView, self).get_queryset()
-        return qs.rendered()
+        return qs.has_successful_render()
 
 
 def paper_detail(request, arxiv_id):
