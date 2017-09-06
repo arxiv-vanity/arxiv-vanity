@@ -32,7 +32,6 @@ def create_papers(papers):
     that have been created.
     """
     for paper in papers:
-        obj, created = Paper.objects.get_or_create(arxiv_id=paper['arxiv_id'],
-                                                   defaults=paper)
+        obj, created = Paper.objects.update_or_create_from_api(paper)
         if created:
             yield obj

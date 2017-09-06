@@ -73,6 +73,10 @@ class PaperQuerySet(models.QuerySet):
     def not_downloaded(self):
         return self.filter(source_file__isnull=True)
 
+    def update_or_create_from_api(self, result):
+        return self.update_or_create(arxiv_id=result['arxiv_id'],
+                                     defaults=result)
+
 
 class Paper(models.Model):
     # ArXiV fields
