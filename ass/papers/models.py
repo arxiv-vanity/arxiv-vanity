@@ -115,6 +115,18 @@ class Paper(models.Model):
         # https://arxiv.org/help/mimetypes has more info
         return 'https://arxiv.org/e-print/' + self.arxiv_id
 
+    def get_https_arxiv_url(self):
+        url = self.arxiv_url
+        if url.startswith('http://arxiv.org'):
+            url = 'https' + url.lstrip('http')
+        return url
+
+    def get_https_pdf_url(self):
+        url = self.pdf_url
+        if url.startswith('http://arxiv.org'):
+            url = 'https' + url.lstrip('http')
+        return url
+
     def download(self):
         """
         Download the LaTeX source of this paper and save to storage. It will

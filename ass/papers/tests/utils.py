@@ -6,20 +6,21 @@ from django.conf import settings
 from ..models import Paper, Render
 
 
-def create_paper(arxiv_id=None, title=None, updated=None, source_file=None):
+def create_paper(arxiv_id=None, title=None, updated=None, source_file=None,
+                 arxiv_url=None, pdf_url=None):
     return Paper.objects.create(**{
         'arxiv_id': arxiv_id or uuid.uuid4(),
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
         'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
         'updated': updated or datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
-        'arxiv_url': 'http://arxiv.org/abs/1708.03312v1',
+        'arxiv_url': arxiv_url or 'http://arxiv.org/abs/1708.03312v1',
         'authors': [{'affiliation': [], 'name': 'Yuanzhi Ke'},
                     {'affiliation': [], 'name': 'Masafumi Hagiwara'}],
         'categories': ['cs.CL'],
         'comment': '12 pages, 4 figures',
         'doi': None,
         'journal_ref': None,
-        'pdf_url': 'http://arxiv.org/pdf/1708.03312v1',
+        'pdf_url': pdf_url or 'http://arxiv.org/pdf/1708.03312v1',
         'primary_category': 'cs.CL',
         'summary': '  The character vocabulary can be very large in non-alphabetic languages such\n'
             'as Chinese and Japanese, which makes neural network models huge to process such\n'
