@@ -16,10 +16,10 @@ class PaperListViewTest(TestCase):
         paper4 = create_paper(title="Paper success render", arxiv_id="1234.5678")
         create_render(paper=paper4, state=Render.STATE_SUCCESS)
         res = self.client.get('/')
-        self.assertNotIn('Paper no&nbsp;render', str(res.content))
-        self.assertNotIn('Paper unstarted&nbsp;render', str(res.content))
-        self.assertNotIn('Paper failed&nbsp;render', str(res.content))
-        self.assertIn('Paper success&nbsp;render', str(res.content))
+        self.assertNotIn('Paper no render', str(res.content))
+        self.assertNotIn('Paper unstarted render', str(res.content))
+        self.assertNotIn('Paper failed render', str(res.content))
+        self.assertIn('Paper success render', str(res.content))
         self.assertIn('/papers/1234.5678/', str(res.content))
 
 

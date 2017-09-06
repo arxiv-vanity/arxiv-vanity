@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% load papers %}
-{% load typogrify_tags %}
 
 {% block whole_title %}Arxiv Vanity{% endblock %}
 
@@ -16,7 +15,7 @@
           <hr>
           {% for paper in papers %}
             <div class="paper-list-item">
-              <h3><a href="{{ paper.get_absolute_url }}">{{ paper.title|widont }}</a></h3>
+              <h3><a href="{{ paper.get_absolute_url }}">{{ paper.title }}</a></h3>
               <!-- <p class="author">{% for author in paper.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
               <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
               <p>
