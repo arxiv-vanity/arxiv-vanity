@@ -11,12 +11,32 @@ NS = {
 }
 
 
+class PaperNotFoundError(Exception):
+    """A query was made for a particular paper and it was not found."""
+
+
 def category_search_query(categories):
     """
     Download papers from ArXiV from a given list of categories.
     """
     search_query = ' OR '.join('cat:' + cat for cat in categories)
     return query(search_query=search_query)
+
+
+def query_single_paper(paper_id):
+    """
+    Download and parse a single paper from arxiv.
+    """
+    try:
+        result = list(query(id_list=[paper_id], max_results=1))
+    except requests.HTTPError as e:
+        # This seems to mean the ID was badly formatted
+        if e.response.status_code == 400:
+            raise PaperNotFoundError()
+        raise
+    if not result:
+        raise PaperNotFoundError()
+    return result[0]
 
 
 def query(search_query=None, id_list=None, start=0, max_results=100):
@@ -44,6 +64,9 @@ def parse(s):
     # got everything.
     root = ElementTree.fromstring(s)
     for entry in root.findall("atom:entry", NS):
+        # If there are no results, arxiv sometimes just a blank entry
+        if entry.find("atom:id", NS) is None:
+            continue
         yield convert_entry_to_paper(entry)
 
 
