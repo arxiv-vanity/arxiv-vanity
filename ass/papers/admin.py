@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin.templatetags.admin_list import _boolean_icon
 from django.template.defaultfilters import truncatechars
 from django.utils.safestring import mark_safe
 import json
@@ -41,7 +40,7 @@ class HasSuccessfulRenderListFilter(admin.SimpleListFilter):
 
 class PaperAdmin(admin.ModelAdmin):
     actions = ['download', 'render']
-    list_display = ['arxiv_id', 'title', 'is_downloaded', 'is_renderable', 'has_successful_render']
+    list_display = ['arxiv_id', 'title', 'is_downloaded', 'is_renderable', 'has_successful_render', 'latest_render']
     list_filter = [IsDownloadedListFilter, HasSuccessfulRenderListFilter]
     list_per_page = 250
     search_fields = ['arxiv_id', 'title']
@@ -55,25 +54,16 @@ class PaperAdmin(admin.ModelAdmin):
     is_renderable.boolean = True
 
     def has_successful_render(self, obj):
-        has_successful_render = obj.renders.succeeded().exists()
-        s = _boolean_icon(has_successful_render)
-        if not has_successful_render:
-            try:
-                last_failure = obj.renders.failed().latest()
-            except Render.DoesNotExist:
-                pass
-            else:
-                s += ' <a href="../render/{}">view failure</a>'.format(last_failure.id)
-        return s
-    has_successful_render.allow_tags = True
+        return obj.renders.succeeded().exists()
+    has_successful_render.boolean = True
 
-    def last_render_state(self, obj):
+    def latest_render(self, obj):
         try:
             render = obj.renders.latest()
         except Render.DoesNotExist:
             return ""
         return '<a href="../render/{}/">{}</a>'.format(render.id, render.state)
-    last_render_state.allow_tags = True
+    latest_render.allow_tags = True
 
     def download(self, request, queryset):
         for paper in queryset:
