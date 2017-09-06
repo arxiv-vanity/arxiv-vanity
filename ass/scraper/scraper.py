@@ -17,7 +17,7 @@ def scrape_papers():
     """
     papers = category_search_query(CATEGORIES)
     for paper in create_papers(papers):
-        print("Downloading and rendering {}... ".format(paper.arxiv_id), end="")
+        print("Downloading and rendering {}... ".format(paper.arxiv_id), end="", flush=True)
         try:
             paper.render()
         except PaperIsNotRenderableError:
