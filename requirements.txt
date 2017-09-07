@@ -4,7 +4,7 @@ django-environ==0.4.4
 gunicorn==19.7.1
 whitenoise==3.3.0
 eventlet==0.21.0
-requests==2.18.3
+requests==2.18.4
 python-dateutil==2.6.1
 docker==2.5.1
 beautifulsoup4==4.6.0
