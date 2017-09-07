@@ -10,7 +10,7 @@ docker==2.5.1
 beautifulsoup4==4.6.0
 lxml==3.8.0
 django-storages==1.6.5
-boto3==1.4.6
+boto3==1.4.7
 git+https://github.com/bfirsh/hyper_sh.git@fad2f5430bac79395feceab7292cefd05ff07717#egg=hyper-sh
 django-basicauth==0.3
 git+https://github.com/bfirsh/PyGithub@3b9b1734903ec7a6b16410f5efe48407f5ffe111#egg=pyGithub
