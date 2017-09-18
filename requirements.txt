@@ -8,7 +8,7 @@ requests==2.18.4
 python-dateutil==2.6.1
 docker==2.5.1
 beautifulsoup4==4.6.0
-lxml==3.8.0
+lxml==4.0.0
 django-storages==1.6.5
 boto3==1.4.7
 git+https://github.com/bfirsh/hyper_sh.git@fad2f5430bac79395feceab7292cefd05ff07717#egg=hyper-sh
