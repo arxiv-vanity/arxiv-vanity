@@ -55,6 +55,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'ass.urls'
+APPEND_SLASH = True
 
 TEMPLATES = [
     {
