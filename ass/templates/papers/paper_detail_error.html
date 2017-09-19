@@ -2,8 +2,17 @@
 {% block title %}{{ paper.title }}{% endblock %}
 {% block content %}
   <div class="container">
-    <h1>{{ paper.title }}</h1>
-    <p>{{ message }}</p>
-    <p>Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
+    <div class="row">
+      <div class="col-12">
+        <h1>{{ paper.title }}</h1>
+      </div>
+    </div>
+    <div class="row justify-content-left">
+      <div class="col-lg-9">
+        <hr class="mb-5">
+        <p>{{ message }}</p>
+        <p>Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
+      </div>
+    </div>
   </div>
 {% endblock %}
