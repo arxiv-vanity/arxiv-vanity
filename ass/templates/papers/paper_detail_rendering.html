@@ -30,7 +30,6 @@
         } else {
           console.error("Unexpected response. Status: " + response.status);
           response.text().then(function(text) {
-            console.error("Response: " + text);
             _this.waitTimeout();
           });
         }
@@ -42,7 +41,7 @@
     };
     ArxivVanityWaiter.prototype.waitTimeout = function() {
       var _this = this;
-      setTimeout(function() { _this.wait(); }, 500);
+      setTimeout(function() { _this.wait(); }, 1000);
     };
 
     window.arxivVanityWaiter = new ArxivVanityWaiter("{% url 'paper_wait' paper.arxiv_id %}");
