@@ -1,5 +1,6 @@
+import re
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView
 from .models import Paper, Render, PaperIsNotRenderableError
 
@@ -95,3 +96,25 @@ def paper_wait(request, arxiv_id):
         r.wait()
         r.update_state()
     return HttpResponse('')
+
+
+ARXIV_ID_RE = re.compile(r'arxiv.org/[^\/]+/([\w\.]+)')
+
+
+def convert_query_to_arxiv_id(query):
+    match = ARXIV_ID_RE.search(query)
+    if match:
+        return match.group(1)
+
+
+def paper_convert(request):
+    if not request.GET.get('query'):
+        return render(request, "papers/paper_convert_error.html", {
+            "message": "No paper was given. Please enter something into the search box."
+        })
+    arxiv_id = convert_query_to_arxiv_id(request.GET['query'])
+    if not arxiv_id:
+        return render(request, "papers/paper_convert_error.html", {
+            "message": "Could not find Arxiv ID in that URL. Are you sure it's an arxiv.org URL?"
+        })
+    return redirect("paper_detail", arxiv_id=arxiv_id)

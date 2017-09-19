@@ -18,12 +18,13 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from .feedback.views import submit_feedback
-from .papers.views import PaperListView, paper_detail, paper_wait
+from .papers.views import PaperListView, paper_detail, paper_wait, paper_convert
 
 urlpatterns = [
     url(r'^$', PaperListView.as_view()),
     url(r'^papers/(?P<arxiv_id>[^/]+)/$', paper_detail, name='paper_detail'),
     url(r'^papers/(?P<arxiv_id>[^/]+)/wait-until-rendered/$', paper_wait, name='paper_wait'),
+    url(r'^convert/$', paper_convert, name='paper_convert'),
     url(r'^submit-feedback/$', submit_feedback),
     url(r'^admin/', admin.site.urls),
 ]

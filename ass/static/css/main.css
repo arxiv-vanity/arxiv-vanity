@@ -55,6 +55,18 @@ a:hover {
   border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }
 
+/* Forms */
+
+form {
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+}
+
+.btn-primary, .btn-primary:hover {
+  background-color: rgba(0,0,0,0.8);
+  border-color: rgba(0,0,0,0.8);
+}
+
+
 /* Components */
 
 .badge {

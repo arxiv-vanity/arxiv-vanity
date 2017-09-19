@@ -4,6 +4,7 @@ import shutil
 from django.conf import settings
 from django.test import TestCase, override_settings
 from ..models import Render
+from ..views import convert_query_to_arxiv_id
 from .utils import create_paper, create_render, create_render_with_html
 
 class PaperListViewTest(TestCase):
@@ -77,3 +78,15 @@ class PaperDetailViewTest(TestCase):
         res = self.client.get('/papers/1234.5678/')
         self.assertEqual(res.status_code, 500)
         self.assertIn('This paper failed to render', str(res.content))
+
+
+class TestPaperConvert(TestCase):
+    def test_convert_query_to_arxiv_id(self):
+        self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/abs/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/abs/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('https://example.com/abs/1709.04466v1'), None)
+        self.assertEqual(convert_query_to_arxiv_id('https://example.com/pdf/1709.04466v1'), None)
+        self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/1709.04466v1'), None)

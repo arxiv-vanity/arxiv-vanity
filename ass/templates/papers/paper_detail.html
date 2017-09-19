@@ -6,6 +6,16 @@
   {{ scripts|safe }}
   <link rel="stylesheet" href="{% static "css/feedback.css" %}" media="screen" title="no title" charset="utf-8">
 {% endblock %}
+{% block before_content %}
+  <div class="wtf-is-this-bar">
+    <div class="container">
+      Arxiv Vanity renders machine learning papers from <a href="https://arxiv.org/">Arxiv</a> as responsive web pages so you don't have to squint at a PDF. <!-- <a href="/about/">Learn more.</a> -->
+      <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+{% endblock %}
 {% block content %}
   {{ body|safe }}
 {% endblock %}
