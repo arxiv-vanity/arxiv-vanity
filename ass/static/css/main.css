@@ -47,10 +47,12 @@ dt-appendix h3 {
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
 }
 
-/* override bootstrap setting stuff we don't want */
+a,
 a:hover {
+  color: rgba(0,0,0,0.8);
   text-decoration: none;
   color: inherit;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }
 
 /* Components */
@@ -73,6 +75,7 @@ a:hover {
   font-size: 1.1em;
   letter-spacing: 0.05rem;
   margin-right: 0;
+  border-bottom: none;
 }
 
 .navbar .navbar-brand .logo {
@@ -82,6 +85,7 @@ a:hover {
 
 .navbar .navbar-brand:hover {
   color: rgba(255, 255, 255, 1.0) !important;
+  border-bottom: none;
 }
 
 .content {
@@ -114,9 +118,11 @@ a:hover {
   }
 }
 
-.paper-list-item h3 a {
+.paper-list-item h3 a,
+.paper-list-item h3 a:hover {
   color: rgba(0, 0, 0, 0.8);
   font-weight: normal;
+  border-bottom: none;
 }
 
 .paper-list-item .abstract,
