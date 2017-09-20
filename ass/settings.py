@@ -193,3 +193,13 @@ if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD'):
 
 # Paper feedback
 GITHUB_ACCESS_TOKEN = env('GITHUB_ACCESS_TOKEN', default='')
+
+# Papers
+PAPERS_MACHINE_LEARNING_CATEGORIES = [
+    "cs.CV",
+    "cs.AI",
+    "cs.LG",
+    "cs.CL",
+    "cs.NE",
+    "stat.ML"
+]

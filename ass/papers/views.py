@@ -11,7 +11,7 @@ class PaperListView(ListView):
 
     def get_queryset(self):
         qs = super(PaperListView, self).get_queryset()
-        return qs.has_successful_render()
+        return qs.machine_learning().has_successful_render()
 
 
 def render_error(request, paper, message, status=404):

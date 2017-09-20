@@ -7,7 +7,7 @@ from ..models import Paper, Render
 
 
 def create_paper(arxiv_id=None, title=None, updated=None, source_file=None,
-                 arxiv_url=None, pdf_url=None):
+                 arxiv_url=None, pdf_url=None, categories=None):
     return Paper.objects.create(**{
         'arxiv_id': arxiv_id or uuid.uuid4(),
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
@@ -16,7 +16,7 @@ def create_paper(arxiv_id=None, title=None, updated=None, source_file=None,
         'arxiv_url': arxiv_url or 'http://arxiv.org/abs/1708.03312v1',
         'authors': [{'affiliation': [], 'name': 'Yuanzhi Ke'},
                     {'affiliation': [], 'name': 'Masafumi Hagiwara'}],
-        'categories': ['cs.CL'],
+        'categories': categories or ['cs.CL'],
         'comment': '12 pages, 4 figures',
         'doi': None,
         'journal_ref': None,

@@ -1,21 +1,13 @@
+from django.conf import settings
 from ..papers.models import Paper, PaperIsNotRenderableError
 from .query import category_search_query
-
-CATEGORIES = [
-    "cs.CV",
-    "cs.AI",
-    "cs.LG",
-    "cs.CL",
-    "cs.NE",
-    "stat.ML"
-]
 
 
 def scrape_papers():
     """
     Download papers from Arxiv's API and insert new ones into the database.
     """
-    papers = category_search_query(CATEGORIES)
+    papers = category_search_query(settings.PAPERS_MACHINE_LEARNING_CATEGORIES)
     for paper in create_papers(papers):
         print("Downloading and rendering {}... ".format(paper.arxiv_id), end="", flush=True)
         try:

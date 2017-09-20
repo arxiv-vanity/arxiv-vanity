@@ -88,6 +88,11 @@ class PaperQuerySet(models.QuerySet):
         """
         return self.update_or_create_from_api(query_single_paper(arxiv_id))
 
+    def machine_learning(self):
+        """
+        Return only machine learning papers.
+        """
+        return self.filter(categories__overlap=settings.PAPERS_MACHINE_LEARNING_CATEGORIES)
 
 class Paper(models.Model):
     # ArXiV fields

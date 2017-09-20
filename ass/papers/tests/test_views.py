@@ -16,12 +16,15 @@ class PaperListViewTest(TestCase):
         create_render(paper=paper3, state=Render.STATE_FAILURE)
         paper4 = create_paper(title="Paper success render", arxiv_id="1234.5678")
         create_render(paper=paper4, state=Render.STATE_SUCCESS)
+        paper5 = create_paper(title="Paper not ML", categories=['astro-ph'])
+        create_render(paper=paper5, state=Render.STATE_SUCCESS)
         res = self.client.get('/')
         self.assertNotIn('Paper no render', str(res.content))
         self.assertNotIn('Paper unstarted render', str(res.content))
         self.assertNotIn('Paper failed render', str(res.content))
         self.assertIn('Paper success render', str(res.content))
         self.assertIn('/papers/1234.5678/', str(res.content))
+        self.assertNotIn('Paper not ML', str(res.content))
 
 
 TEST_MEDIA_ROOT = os.path.join(settings.MEDIA_ROOT, 'test')
