@@ -1,4 +1,4 @@
-# ASS
+# Arxiv Vanity
 
 ## Running in development
 
