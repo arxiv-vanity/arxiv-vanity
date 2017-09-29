@@ -3,7 +3,6 @@ from xml.etree import ElementTree
 import dateutil.parser
 import requests
 
-
 ROOT_URL = 'http://export.arxiv.org/api/'
 NS = {
     'atom': 'http://www.w3.org/2005/Atom',
@@ -28,7 +27,7 @@ def query_single_paper(paper_id):
     Download and parse a single paper from arxiv.
     """
     try:
-        result = list(query(id_list=[paper_id], max_results=1))
+        result = list(query_page(id_list=[paper_id], max_results=1))
     except requests.HTTPError as e:
         # This seems to mean the ID was badly formatted
         if e.response.status_code == 400:
@@ -39,9 +38,22 @@ def query_single_paper(paper_id):
     return result[0]
 
 
-def query(search_query=None, id_list=None, start=0, max_results=100):
+def query(search_query=None, id_list=None, results_per_iteration=100,
+          wait_time=5.0, max_index=10000):
     """
-    Download and parse papers from Arxiv's API.
+    Returns an iterator of parsed results from Arxiv's API.
+    """
+    for i in range(0, max_index, results_per_iteration):
+        print(f"Downloading page starting from {i}...", flush=True)
+        for result in query_page(search_query=search_query, id_list=id_list,
+                                 start=i, max_results=results_per_iteration):
+            yield result
+
+
+def query_page(search_query=None, id_list=None, start=0, max_results=100):
+    """
+    Download a single page of results from Arxiv's API and returns an iterator
+    of parsed results.
     """
     url_args = {"start": start,
                 "max_results": max_results,
@@ -57,7 +69,7 @@ def query(search_query=None, id_list=None, start=0, max_results=100):
 
 def parse(s):
     """
-    Parse an API response from Arxiv.
+    Returns an iterator of parsed results given an API response from Arxiv.
     """
     # We're not using Feedparser here because it eats a lot of the extra
     # data that Arxiv adds. By manually reading the XML, we can be sure we've

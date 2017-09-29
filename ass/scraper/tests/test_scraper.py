@@ -1,21 +1,21 @@
 import os
 from django.test import TestCase
-from ..query import parse
-from ..scraper import create_papers
-from ...papers.models import Paper
+import vcr
+from ..scraper import query_and_create_papers
+from ...papers.tests.utils import create_paper
 
-TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), 'test-data.xml')
+FIXTURES_PATH = os.path.join(os.path.dirname(__file__), 'fixtures')
 
 
 class ScraperTest(TestCase):
-    def test_create_papers(self):
-        papers = parse(open(TEST_DATA_PATH).read())
-        self.assertEqual(len(list(create_papers(papers))), 10)
-        self.assertEqual(Paper.objects.count(), 10)
-        # Duplicates should be ignored
-        self.assertEqual(len(list(create_papers(papers))), 0)
-        self.assertEqual(Paper.objects.count(), 10)
+    @vcr.use_cassette(os.path.join(FIXTURES_PATH, 'query.yaml'))
+    def test_query_and_create_papers(self):
+        # Insert paper that is at position 111 in query.yaml
+        paper = create_paper(arxiv_id='1709.09354v1')
 
-        latest = Paper.objects.latest()
-        self.assertEqual(
-            latest.title, "Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese")
+        # NOTE: If this raises vcr.errors.CannotOverwriteExistingCassetteException,
+        # that means it is probably not stopping paginating when it has reached 1709.09354v1
+        papers = list(query_and_create_papers())
+
+        # Check it stopped at 1709.09354v1
+        self.assertEqual(len(papers), 110)

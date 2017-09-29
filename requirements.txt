@@ -17,3 +17,4 @@ git+https://github.com/bfirsh/PyGithub@3b9b1734903ec7a6b16410f5efe48407f5ffe111#
 django-typogrify==1.3.3
 randomcolor==0.4.4.4
 raven==6.2.1
+vcrpy==1.11.1
