@@ -84,8 +84,7 @@ class PaperQuerySet(models.QuerySet):
         Query the Arxiv API and create a Paper from it.
 
         Raises:
-            `ass.scraper.query.PaperNotFoundError`: If paper does not exist on
-                arxiv.
+            `arxiv_vanity.scraper.query.PaperNotFoundError`: If paper does not exist on arxiv.
         """
         return self.update_or_create_from_api(query_single_paper(arxiv_id))
 
