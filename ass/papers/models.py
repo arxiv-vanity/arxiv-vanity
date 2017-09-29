@@ -1,4 +1,5 @@
 import datetime
+import docker.errors
 from django.conf import settings
 from django.db import models
 from django.contrib.postgres.fields import ArrayField, JSONField
@@ -190,11 +191,24 @@ class Paper(models.Model):
 
 
 class RenderQuerySet(models.QuerySet):
+    def running(self):
+        return self.filter(state=Render.STATE_RUNNING)
+
     def succeeded(self):
         return self.filter(state=Render.STATE_SUCCESS)
 
     def failed(self):
         return self.filter(state=Render.STATE_FAILURE)
+
+    def update_state(self):
+        for render in self:
+            try:
+                render.update_state()
+            except docker.errors.NotFound:
+                # TODO: logging
+                print(f"Could not update render {render.id}: Container ID {render.container_id} does not exist")
+        return self
+
 
 class Render(models.Model):
     STATE_UNSTARTED = 'unstarted'
