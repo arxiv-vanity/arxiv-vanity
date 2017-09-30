@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'arxiv_vanity.context_processors.extra_settings',
             ],
         },
     },
@@ -194,6 +195,9 @@ if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD'):
         env('BASICAUTH_USERNAME'): env('BASICAUTH_PASSWORD')
     }
     MIDDLEWARE_CLASSES.append('basicauth.middleware.BasicAuthMiddleware')
+
+# Google Analytics
+GOOGLE_ANALYTICS_PROPERTY_ID = env('GOOGLE_ANALYTICS_PROPERTY_ID', default='UA-107304984-2')
 
 # Paper feedback
 GITHUB_ACCESS_TOKEN = env('GITHUB_ACCESS_TOKEN', default='')
