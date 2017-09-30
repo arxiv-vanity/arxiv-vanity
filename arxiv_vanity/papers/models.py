@@ -1,4 +1,3 @@
-import datetime
 import docker.errors
 from django.conf import settings
 from django.db import models
@@ -93,6 +92,7 @@ class PaperQuerySet(models.QuerySet):
         Return only machine learning papers.
         """
         return self.filter(categories__overlap=settings.PAPERS_MACHINE_LEARNING_CATEGORIES)
+
 
 class Paper(models.Model):
     # ArXiV fields
@@ -265,7 +265,7 @@ class Render(models.Model):
         Start running this render.
         """
         if self.state != Render.STATE_UNSTARTED:
-            raise RenderAlreadyStartedError("Render {} has already been started".format(self.id))
+            raise RenderAlreadyStartedError(f"Render {self.id} has already been started")
         self.container_id = render_paper(
             self.paper.source_file.name,
             self.get_output_path()
@@ -278,9 +278,9 @@ class Render(models.Model):
         Update state of this render from the container.
         """
         if self.state == Render.STATE_UNSTARTED:
-            raise RenderWrongStateError("Render {} has not been started".format(self.id))
+            raise RenderWrongStateError(f"Render {self.id} has not been started")
         if self.state in (Render.STATE_SUCCESS, Render.STATE_FAILURE):
-            raise RenderWrongStateError("Render {} has already had state set".format(self.id))
+            raise RenderWrongStateError(f"Render {self.id} has already had state set")
         client = create_client()
         container = client.containers.get(self.container_id)
         self.container_inspect = container.attrs

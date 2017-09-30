@@ -37,10 +37,8 @@ def render_paper(source, output_path):
 
     # Production
     if settings.MEDIA_USE_S3:
-        source = "s3://{}/{}".format(settings.AWS_STORAGE_BUCKET_NAME,
-                                     source)
-        output_path = "s3://{}/{}".format(settings.AWS_STORAGE_BUCKET_NAME,
-                                          output_path)
+        source = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{source}"
+        output_path = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{output_path}"
         environment['AWS_ACCESS_KEY_ID'] = settings.AWS_ACCESS_KEY_ID
         environment['AWS_SECRET_ACCESS_KEY'] = settings.AWS_SECRET_ACCESS_KEY
         environment['AWS_S3_REGION_NAME'] = settings.AWS_S3_REGION_NAME

@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 import json
 from .models import Paper, Render, PaperIsNotRenderableError
 
+
 class IsDownloadedListFilter(admin.SimpleListFilter):
     title = 'is downloaded'
     parameter_name = 'is_downloaded'
@@ -62,7 +63,7 @@ class PaperAdmin(admin.ModelAdmin):
             render = obj.renders.latest()
         except Render.DoesNotExist:
             return ""
-        return '<a href="../render/{}/">{}</a>'.format(render.id, render.state)
+        return f'<a href="../render/{render.id}/">{render.state}</a>'
     latest_render.allow_tags = True
 
     def download(self, request, queryset):
@@ -80,11 +81,12 @@ class PaperAdmin(admin.ModelAdmin):
                 not_renderable += 1
             else:
                 rendered += 1
-        s = "{} successfully rendered.".format(rendered)
+        s = f"{rendered} successfully rendered."
         if not_renderable > 0:
-            s += " {} not renderable.".format(not_renderable)
+            s += f" {not_renderable} not renderable."
         self.message_user(request, s)
     render.short_description = 'Render selected papers'
+
 
 admin.site.register(Paper, PaperAdmin)
 
@@ -104,16 +106,17 @@ class RenderAdmin(admin.ModelAdmin):
     readonly_fields = RENDER_FIELDS
 
     def formatted_container_logs(self, obj):
-        return mark_safe("<pre>{}</pre>".format(obj.container_logs))
+        return mark_safe(f"<pre>{obj.container_logs}</pre>")
     formatted_container_logs.short_description = 'Container logs'
 
     def formatted_container_inspect(self, obj):
         formatted = json.dumps(obj.container_inspect, indent=2)
-        return mark_safe("<pre>{}</pre>".format(formatted))
+        return mark_safe(f"<pre>{formatted}</pre>")
     formatted_container_inspect.short_description = 'Container inspect'
 
     def short_paper_title(self, obj):
         return truncatechars(obj.paper.title, 70)
     short_paper_title.short_description = 'Paper'
+
 
 admin.site.register(Render, RenderAdmin)

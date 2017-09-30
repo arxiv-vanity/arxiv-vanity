@@ -19,6 +19,7 @@ def render_error(request, paper, message, status=404):
     return render(request, "papers/paper_detail_error.html", context,
                   status=status)
 
+
 def render_not_renderable_error(request, paper):
     return render_error(request, paper,
                         "This paper doesn't have LaTeX source code, so it "
