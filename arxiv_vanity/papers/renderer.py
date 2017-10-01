@@ -74,3 +74,18 @@ def pull_image():
     client = create_client()
     print(f"Pulling {settings.ENGRAFO_IMAGE}...")
     return client.images.pull(settings.ENGRAFO_IMAGE)
+
+
+def prune_images():
+    client = create_client()
+    print(f"Pulling {settings.ENGRAFO_IMAGE}...")
+    for image in client.images.list(filters={'dangling': True}):
+        image_id = image.attrs['Id']
+        print(f"Removing {image_id}...")
+        try:
+            client.images.remove(image_id)
+        except docker.errors.APIError as e:
+            if e.response.status_code == 409:
+                print(f"Image {image_id} in use")
+            else:
+                raise
