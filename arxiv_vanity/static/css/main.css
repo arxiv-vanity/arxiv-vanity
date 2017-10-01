@@ -72,6 +72,7 @@ form {
 .badge {
   padding: 0.4rem 0.5rem;
   margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
   font-weight: normal;
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
 }
