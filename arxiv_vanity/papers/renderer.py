@@ -68,3 +68,9 @@ def render_paper(source, output_path):
         detach=True,
     )
     return container.id
+
+
+def pull_image():
+    client = create_client()
+    print(f"Pulling {settings.ENGRAFO_IMAGE}...")
+    return client.images.pull(settings.ENGRAFO_IMAGE)
