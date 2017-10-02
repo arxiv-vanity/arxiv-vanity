@@ -78,7 +78,6 @@ def pull_image():
 
 def prune_images():
     client = create_client()
-    print(f"Pulling {settings.ENGRAFO_IMAGE}...")
     for image in client.images.list(filters={'dangling': True}):
         image_id = image.attrs['Id']
         print(f"Removing {image_id}...")
