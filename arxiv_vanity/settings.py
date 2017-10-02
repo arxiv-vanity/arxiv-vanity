@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'arxiv_vanity.scraper',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -193,7 +193,7 @@ if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD'):
     BASICAUTH_USERS = {
         env('BASICAUTH_USERNAME'): env('BASICAUTH_PASSWORD')
     }
-    MIDDLEWARE_CLASSES.append('basicauth.middleware.BasicAuthMiddleware')
+    MIDDLEWARE.append('basicauth.middleware.BasicAuthMiddleware')
 
 # Google Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = env('GOOGLE_ANALYTICS_PROPERTY_ID', default='UA-107304984-2')
