@@ -31,7 +31,7 @@ class Feedback(object):
         issue = self.repo.create_issue(title, body)
         self.column.create_card_for_issue(issue.id)
 
-        return issue.url
+        return issue.html_url
 
     def commit_image(self, jpg_data):
         image_sha1 = hashlib.sha1(jpg_data).hexdigest()
