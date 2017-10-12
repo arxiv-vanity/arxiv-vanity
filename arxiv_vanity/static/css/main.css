@@ -57,7 +57,9 @@ a:hover {
 
 /* Forms */
 
-form {
+form,
+.btn,
+.modal {
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
 }
 

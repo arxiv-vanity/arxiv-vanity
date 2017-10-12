@@ -5,16 +5,15 @@ class FeedbackForm {
   constructor(screenshooter) {
     this.screenshooter = screenshooter;
     this.$lip = this.makeLip();
-    this.$div = this.makeForm();
+    this.$modal = this.makeModal();
+    this.resetModal();
     this.screenshot = null;
     this.hide();
+    this.listen();
   }
 
   listen() {
-    $('#feedback-lip').on('click', this.show.bind(this));
-    $('#feedback-screenshot').on('click', this.takeScreenshot.bind(this));
-    $('#feedback-submit').on('click', this.submit.bind(this));
-    $('#feedback-close').on('click', this.hide.bind(this));
+    $('.feedback-lip-button').on('click', this.show.bind(this));
   }
 
   takeScreenshot() {
@@ -29,16 +28,16 @@ class FeedbackForm {
 
   setScreenshot(canvas) {
     this.screenshot = canvas;
-    $('#feedback-current-screenshot').html('').append(canvas);
+    this.$modal.find('.feedback-current-screenshot').html('').append(canvas);
   }
 
   hide() {
-    this.$div.hide();
+    this.$modal.modal('hide');
     return false;
   }
 
   show() {
-    this.$div.show();
+    this.$modal.modal('show');
     return false;
   }
 
@@ -51,6 +50,11 @@ class FeedbackForm {
               .replace('data:image/jpeg;base64,', '')
         : null;
     const text = $('#feedback-text').val();
+    if (!this.screenshot && !text) {
+      alert("Enter a description or take a screenshot.");
+      return;
+    }
+    this.$modal.find('.feedback-submit-button').text('Submitting...').prop('disabled', true);
     $.ajax({
       url: '/submit-feedback/',
       method: 'POST',
@@ -60,37 +64,63 @@ class FeedbackForm {
         text: text,
       }
     }).then((ret) => {
-      this.hide();
-      alert('Follow the issue at ' + ret.issue_url);
+      this.$modal.find('.modal-body').html(`Issue has been reported! <a href="${ret.issue_url}" target="_blank">Follow it on GitHub.</a>`);
+      this.$modal.find('.feedback-submit-button').remove();
+      this.$modal.on('hidden.bs.modal', () => {
+        this.resetModal();
+      });
     }).fail((xhr, error) => {
-      this.hide();
       alert(error);
     });
   }
 
   makeLip() {
-    const $a = $('<a href="#">Report a bug</a>');
-    $a.attr('id', 'feedback-lip');
+    const $a = $('<button class="feedback-lip-button btn btn-primary" data-toggle="modal" data-target="#feedbackModal">Report a bug</button>');
     $('body').append($a);
     return $a;
   }
 
-  makeForm() {
-    const $div = $(`
-<div id="feedback-form">
-<a href="#" id="feedback-close" title="Close">X</a>
-<center>
-<h3>Report a bug</h3>
-<p><a id="feedback-screenshot" href="#">Take screenshot</a></p>
-<p id="feedback-current-screenshot"></p>
-<p><label for="feedback-text">Describe the issue</label><br />
-  <textarea id="feedback-text"></textarea></p>
-<p><input type="submit" id="feedback-submit" value="Submit" /></p>
-</center>
-</div>
-`);
-    $('body').append($div);
-    return $div;
+  makeModal() {
+    $('#feedbackModal').remove();
+    const $modal = $(`
+      <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+          </div>
+        </div>
+      </div>
+    `);
+
+    $('body').append($modal);
+    return $modal;
+  }
+
+  resetModal() {
+    this.$modal.find('.modal-content').html(`
+      <div class="modal-header">
+        <h5 class="modal-title">Report a bug</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="feedback-text">Describe the issue</label>
+          <textarea id="feedback-text" class="form-control" rows="5"></textarea>
+        </div>
+
+        <p>You can also attach a screenshot, if you like.</p>
+        <p><button class="btn btn-secondary" class="feedback-screenshot-button">Take screenshot</button></p>
+        <p class="feedback-current-screenshot"></p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary feedback-submit-button">Submit</button>
+      </div>
+    `);
+    this.$modal.find('.feedback-screenshot-button').on('click', this.takeScreenshot.bind(this));
+    this.$modal.find('.feedback-submit-button').on('click', this.submit.bind(this));
   }
 
 }
@@ -101,6 +131,7 @@ class Screenshooter {
   constructor() {
     this.state = Screenshooter.INACTIVE;
     this.onComplete = null;
+    this.listen();
   }
 
   listen() {

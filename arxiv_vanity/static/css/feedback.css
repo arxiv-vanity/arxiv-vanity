@@ -1,79 +1,37 @@
-#feedback-form {
-    /* display: none; */
-    width: 300px;
-    background-color: black;
-    color: white;
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    margin-left: -150px;
-}
-
-#feedback-close {
-    color: white;
-    position: absolute;
-    top: 2px;
-    right: 5px;
-    text-decoration: none;
-}
-
-#feedback-current-screenshot {
-    max-height: 100px;
-    max-width: 200px;
+.feedback-current-screenshot {
+    max-height: 300px;
+    max-width: 400px;
     overflow: hidden;
 }
 
-#feedback-current-screenshot canvas {
+.feedback-current-screenshot canvas {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-#feedback-screenshot {
-    color: black;
-    background-color: white;
-    padding: 5px;
-}
-
-#feedback-form p {
-    margin: 20px;
-}
-
-#feedback-text {
-    width: 200px;
-    height: 100px;
-}
-
-#feedback-submit {
-    cursor: pointer;
-
-}
-
-#feedback-lip {
+.feedback-lip-button {
     display: none;
     position: fixed;
     bottom: 0;
     right: 50px;
-    background-color: black;
     padding: 10px 20px;
     z-index: 100;
-    color: white;
-    opacity: 0.5;
+    opacity: 0.8;
     transition: padding 0.2s, opacity 0.2s;
-    text-decoration: none;
+    border-radius: 3px 3px 0 0;
+    font-size: 14px;
 }
 
 @media (min-width: 1024px) {
-  #feedback-lip {
+  .feedback-lip-button {
     display: block;
   }
 }
 
-#feedback-lip:hover {
-    padding: 10px 20px 30px 20px;
-    opacity: 1.0;
+.feedback-lip-button:hover {
+    opacity: 1;
     transition: all 0.2s;
-    text-decoration: underline;
 }
 
 #screenshot-rect {
