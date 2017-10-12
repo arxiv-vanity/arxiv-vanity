@@ -105,6 +105,16 @@ form {
   margin-top: 4rem;
 }
 
+footer {
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+  background: rgb(250, 250, 250);
+  color: rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(0,0,0,0.1);
+  font-size: 14px;
+  padding-top: 26px;
+  padding-bottom: 60px;
+}
+
 .paper-list {
   margin-bottom: 4rem;
 }
