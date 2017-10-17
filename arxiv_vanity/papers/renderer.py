@@ -1,4 +1,5 @@
 import os
+import shlex
 import docker
 import hyper_sh
 from django.conf import settings
@@ -21,7 +22,22 @@ def create_client():
     return client
 
 
-def render_paper(source, output_path):
+def make_command(source, output_path, webhook_url):
+    command = [
+        f"engrafo -o {shlex.quote(output_path)} {shlex.quote(source)}",
+        f"EXIT_CODE=$?"
+    ]
+    if webhook_url:
+        command.extend([
+            f"echo Calling webhook {shlex.quote(webhook_url)} with payload exit_code=$EXIT_CODE",
+            f"curl -D - -X POST -F exit_code=$EXIT_CODE {shlex.quote(webhook_url)}"
+        ])
+
+    command.append("exit $EXIT_CODE")
+    return command
+
+
+def render_paper(source, output_path, webhook_url=None):
     """
     Render a source directory using Engrafo.
     """
@@ -34,6 +50,7 @@ def render_paper(source, output_path):
     labels = {}
     environment = {}
     volumes = {}
+    network = None
 
     # Production
     if settings.MEDIA_USE_S3:
@@ -56,15 +73,18 @@ def render_paper(source, output_path):
         # HOST_PWD is set in docker-compose.yml
         volumes[os.environ['HOST_PWD']] = {'bind': '/mnt', 'mode': 'rw'}
 
+        network = 'arxivvanity_default'
+
     if settings.ENGRAFO_USE_HYPER_SH:
         labels['sh_hyper_instancetype'] = settings.HYPER_INSTANCE_TYPE
 
     container = client.containers.run(
         settings.ENGRAFO_IMAGE,
-        ["engrafo", "-o", output_path, source],
+        'sh -c ' + shlex.quote('; '.join(make_command(source, output_path, webhook_url))),
         volumes=volumes,
         environment=environment,
         labels=labels,
+        network=network,
         detach=True,
     )
     return container.id

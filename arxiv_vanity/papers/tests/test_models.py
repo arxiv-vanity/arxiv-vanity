@@ -1,6 +1,7 @@
 from django.test import TestCase
 from ..models import guess_extension_from_headers
-from .utils import create_paper
+from .utils import create_paper, create_render
+
 
 class PaperTest(TestCase):
     def test_get_source_url(self):
@@ -45,3 +46,10 @@ class PaperTest(TestCase):
             'content-encoding': 'x-gzip',
             'content-type': 'application/x-dvi',
         }), '.dvi.gz')
+
+
+class RenderTest(TestCase):
+    def test_get_webhook_url(self):
+        paper = create_paper()
+        render = create_render(paper=paper)
+        self.assertEqual(render.get_webhook_url(), f"http://web:8000/renders/{render.pk}/update-state/")

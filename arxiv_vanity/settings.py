@@ -25,7 +25,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', 'web'])
 
 
 # Application definition
@@ -187,6 +187,8 @@ if ENGRAFO_USE_HYPER_SH:
     HYPER_SECRET_KEY = env('HYPER_SECRET_KEY')
     HYPER_ENDPOINT = env('HYPER_ENDPOINT', default='https://us-west-1.hyper.sh:443/v1.23')
     HYPER_INSTANCE_TYPE = env('HYPER_INSTANCE_TYPE', default='s4')
+# The prefix to use for Engrafo webhooks
+ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 
 # Basic auth
 if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD'):

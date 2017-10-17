@@ -260,6 +260,14 @@ class Render(models.Model):
         if self.container_id:
             return self.container_id[:12]
 
+    def get_webhook_url(self):
+        """
+        Get the webhook to call when the Engrafo job ends to update render
+        state.
+        """
+        path = reverse('render_update_state', args=(self.id,))
+        return settings.ENGRAFO_WEBHOOK_URL_PREFIX + path
+
     def run(self):
         """
         Start running this render.
@@ -268,7 +276,8 @@ class Render(models.Model):
             raise RenderAlreadyStartedError(f"Render {self.id} has already been started")
         self.container_id = render_paper(
             self.paper.source_file.name,
-            self.get_output_path()
+            self.get_output_path(),
+            webhook_url=self.get_webhook_url()
         )
         self.state = Render.STATE_RUNNING
         self.save()
