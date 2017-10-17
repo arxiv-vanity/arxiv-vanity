@@ -1,6 +1,7 @@
 import datetime
 import os
 import shutil
+from unittest import mock
 from django.conf import settings
 from django.test import TestCase, override_settings
 from ..models import Render
@@ -106,3 +107,13 @@ class TestPaperRenderState(TestCase):
         render.save()
         res = self.client.get('/papers/1234.5678/render-state/')
         self.assertEqual(res.json()['state'], 'success')
+
+
+class TestPaperUpdateRenderState(TestCase):
+    def test_paper_update_render_state(self):
+        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        render = create_render(paper=paper, state=Render.STATE_RUNNING)
+        with mock.patch('arxiv_vanity.papers.models.Render.update_state') as m:
+            res = self.client.post('/papers/1234.5678/update-render-state/')
+            self.assertEqual(res.status_code, 200)
+            m.assert_called_once_with()

@@ -94,6 +94,16 @@ def paper_render_state(request, arxiv_id):
     return JsonResponse({'state': r.state})
 
 
+def paper_update_render_state(request, arxiv_id):
+    paper = get_object_or_404(Paper, arxiv_id=arxiv_id)
+    try:
+        r = paper.renders.latest()
+    except Render.DoesNotExist:
+        raise Http404()
+    r.update_state()
+    return HttpResponse()
+
+
 ARXIV_ID_RE = re.compile(r'arxiv.org/[^\/]+/([\w\.]+)')
 
 
