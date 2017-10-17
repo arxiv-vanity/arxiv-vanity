@@ -20,43 +20,37 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js" integrity="sha256-aB35laj7IZhLTx58xw/Gm1EKOoJJKZt6RY+bH1ReHxs=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js" integrity="sha256-PieqE0QdEDMppwXrTzSZQr6tWFX3W5KkyRVyF1zN3eg=" crossorigin="anonymous"></script>
   <script>
-    function ArxivVanityWaiter(waitURL) {
-      this.waitURL = waitURL;
+    function ArxivVanityWaiter(renderStateURL) {
+      this.renderStateURL = renderStateURL;
     }
-    ArxivVanityWaiter.prototype.wait = function() {
+    ArxivVanityWaiter.prototype.checkState = function() {
       var _this = this;
-      var options = {
-        method: 'POST',
-        credentials: "same-origin",
-        headers: {
-          "X-CSRFToken": getCookie("csrftoken"),
-        },
-      };
-      fetch(this.waitURL, options).then(function(response) {
-        // Hit Heroku timeout
-        if (response.status == 503) {
-          _this.wait();
-        } else if (response.status == 200) {
-          window.location.reload();
-        } else {
-          console.error("Unexpected response. Status: " + response.status);
-          response.text().then(function(text) {
-            _this.waitTimeout();
-          });
-        }
-      }, function(error) {
-        console.error(error);
-        console.error("Encountered error waiting, retrying...");
-        _this.waitTimeout();
-      });
+      fetch(this.renderStateURL)
+        .then(function(response) {
+          if (response.status != 200) {
+            throw new Error("Unexpected response. Status: " + response.status);
+          }
+          return response.json();
+        })
+        .then(function(res) {
+          if (res.state === "running") {
+            _this.checkStateTimeout();
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch(function(error) {
+          console.error(error);
+          _this.checkStateTimeout();
+        });
     };
-    ArxivVanityWaiter.prototype.waitTimeout = function() {
+    ArxivVanityWaiter.prototype.checkStateTimeout = function() {
       var _this = this;
-      setTimeout(function() { _this.wait(); }, 1000);
+      setTimeout(function() { _this.checkState(); }, 2000);
     };
 
-    window.arxivVanityWaiter = new ArxivVanityWaiter("{% url 'paper_wait' paper.arxiv_id %}");
-    window.arxivVanityWaiter.wait();
+    window.arxivVanityWaiter = new ArxivVanityWaiter("{% url 'paper_render_state' paper.arxiv_id %}");
+    window.arxivVanityWaiter.checkState();
 
     var spinner = new Spinner().spin();
     document.querySelector(".waiter-spinner").appendChild(spinner.el);

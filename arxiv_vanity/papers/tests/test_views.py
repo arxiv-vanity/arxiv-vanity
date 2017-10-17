@@ -7,6 +7,7 @@ from ..models import Render
 from ..views import convert_query_to_arxiv_id
 from .utils import create_paper, create_render, create_render_with_html
 
+
 class PaperListViewTest(TestCase):
     def test_view(self):
         paper1 = create_paper(title="Paper no render")
@@ -93,3 +94,15 @@ class TestPaperConvert(TestCase):
         self.assertEqual(convert_query_to_arxiv_id('https://example.com/abs/1709.04466v1'), None)
         self.assertEqual(convert_query_to_arxiv_id('https://example.com/pdf/1709.04466v1'), None)
         self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/1709.04466v1'), None)
+
+
+class TestPaperRenderState(TestCase):
+    def test_render_state(self):
+        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        render = create_render(paper=paper, state=Render.STATE_RUNNING)
+        res = self.client.get('/papers/1234.5678/render-state/')
+        self.assertEqual(res.json()['state'], 'running')
+        render.state = Render.STATE_SUCCESS
+        render.save()
+        res = self.client.get('/papers/1234.5678/render-state/')
+        self.assertEqual(res.json()['state'], 'success')

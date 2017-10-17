@@ -293,13 +293,6 @@ class Render(models.Model):
             container.remove()
         self.save()
 
-    def wait(self):
-        """
-        Wait for this render to finish. Returns the exit code.
-        """
-        client = create_client()
-        return client.containers.get(self.container_id).wait()
-
     def get_processed_render(self):
         """
         Do final processing on this render and returns it as a dictionary of

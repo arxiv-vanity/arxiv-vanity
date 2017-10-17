@@ -1,5 +1,5 @@
 import re
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView
 from .models import Paper, Render, PaperIsNotRenderableError
@@ -85,18 +85,13 @@ def paper_detail(request, arxiv_id):
     })
 
 
-def paper_wait(request, arxiv_id):
+def paper_render_state(request, arxiv_id):
     paper = get_object_or_404(Paper, arxiv_id=arxiv_id)
     try:
         r = paper.renders.latest()
     except Render.DoesNotExist:
-        raise Http404('No render yet')
-    if r.state == Render.STATE_UNSTARTED:
-        raise Http404('No render yet')
-    if r.state == Render.STATE_RUNNING:
-        r.wait()
-        r.update_state()
-    return HttpResponse('')
+        raise Http404()
+    return JsonResponse({'state': r.state})
 
 
 ARXIV_ID_RE = re.compile(r'arxiv.org/[^\/]+/([\w\.]+)')
