@@ -109,11 +109,11 @@ class TestPaperRenderState(TestCase):
         self.assertEqual(res.json()['state'], 'success')
 
 
-class TestPaperUpdateRenderState(TestCase):
-    def test_paper_update_render_state(self):
+class TestRenderUpdateState(TestCase):
+    def test_render_update_state(self):
         paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         with mock.patch('arxiv_vanity.papers.models.Render.update_state') as m:
-            res = self.client.post('/papers/1234.5678/update-render-state/')
+            res = self.client.post(f'/renders/{render.pk}/update-state/')
             self.assertEqual(res.status_code, 200)
             m.assert_called_once_with()
