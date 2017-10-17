@@ -273,7 +273,7 @@ class Render(models.Model):
         self.state = Render.STATE_RUNNING
         self.save()
 
-    def update_state(self):
+    def update_state(self, exit_code=None):
         """
         Update state of this render from the container.
         """
@@ -284,13 +284,17 @@ class Render(models.Model):
         client = create_client()
         container = client.containers.get(self.container_id)
         self.container_inspect = container.attrs
-        if container.status == 'exited':
-            self.container_logs = container.logs()
-            if container.attrs['State']['ExitCode'] == 0:
+        self.container_logs = container.logs()
+
+        if exit_code is None and container.status == 'exited':
+            exit_code = container.attrs['State']['ExitCode']
+
+        if exit_code is not None:
+            # Safer to convert int to str than other way round
+            if str(exit_code) == '0':
                 self.state = Render.STATE_SUCCESS
             else:
                 self.state = Render.STATE_FAILURE
-            container.remove()
         self.save()
 
     def get_processed_render(self):

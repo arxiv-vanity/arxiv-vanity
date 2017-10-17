@@ -114,6 +114,6 @@ class TestRenderUpdateState(TestCase):
         paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         with mock.patch('arxiv_vanity.papers.models.Render.update_state') as m:
-            res = self.client.post(f'/renders/{render.pk}/update-state/')
+            res = self.client.post(f'/renders/{render.pk}/update-state/', {'exit_code': '1'})
             self.assertEqual(res.status_code, 200)
-            m.assert_called_once_with()
+            m.assert_called_once_with(exit_code='1')

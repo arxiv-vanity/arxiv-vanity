@@ -96,7 +96,7 @@ def paper_render_state(request, arxiv_id):
 
 def render_update_state(request, pk):
     r = get_object_or_404(Render, pk=pk)
-    r.update_state()
+    r.update_state(exit_code=request.POST.get('exit_code'))
     return HttpResponse()
 
 
