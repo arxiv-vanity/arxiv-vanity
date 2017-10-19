@@ -28,6 +28,8 @@ def make_command(source, output_path, webhook_url):
         f"EXIT_CODE=$?"
     ]
     if webhook_url:
+        # Pass through exit code to webhook because this container hasn't
+        # actually exited yet
         command.extend([
             f"echo Calling webhook {shlex.quote(webhook_url)} with payload exit_code=$EXIT_CODE",
             f"curl -D - -X POST -F exit_code=$EXIT_CODE {shlex.quote(webhook_url)}"
