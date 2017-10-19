@@ -13,7 +13,7 @@ The web app runs render jobs on [Hyper.sh](https://hyper.sh/) as Docker containe
 
 The process looks a bit like this:
 
-![Arxiv Vanity architecture](docs/architecture.svg)
+<img src="docs/architecture.svg" alt="Arxiv Vanity architecture" width="500">
 
 In detail:
 
