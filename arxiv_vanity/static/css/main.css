@@ -173,6 +173,17 @@ footer span {
   text-decoration: underline;
 }
 
+.paper-detail-status {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+.paper-detail-status h1,
+.paper-detail-status h2,
+.paper-detail-status h3 {
+  font-family: Baskerville, Georgia, serif;
+}
+
 .wtf-is-this-bar {
   border-bottom: 1px solid rgba(0,0,0,0.1);
   /*color: rgba(0,0,0,0.5);*/
@@ -202,7 +213,7 @@ footer span {
 }
 
 @media (min-width: 768px) {
-.page-home {
-  margin-top: 8em;
-}
+  .page-home {
+    margin-top: 8em;
+  }
 }
