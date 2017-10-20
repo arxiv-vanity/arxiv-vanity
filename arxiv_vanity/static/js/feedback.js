@@ -110,7 +110,7 @@ class FeedbackForm {
         </div>
 
         <p>You can also attach a screenshot, if you like.</p>
-        <p><button class="btn btn-secondary" class="feedback-screenshot-button">Take screenshot</button></p>
+        <p><button class="btn btn-secondary feedback-screenshot-button">Take screenshot</button></p>
         <p class="feedback-current-screenshot"></p>
       </div>
 
