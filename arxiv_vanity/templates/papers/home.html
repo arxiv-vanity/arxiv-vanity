@@ -29,8 +29,26 @@
             <button type="submit" class="btn btn-primary">Convert to web page</button>
           </form>
         </div>
-        <p>For example, <a href="/papers/1705.06031v2/">Learning to Identify Ambiguous and Misleading News Headlines</a></p>
+        <p>For example, <a href="/papers/1705.06031v2/" class="home-example-paper">Learning to Identify Ambiguous and Misleading News Headlines</a></p>
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  var HOME_EXAMPLE_PAPERS = [
+    {"id": "1512.03385", "title": "Deep Residual Learning for Image Recognition"},
+    {"id": "1705.06031v2", "title": "Learning to Identify Ambiguous and Misleading News Headlines"},
+    {"id": "1610.05256v1", "title": "Achieving Human Parity in Conversational Speech Recognition"},
+    {"id": "1411.4555", "title": "Show and Tell: A Neural Image Caption Generator"},
+  ];
+  (function() {
+    var example = HOME_EXAMPLE_PAPERS[Math.floor(Math.random() * HOME_EXAMPLE_PAPERS.length)];
+    var exampleEl = document.querySelector(".home-example-paper");
+    exampleEl.attributes.href = "/papers/" + example.id + "/";
+    exampleEl.innerHTML = example.title;
+  })();
+</script>
+
 {% endblock %}
