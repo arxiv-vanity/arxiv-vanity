@@ -2,10 +2,12 @@ import base64
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from .feedback import Feedback
 
 
 @csrf_exempt
+@require_POST
 def submit_feedback(request):
     if request.method != "POST":
         return HttpResponse(code=400)

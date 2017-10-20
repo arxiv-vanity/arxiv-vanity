@@ -2,6 +2,7 @@ import re
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from .models import Paper, Render, PaperIsNotRenderableError
 
@@ -96,6 +97,7 @@ def paper_render_state(request, arxiv_id):
 
 
 @csrf_exempt
+@require_POST
 def render_update_state(request, pk):
     r = get_object_or_404(Render, pk=pk, container_is_removed=False)
     r.update_state(exit_code=request.POST.get('exit_code'))
