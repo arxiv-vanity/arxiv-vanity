@@ -1,3 +1,4 @@
+import datetime
 import docker.errors
 from django.conf import settings
 from django.db import models
@@ -67,6 +68,17 @@ class PaperQuerySet(models.QuerySet):
     def has_no_successful_render(self):
         qs = self._with_has_successful_render_annotation()
         return qs.filter(has_successful_render=False)
+
+    def _with_has_not_expired_render_annotation(self):
+        expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
+        expired_date = datetime.datetime.now() - expired_delta
+        renders = Render.objects.filter(paper=models.OuterRef('pk'),
+                                        created_at__gte=expired_date)
+        return self.annotate(has_not_expired_render=models.Exists(renders))
+
+    def has_not_expired_render(self):
+        qs = self._with_has_not_expired_render_annotation()
+        return qs.filter(has_not_expired_render=True)
 
     def downloaded(self):
         return self.filter(source_file__isnull=False)
@@ -187,6 +199,7 @@ class Paper(models.Model):
             raise PaperIsNotRenderableError("This paper is not renderable.")
         render = Render.objects.create(paper=self)
         render.run()
+        return render
 
 
 class RenderQuerySet(models.QuerySet):
@@ -198,6 +211,14 @@ class RenderQuerySet(models.QuerySet):
 
     def failed(self):
         return self.filter(state=Render.STATE_FAILURE)
+
+    def not_expired(self):
+        """
+        Renders which have occurred in the last PAPERS_EXPIRED_DAYS days.
+        """
+        expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
+        expired_date = datetime.datetime.now() - expired_delta
+        return self.filter(created_at__gte=expired_date)
 
     def update_state(self):
         """

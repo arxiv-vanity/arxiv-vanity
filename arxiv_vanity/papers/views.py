@@ -59,22 +59,18 @@ def paper_detail(request, arxiv_id):
     # First, try to get the latest succeeded paper -- this is always what
     # we'll want to render.
     try:
-        r = paper.renders.succeeded().latest()
+        r = paper.renders.succeeded().not_expired().latest()
     except Render.DoesNotExist:
         # If there is no latest paper and the paper is not renderable, then
         # give up now.
         if not paper.is_renderable():
             return render_not_renderable_error(request, paper)
-        # See if the paper has been rendered at all
+        # See if there is a render running
         try:
-            r = paper.renders.latest()
+            r = paper.renders.not_expired().latest()
         except Render.DoesNotExist:
-            # For some reason this paper hasn't been rendered. Probably
-            # because it failed to download.
-            # TODO(bfirsh): Fix papers in this state in a batch job.
-            return render_error(request, paper,
-                                "This paper temporarily failed to render. "
-                                "Check back again soon – it will retry.")
+            # Either rendering has not started or it has expired.
+            r = paper.render()
 
         if r.state in (Render.STATE_UNSTARTED, Render.STATE_RUNNING):
             res = render(request, "papers/paper_detail_rendering.html", {

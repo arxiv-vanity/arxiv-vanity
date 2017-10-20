@@ -1,5 +1,6 @@
+import datetime
 from django.test import TestCase
-from ..models import guess_extension_from_headers
+from ..models import guess_extension_from_headers, Render
 from .utils import create_paper, create_render
 
 
@@ -53,3 +54,13 @@ class RenderTest(TestCase):
         paper = create_paper()
         render = create_render(paper=paper)
         self.assertEqual(render.get_webhook_url(), f"http://web:8000/renders/{render.pk}/update-state/")
+
+    def test_not_expired(self):
+        paper = create_paper()
+        render1 = create_render(paper=paper)
+        render1.created_at = datetime.datetime(1900, 1, 1)
+        render1.save()
+        render2 = create_render(paper=paper)
+        qs = Render.objects.not_expired()
+        self.assertNotIn(render1, qs)
+        self.assertIn(render2, qs)

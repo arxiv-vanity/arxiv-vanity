@@ -213,5 +213,9 @@ PAPERS_MACHINE_LEARNING_CATEGORIES = [
     "stat.ML"
 ]
 
+# Number of days after which to re-render papers
+PAPERS_EXPIRED_DAYS = env.int('PAPERS_EXPIRED_DAYS', default=30)
+
+
 # Caching
 PAPER_CACHE_SECONDS = env.int('PAPER_CACHE_SECONDS', default=60)

@@ -5,11 +5,11 @@ from ...models import Paper, Render
 
 
 class Command(BaseCommand):
-    help = 'Rerender all papers'
+    help = 'Rerender all papers which have a render that has not expired'
 
     def handle(self, *args, **options):
         print("Rendering papers", end='')
-        for i, paper in enumerate(Paper.objects.all()):
+        for i, paper in enumerate(Paper.objects.has_not_expired_render()):
             paper.render()
             print('.', end='', flush=True)
 
