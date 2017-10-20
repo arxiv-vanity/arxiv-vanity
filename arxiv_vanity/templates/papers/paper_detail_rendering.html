@@ -25,7 +25,14 @@
     }
     ArxivVanityWaiter.prototype.checkState = function() {
       var _this = this;
-      fetch(this.renderStateURL)
+      var options = {
+        headers: {
+          // HACK: remove me after release
+          'Authorization': 'Basic '+btoa('iamnot:elsevier'),
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+      };
+      fetch(this.renderStateURL, options)
         .then(function(response) {
           if (response.status != 200) {
             throw new Error("Unexpected response. Status: " + response.status);
