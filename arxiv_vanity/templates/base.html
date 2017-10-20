@@ -34,11 +34,11 @@
       {% block content %}(no content){% endblock %}
     </div>
 
-    <footer>
+    <footer class="{% block footer_class %}{% endblock %}">
       <div class="container">
-        Built by <a href="http://andreas.jansson.me.uk/">Andreas Jansson</a> and <a href="https://fir.sh">Ben Firshman</a>. Paper rendering and design based on <a href="https://distill.pub/">Distill</a>.
-        <br><br>
-        Found a problem? <a href="https://github.com/arxiv-vanity">Contribute on GitHub</a>.
+        <span>Built by <a href="http://andreas.jansson.me.uk/">Andreas Jansson</a> and <a href="https://fir.sh">Ben Firshman</a>.</span>
+        <span>Paper rendering based on <a href="https://distill.pub/">Distill</a>.</span>
+        <span><a href="https://github.com/arxiv-vanity">Contribute on GitHub</a>.</span>
       </div>
     </footer>
 

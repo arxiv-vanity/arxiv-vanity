@@ -20,7 +20,7 @@ class PaperListViewTest(TestCase):
         create_render(paper=paper4, state=Render.STATE_SUCCESS)
         paper5 = create_paper(title="Paper not ML", categories=['astro-ph'])
         create_render(paper=paper5, state=Render.STATE_SUCCESS)
-        res = self.client.get('/')
+        res = self.client.get('/papers/')
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         self.assertNotIn('Paper no render', str(res.content))
         self.assertNotIn('Paper unstarted render', str(res.content))

@@ -7,32 +7,6 @@
 
 {% block content %}
   <div class="container">
-    {% if page_obj.number == 1 %}
-      <div class="row justify-content-center mb-5">
-        <div class="col-lg-9 text-center">
-          <p class="lead my-3">Arxiv Vanity renders machine learning papers from <a href="https://arxiv.org/">Arxiv</a> as responsive web pages so you don't have to squint at a PDF. <!-- <a href="/about/">Learn more.</a> --></p>
-          <div class="d-none d-md-block">
-            <form class="my-5" method="get" action="{% url 'paper_convert' %}">
-              <div class="input-group input-group-lg">
-                <input type="text" name="query" value="" class="form-control" placeholder="Enter an Arxiv URL">
-                <span class="input-group-btn">
-                  <button type="submit" class="btn btn-primary">Convert to web page</button>
-                </span>
-              </div>
-            </form>
-          </div>
-          <div class="d-md-none">
-            <form class="my-5" method="get" action="{% url 'paper_convert' %}">
-              <div class="form-group">
-                <input type="text" name="query" value="" class="form-control" placeholder="Enter an Arxiv URL">
-              </div>
-              <button type="submit" class="btn btn-primary">Convert to web page</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    {% endif %}
-
     <div class="paper-list">
       <div class="row justify-content-left">
         <div class="col-lg-9">

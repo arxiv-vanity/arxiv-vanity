@@ -28,7 +28,8 @@
 
 body {
   color: rgba(0,0,0,0.8);
-  font-family: Georgia, serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+  font-weight: 300;
   font-size: 16px;
 }
 
@@ -36,10 +37,6 @@ body {
   body {
     font-size: 18px;
   }
-}
-
-h1, h2, h3 {
-  font-family: Baskerville, Georgia, serif;
 }
 
 /* HACK: damn these style sheets and their cascading */
@@ -81,22 +78,16 @@ form,
 }
 
 .navbar {
-  padding: 1.5rem 0;
+  padding: 1em 0;
   font-family: sans-serif;
   background-color: hsla(0, 59%, 40%, 0.9);
 }
 
 .navbar .navbar-brand {
   color: rgba(255, 255, 255, 1.0) !important;
-  font-size: 1.25em;
   letter-spacing: 0.05rem;
   margin-right: 0;
   border-bottom: none;
-}
-
-.navbar .navbar-brand .logo {
-  color: rgba(255, 255, 255, 1.0) !important;
-  font-size: 1.4em;
 }
 
 .navbar .navbar-brand:hover {
@@ -105,21 +96,39 @@ form,
 }
 
 .content {
-  margin-top: 4rem;
+  /*margin-top: 4rem;*/
 }
 
 footer {
-  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-  background: rgb(250, 250, 250);
-  color: rgba(0,0,0,0.5);
-  border-top: 1px solid rgba(0,0,0,0.1);
   font-size: 14px;
+  color: rgba(0,0,0,0.5);
   padding-top: 26px;
   padding-bottom: 60px;
+  text-align: center;
+}
+
+footer.fixed-bottom {
+  padding-bottom: 26px;
+}
+
+footer.footer-paper {
+  background: rgb(250, 250, 250);
+}
+
+footer span {
+  margin-right: 0.5em;
 }
 
 .paper-list {
+  font-family: Georgia, serif;
+  margin-top: 4rem;
   margin-bottom: 4rem;
+}
+
+.paper-list h1,
+.paper-list h2,
+.paper-list h3 {
+  font-family: Baskerville, Georgia, serif;
 }
 
 .paper-list > .row {
@@ -169,6 +178,30 @@ footer {
   background: rgb(250, 250, 250);
   position: relative;
   padding: 1rem 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
   font-size: 16px;
+}
+
+.wtf-is-this-bar p:last-child {
+  margin-bottom: 0;
+}
+
+.wtf-is-this-bar strong {
+  font-weight: 600;
+}
+
+.page-home {
+  margin-top: 4em;
+}
+
+.page-home .tagline {
+  font-size: 1.5rem;
+}
+.page-home input {
+  font-weight: 300;
+}
+
+@media (min-width: 768px) {
+.page-home {
+  margin-top: 8em;
+}
 }
