@@ -212,3 +212,6 @@ PAPERS_MACHINE_LEARNING_CATEGORIES = [
     "cs.NE",
     "stat.ML"
 ]
+
+# Caching
+PAPER_CACHE_SECONDS = env.int('PAPER_CACHE_SECONDS', default=60)

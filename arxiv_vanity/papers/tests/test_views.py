@@ -21,6 +21,7 @@ class PaperListViewTest(TestCase):
         paper5 = create_paper(title="Paper not ML", categories=['astro-ph'])
         create_render(paper=paper5, state=Render.STATE_SUCCESS)
         res = self.client.get('/')
+        self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         self.assertNotIn('Paper no render', str(res.content))
         self.assertNotIn('Paper unstarted render', str(res.content))
         self.assertNotIn('Paper failed render', str(res.content))
@@ -50,6 +51,7 @@ class PaperDetailViewTest(TestCase):
         )
         render = create_render_with_html(paper=paper)
         res = self.client.get('/papers/1234.5678/')
+        self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         self.assertIn('Some paper', str(res.content))
         self.assertIn('script was inserted', str(res.content))
         self.assertIn('style-was-inserted', str(res.content))
@@ -64,6 +66,7 @@ class PaperDetailViewTest(TestCase):
         )
         res = self.client.get('/papers/1234.5678/')
         self.assertEqual(res.status_code, 404)
+        self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         self.assertIn('This paper doesn&#39;t have LaTeX source code, so it can&#39;t be rendered as a web page', str(res.content))
         self.assertIn('https://arxiv.org/pdf/1708.03312v1', str(res.content))
 
@@ -75,6 +78,7 @@ class PaperDetailViewTest(TestCase):
         paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         res = self.client.get('/papers/1234.5678/')
+        self.assertEqual(res['Cache-Control'], 'max-age=0, no-cache, no-store, must-revalidate')
         self.assertIn('This paper is rendering', str(res.content))
 
     def test_it_shows_an_error_if_the_paper_has_failed_to_render(self):
@@ -82,6 +86,7 @@ class PaperDetailViewTest(TestCase):
         render = create_render(paper=paper, state=Render.STATE_FAILURE)
         res = self.client.get('/papers/1234.5678/')
         self.assertEqual(res.status_code, 500)
+        self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         self.assertIn('This paper failed to render', str(res.content))
 
 

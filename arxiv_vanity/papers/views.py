@@ -1,10 +1,18 @@
 import re
+from django.conf import settings
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.utils.cache import add_never_cache_headers, patch_cache_control
+from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from .models import Paper, Render, PaperIsNotRenderableError
+
+
+def add_paper_cache_control(response):
+    patch_cache_control(response, public=True, max_age=settings.PAPER_CACHE_SECONDS)
+    return response
 
 
 class PaperListView(ListView):
@@ -15,11 +23,16 @@ class PaperListView(ListView):
         qs = super(PaperListView, self).get_queryset()
         return qs.machine_learning().has_successful_render()
 
+    def dispatch(self, *args, **kwargs):
+        res = super(PaperListView, self).dispatch(*args, **kwargs)
+        return add_paper_cache_control(res)
+
 
 def render_error(request, paper, message, status=404):
     context = {"paper": paper, "message": message}
-    return render(request, "papers/paper_detail_error.html", context,
-                  status=status)
+    res = render(request, "papers/paper_detail_error.html", context,
+                 status=status)
+    return add_paper_cache_control(res)
 
 
 def render_not_renderable_error(request, paper):
@@ -64,10 +77,12 @@ def paper_detail(request, arxiv_id):
                                 "Check back again soon – it will retry.")
 
         if r.state in (Render.STATE_UNSTARTED, Render.STATE_RUNNING):
-            return render(request, "papers/paper_detail_rendering.html", {
+            res = render(request, "papers/paper_detail_rendering.html", {
                 'paper': paper,
                 'render': r,
             })
+            add_never_cache_headers(res)
+            return res
 
         # Fall back to error if there is no successful or running render
         return render_error(
@@ -78,15 +93,17 @@ def paper_detail(request, arxiv_id):
 
     processed_render = r.get_processed_render()
 
-    return render(request, "papers/paper_detail.html", {
+    res = render(request, "papers/paper_detail.html", {
         'paper': paper,
         'render': r,
         'body': processed_render['body'],
         'scripts': processed_render['scripts'],
         'styles': processed_render['styles'],
     })
+    return add_paper_cache_control(res)
 
 
+@never_cache
 def paper_render_state(request, arxiv_id):
     paper = get_object_or_404(Paper, arxiv_id=arxiv_id)
     try:
@@ -113,6 +130,7 @@ def convert_query_to_arxiv_id(query):
         return match.group(1)
 
 
+@never_cache
 def paper_convert(request):
     if not request.GET.get('query'):
         return render(request, "papers/paper_convert_error.html", {
