@@ -96,6 +96,7 @@ class TestPaperConvert(TestCase):
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/abs/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1709.04466v1.pdf'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('https://example.com/abs/1709.04466v1'), None)
         self.assertEqual(convert_query_to_arxiv_id('https://example.com/pdf/1709.04466v1'), None)

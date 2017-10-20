@@ -125,7 +125,7 @@ def render_update_state(request, pk):
     return HttpResponse()
 
 
-ARXIV_ID_RE = re.compile(r'arxiv.org/[^\/]+/([\w\.]+)')
+ARXIV_ID_RE = re.compile(r'arxiv.org/[^\/]+/([\w\.]+?)(\.pdf)?$')
 
 
 def convert_query_to_arxiv_id(query):
