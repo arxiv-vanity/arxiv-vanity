@@ -10,18 +10,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Rendering papers", end='')
-        for i, paper in enumerate(Paper.objects.all()):
+        for paper in Paper.objects.all():
             paper.render()
             print('.', end='', flush=True)
 
-            # Update render state periodically so we don't create too many
-            # containers
-            if i % 100 == 99:
-                print()
-                print("Updating render state...")
-                update_render_state()
-                print("Rendering papers", end='')
         print()
-        time.sleep(10)
-        print("Updating render state...")
-        update_render_state()

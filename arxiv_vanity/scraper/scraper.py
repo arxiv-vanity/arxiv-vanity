@@ -21,13 +21,6 @@ def scrape_and_render_papers():
         # This limits both API requests and source downloads because we're using iterators.
         time.sleep(5.0)
 
-    # Wait for renders to probably finished. For those that don't finish, a
-    # cron job will sweep them up.
-    time.sleep(30.0)
-
-    print("Updating render state...")
-    Render.objects.running().update_state()
-
 
 def query_and_create_papers():
     """
