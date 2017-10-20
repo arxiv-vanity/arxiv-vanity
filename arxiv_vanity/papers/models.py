@@ -201,9 +201,9 @@ class RenderQuerySet(models.QuerySet):
 
     def update_state(self):
         """
-        Update the state of all running renders.
+        Update the state of renders that have a container.
         """
-        for render in self.filter(state=Render.STATE_RUNNING):
+        for render in self.exclude(state=Render.STATE_UNSTARTED).filter(container_is_removed=False):
             try:
                 render.update_state()
             except docker.errors.NotFound:
@@ -229,6 +229,7 @@ class Render(models.Model):
     container_id = models.CharField(max_length=64, null=True, blank=True)
     container_inspect = JSONField(null=True, blank=True)
     container_logs = models.TextField(null=True, blank=True)
+    container_is_removed = models.BooleanField(default=False)
 
     objects = RenderQuerySet.as_manager()
 
@@ -288,15 +289,32 @@ class Render(models.Model):
     def update_state(self, exit_code=None):
         """
         Update state of this render from the container.
+
+        This is used for two purposes:
+
+        1. Called by the webhook to update the state. In this case, exit_code
+            is passed through instead of using the containers exit code
+            because the container is still running (it's sending the webhook!).
+
+        2. Called by the update_render_state cron job. In this case, it'll
+            sync all of the details about the containers that exist, and remove
+            any containers that have stopped. This sweeps up containers
+            that have reported their state in (1).
         """
         if self.state == Render.STATE_UNSTARTED:
             raise RenderWrongStateError(f"Render {self.id} has not been started")
-        if self.state in (Render.STATE_SUCCESS, Render.STATE_FAILURE):
-            raise RenderWrongStateError(f"Render {self.id} has already had state set")
         client = create_client()
-        container = client.containers.get(self.container_id)
-        self.container_inspect = container.attrs
-        self.container_logs = container.logs()
+
+        try:
+            container = client.containers.get(self.container_id)
+            self.container_inspect = container.attrs
+            self.container_logs = container.logs()
+        except docker.errors.NotFound:
+            # Container has been removed for some reason, so mark it as
+            # removed so we don't try to update its state again
+            self.container_is_removed = True
+            self.save()
+            return
 
         if exit_code is None and container.status == 'exited':
             exit_code = container.attrs['State']['ExitCode']
@@ -307,6 +325,15 @@ class Render(models.Model):
                 self.state = Render.STATE_SUCCESS
             else:
                 self.state = Render.STATE_FAILURE
+
+        if container.status == 'exited':
+            try:
+                container.remove()
+            except docker.errors.NotFound:
+                # Somebody got in there before us. Oh well.
+                pass
+            self.container_is_removed = True
+
         self.save()
 
     def get_processed_render(self):
