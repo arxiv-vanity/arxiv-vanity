@@ -88,7 +88,6 @@ def render_paper(source, output_path, webhook_url=None):
         labels=labels,
         network=network,
         detach=True,
-        remove=True,
     )
     return container.id
 

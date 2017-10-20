@@ -287,17 +287,12 @@ class Render(models.Model):
 
     def update_state(self, exit_code=None):
         """
-        Update state of this render from the container. If the container has
-        stopped but didn't remove itself for whatever reason, also remove the
-        container.
-
-        The exit code can be passed through to update the state even if the
-        container hasn't exited yet. This is used by the webhook -- the
-        webhook is called from inside the container, so we can't query its
-        exit code yet because the container is sending the webhook.
+        Update state of this render from the container.
         """
         if self.state == Render.STATE_UNSTARTED:
             raise RenderWrongStateError(f"Render {self.id} has not been started")
+        if self.state in (Render.STATE_SUCCESS, Render.STATE_FAILURE):
+            raise RenderWrongStateError(f"Render {self.id} has already had state set")
         client = create_client()
         container = client.containers.get(self.container_id)
         self.container_inspect = container.attrs
@@ -312,11 +307,7 @@ class Render(models.Model):
                 self.state = Render.STATE_SUCCESS
             else:
                 self.state = Render.STATE_FAILURE
-
         self.save()
-
-        if container.status == 'exited':
-            container.remove()
 
     def get_processed_render(self):
         """
