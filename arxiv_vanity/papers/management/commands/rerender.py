@@ -1,8 +1,7 @@
 import time
 import docker.errors
 from django.core.management.base import BaseCommand, CommandError
-from ...models import Paper
-from .update_render_state import update_render_state
+from ...models import Paper, Render
 
 
 class Command(BaseCommand):
@@ -19,9 +18,9 @@ class Command(BaseCommand):
             if i % 100 == 99:
                 print()
                 print("Updating render state...")
-                update_render_state()
+                Render.objects.update_state()
                 print("Rendering papers", end='')
         print()
         time.sleep(10)
         print("Updating render state...")
-        update_render_state()
+        Render.objects.update_state()
