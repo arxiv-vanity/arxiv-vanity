@@ -6,4 +6,4 @@ class Command(BaseCommand):
     help = 'Sync the state of renders in the database with what is on Docker'
 
     def handle(self, *args, **options):
-        Render.objects.running().update_state()
+        Render.objects.update_state()

@@ -200,7 +200,10 @@ class RenderQuerySet(models.QuerySet):
         return self.filter(state=Render.STATE_FAILURE)
 
     def update_state(self):
-        for render in self:
+        """
+        Update the state of all running renders.
+        """
+        for render in self.filter(state=Render.STATE_RUNNING):
             try:
                 render.update_state()
             except docker.errors.NotFound:
