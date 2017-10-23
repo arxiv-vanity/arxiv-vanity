@@ -9,4 +9,4 @@ ADD . /code/
 RUN SECRET_KEY=unset python manage.py collectstatic --no-input
 ENV WEB_CONCURRENCY 3
 ENV PORT 8000
-CMD gunicorn arxiv_vanity.wsgi -k gevent --worker-connections 100 --bind 0.0.0.0:8000 --config gunicorn_config.py
+CMD gunicorn arxiv_vanity.wsgi -k gevent --worker-connections 100 --bind 0.0.0.0:$PORT --config gunicorn_config.py
