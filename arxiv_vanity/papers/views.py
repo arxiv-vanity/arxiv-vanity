@@ -37,19 +37,6 @@ class PaperListView(ListView):
         return add_paper_cache_control(res)
 
 
-def render_error(request, paper, message, status=404):
-    context = {"paper": paper, "message": message}
-    res = render(request, "papers/paper_detail_error.html", context,
-                 status=status)
-    return add_paper_cache_control(res)
-
-
-def render_not_renderable_error(request, paper):
-    return render_error(request, paper,
-                        "This paper doesn't have LaTeX source code, so it "
-                        "can't be rendered as a web page.")
-
-
 def paper_detail(request, arxiv_id):
     # Get the requested paper
     try:
@@ -66,7 +53,9 @@ def paper_detail(request, arxiv_id):
             try:
                 paper.render()
             except PaperIsNotRenderableError:
-                return render_not_renderable_error(request, paper)
+                res = render(request, "papers/paper_detail_not_renderable.html",
+                             {"paper": paper}, status=404)
+                return add_paper_cache_control(res)
 
     # First, try to get the latest succeeded paper -- this is always what
     # we'll want to render.
@@ -76,7 +65,9 @@ def paper_detail(request, arxiv_id):
         # If there is no latest paper and the paper is not renderable, then
         # give up now.
         if not paper.is_renderable():
-            return render_not_renderable_error(request, paper)
+            res = render(request, "papers/paper_detail_not_renderable.html",
+                         {"paper": paper}, status=404)
+            return add_paper_cache_control(res)
         # See if there is a render running
         try:
             r = paper.renders.not_expired().latest()
@@ -93,11 +84,9 @@ def paper_detail(request, arxiv_id):
             return res
 
         # Fall back to error if there is no successful or running render
-        return render_error(
-            request, paper,
-            "This paper failed to render. We are aware of the problem and "
-            "will hopefully get it fixed soon!",
-            status=500)
+        res = render(request, "papers/paper_detail_error.html",
+                     {"paper": paper}, status=500)
+        return add_paper_cache_control(res)
 
     processed_render = r.get_processed_render()
 

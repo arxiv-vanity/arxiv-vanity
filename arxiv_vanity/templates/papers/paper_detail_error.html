@@ -10,8 +10,8 @@
     <div class="row justify-content-left">
       <div class="col-lg-9">
         <hr class="mb-5">
-        <p>{{ message }}</p>
-        <p>Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
+        <p>This paper failed to render. Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
+        <p>If you want to help fix this problem, <a href="https://github.com/arxiv-vanity/engrafo#development-environment">set up a development environent for Engrafo</a> and open up <a href="http://localhost:8010/html/{{ paper.arxiv_id }}">http://localhost:8010/html/{{ paper.arxiv_id }}</a> to see the error.
       </div>
     </div>
   </div>
