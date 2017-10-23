@@ -6,6 +6,7 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.urls import reverse
+from django.utils import timezone
 import os
 import requests
 from ..scraper.query import query_single_paper
@@ -71,7 +72,7 @@ class PaperQuerySet(models.QuerySet):
 
     def _with_has_not_expired_render_annotation(self):
         expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
-        expired_date = datetime.datetime.now() - expired_delta
+        expired_date = timezone.now() - expired_delta
         renders = Render.objects.filter(paper=models.OuterRef('pk'),
                                         created_at__gte=expired_date)
         return self.annotate(has_not_expired_render=models.Exists(renders))
@@ -217,7 +218,7 @@ class RenderQuerySet(models.QuerySet):
         Renders which have occurred in the last PAPERS_EXPIRED_DAYS days.
         """
         expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
-        expired_date = datetime.datetime.now() - expired_delta
+        expired_date = timezone.now() - expired_delta
         return self.filter(created_at__gte=expired_date)
 
     def update_state(self):

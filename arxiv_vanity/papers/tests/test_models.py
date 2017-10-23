@@ -1,5 +1,6 @@
 import datetime
 from django.test import TestCase
+from django.utils import timezone
 from ..models import guess_extension_from_headers, Render
 from .utils import create_paper, create_render
 
@@ -58,7 +59,7 @@ class RenderTest(TestCase):
     def test_not_expired(self):
         paper = create_paper()
         render1 = create_render(paper=paper)
-        render1.created_at = datetime.datetime(1900, 1, 1)
+        render1.created_at = datetime.datetime(1900, 1, 1).replace(tzinfo=timezone.utc)
         render1.save()
         render2 = create_render(paper=paper)
         qs = Render.objects.not_expired()
