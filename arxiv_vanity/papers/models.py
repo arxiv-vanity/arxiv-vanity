@@ -122,7 +122,7 @@ class Paper(models.Model):
     doi = models.CharField(null=True, blank=True, max_length=100)
     journal_ref = models.TextField(null=True, blank=True, max_length=100)
 
-    # ASS fields
+    # Arxiv Vanity fields
     source_file = models.FileField(upload_to='paper-sources/', null=True, blank=True)
 
     objects = PaperQuerySet.as_manager()
