@@ -92,18 +92,32 @@ class PaperDetailViewTest(TestCase):
 
 class TestPaperConvert(TestCase):
     def test_convert_query_to_arxiv_id(self):
+        # arxiv URLs
         self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/abs/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('http://arXiv.org/abs/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/abs/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1709.04466v1.pdf'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
+
+        # arxiv IDs
+        self.assertEqual(convert_query_to_arxiv_id('1709.04466'), '1709.04466')
+        self.assertEqual(convert_query_to_arxiv_id('1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('arxiv:1709.04466'), '1709.04466')
+        self.assertEqual(convert_query_to_arxiv_id('arXiv:1709.04466'), '1709.04466')
+
+        # arxiv vanity URLs
         self.assertEqual(convert_query_to_arxiv_id('https://www.arxiv-vanity.com/papers/1707.08901v1/'), '1707.08901v1')
         self.assertEqual(convert_query_to_arxiv_id('http://localhost:8010/html/1707.08901v1/'), '1707.08901v1')
         self.assertEqual(convert_query_to_arxiv_id('http://localhost:8000/papers/1707.08901v1/'), '1707.08901v1')
+
+        # non-matching
         self.assertEqual(convert_query_to_arxiv_id('https://example.com/abs/1709.04466v1'), None)
         self.assertEqual(convert_query_to_arxiv_id('https://example.com/pdf/1709.04466v1'), None)
         self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/1709.04466v1'), None)
+        self.assertEqual(convert_query_to_arxiv_id('4789432'), None)
+        self.assertEqual(convert_query_to_arxiv_id('foobar'), None)
 
 
 class TestPaperRenderState(TestCase):
