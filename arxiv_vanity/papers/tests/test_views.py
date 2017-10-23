@@ -86,7 +86,7 @@ class PaperDetailViewTest(TestCase):
         paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
         render = create_render(paper=paper, state=Render.STATE_FAILURE)
         res = self.client.get('/papers/1234.5678/')
-        self.assertEqual(res.status_code, 500)
+        self.assertEqual(res.status_code, 200)
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         self.assertIn('This paper failed to render', str(res.content))
 
