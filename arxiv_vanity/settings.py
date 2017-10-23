@@ -198,7 +198,7 @@ if ENGRAFO_USE_HYPER_SH:
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 
 # Basic auth
-if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD'):
+if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD', default=''):
     BASICAUTH_USERS = {
         env('BASICAUTH_USERNAME'): env('BASICAUTH_PASSWORD')
     }
