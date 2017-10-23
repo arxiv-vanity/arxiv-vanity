@@ -108,8 +108,13 @@ footer {
   text-align: center;
 }
 
-footer.fixed-bottom {
-  padding-bottom: 26px;
+@media (min-width: 768px) {
+  footer.fixed {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 26px;
+  }
 }
 
 footer.footer-paper {
@@ -208,11 +213,11 @@ footer span {
 }
 
 .page-home {
-  margin-top: 4em;
+  margin-top: 3em;
 }
 
 .page-home .tagline {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 .page-home input {
   font-weight: 300;
@@ -221,5 +226,8 @@ footer span {
 @media (min-width: 768px) {
   .page-home {
     margin-top: 8em;
+  }
+  .page-home .tagline {
+    font-size: 1.5rem;
   }
 }
