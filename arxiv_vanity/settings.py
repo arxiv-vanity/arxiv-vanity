@@ -89,7 +89,7 @@ DATABASES['default'].update({
     'ATOMIC_REQUESTS': False,
     'CONN_MAX_AGE': 0,
     'OPTIONS': {
-        'MAX_CONNS': 4
+        'MAX_CONNS': env.int('DATABASE_MAX_CONNS', default=4)
     }
 })
 
