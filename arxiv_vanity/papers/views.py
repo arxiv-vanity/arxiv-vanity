@@ -85,7 +85,7 @@ def paper_detail(request, arxiv_id):
 
         # Fall back to error if there is no successful or running render
         res = render(request, "papers/paper_detail_error.html",
-                     {"paper": paper}, status=200)
+                     {"paper": paper}, status=500)
         return add_paper_cache_control(res)
 
     processed_render = r.get_processed_render()
