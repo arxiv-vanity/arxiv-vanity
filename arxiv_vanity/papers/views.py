@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from .models import Paper, Render, PaperIsNotRenderableError
+from ..scraper.query import PaperNotFoundError
 
 
 def add_paper_cache_control(response):
@@ -57,7 +58,10 @@ def paper_detail(request, arxiv_id):
     except Paper.DoesNotExist:
         # update_or_create to avoid the race condition where several people
         # hit a new paper at the same time
-        paper, created = Paper.objects.update_or_create_from_arxiv_id(arxiv_id)
+        try:
+            paper, created = Paper.objects.update_or_create_from_arxiv_id(arxiv_id)
+        except PaperNotFoundError:
+            raise Http404(f"Paper '{arxiv_id}' not found on Arxiv")
         if created:
             try:
                 paper.render()
