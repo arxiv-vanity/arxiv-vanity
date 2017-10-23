@@ -77,23 +77,37 @@ form,
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
 }
 
+.navbar-container {
+  background-color: hsla(0, 59%, 40%, 0.9);
+}
+
 .navbar {
   padding: 1em 0;
-  font-family: sans-serif;
-  background-color: hsla(0, 59%, 40%, 0.9);
 }
 
 .navbar .navbar-brand {
   color: rgba(255, 255, 255, 1.0) !important;
   font-size: 1em;
-  letter-spacing: 0.05rem;
+  letter-spacing: 0.01rem;
+  font-weight: 400;
   margin-right: 0;
   border-bottom: none;
 }
 
 .navbar .navbar-brand:hover {
-  color: rgba(255, 255, 255, 1.0) !important;
   border-bottom: none;
+}
+
+.navbar .nav-link {
+  font-size: 0.9em;
+  border-bottom: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (min-width: 768px) {
+  .navbar .nav-link {
+    padding-right: 1em !important;
+  }
 }
 
 .content {

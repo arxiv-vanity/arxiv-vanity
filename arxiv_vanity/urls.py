@@ -21,8 +21,8 @@ from .feedback.views import submit_feedback
 from .papers.views import HomeView, PaperListView, paper_detail, paper_convert, paper_render_state, render_update_state
 
 urlpatterns = [
-    url(r'^$', HomeView.as_view()),
-    url(r'^papers/$', PaperListView.as_view()),
+    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^papers/$', PaperListView.as_view(), name='paper_list'),
     url(r'^papers/(?P<arxiv_id>[^/]+)/$', paper_detail, name='paper_detail'),
     url(r'^papers/(?P<arxiv_id>[^/]+)/render-state/$', paper_render_state, name='paper_render_state'),
     url(r'^renders/(?P<pk>\d+)/update-state/$', render_update_state, name='render_update_state'),
