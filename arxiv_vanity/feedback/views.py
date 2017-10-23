@@ -19,7 +19,12 @@ def submit_feedback(request):
         jpg_data = None
     text = request.POST['text']
 
-    feedback = Feedback(settings.GITHUB_ACCESS_TOKEN)
+    feedback = Feedback(
+        github_access_token=settings.GITHUB_ACCESS_TOKEN,
+        repo_name=settings.FEEDBACK_REPO_NAME,
+        project_id=settings.FEEDBACK_PROJECT_ID,
+        column_id=settings.FEEDBACK_COLUMN_ID
+    )
     issue_url = feedback.create_issue(arxiv_id, text, jpg_data)
 
     return JsonResponse({'issue_url': issue_url})
