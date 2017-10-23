@@ -2,7 +2,7 @@
 {% load humanize %}
 {% load papers %}
 
-{% block whole_title %}Arxiv Vanity{% endblock %}
+{% block title %}Latest Papers{% endblock %}
 
 
 {% block content %}
@@ -10,7 +10,7 @@
     <div class="paper-list">
       <div class="row justify-content-left">
         <div class="col-lg-9">
-          <h2>Latest papers</h2>
+          <h2>Latest Papers</h2>
           <hr>
           {% for paper in object_list %}
             <div class="paper-list-item">
