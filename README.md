@@ -2,6 +2,8 @@
 
 [Arxiv Vanity](https://www.arxiv-vanity.com) renders papers from [Arxiv](https://arxiv.org) as responsive web pages so you don't have to squint at a PDF.
 
+This is the web interface for viewing papers. The actual LaTeX to HTML conversion (the interesting bit) is done by [Engrafo](https://github.com/arxiv-vanity/engrafo).
+
 ## Design
 
 Arxiv Vanity downloads LaTeX source from Arxiv and renders it as HTML using the [Engrafo](https://github.com/arxiv-vanity/engrafo) LaTeX to HTML convertor.
