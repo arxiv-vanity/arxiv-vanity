@@ -18,5 +18,4 @@ randomcolor==0.4.4.5
 raven==6.2.1
 vcrpy==1.11.1
 django-db-geventpool==1.21
-django-db-geventpool==1.21
 gevent==1.2.2
