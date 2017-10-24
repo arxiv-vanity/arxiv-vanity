@@ -239,7 +239,7 @@ footer span {
 
 @media (min-width: 768px) {
   .page-home {
-    margin-top: 8em;
+    margin-top: 6em;
   }
   .page-home .tagline {
     font-size: 1.5rem;
