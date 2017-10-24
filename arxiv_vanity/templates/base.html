@@ -1,10 +1,10 @@
 {% load staticfiles %}<!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="alternate" type="application/rss+xml" href="{% url 'paper_feed' %}">
 
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_PROPERTY_ID }}"></script>
