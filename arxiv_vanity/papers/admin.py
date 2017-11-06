@@ -92,8 +92,8 @@ admin.site.register(Paper, PaperAdmin)
 
 
 class RenderAdmin(admin.ModelAdmin):
-    list_display = ['created_at', 'short_paper_title', 'state', 'short_container_id']
-    list_filter = ['state']
+    list_display = ['created_at', 'short_paper_title', 'state', 'short_container_id', 'is_expired']
+    list_filter = ['state', 'is_expired']
     list_per_page = 250
     list_select_related = ['paper']
 

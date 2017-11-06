@@ -62,6 +62,16 @@ class RenderTest(TestCase):
         render1.created_at = datetime.datetime(1900, 1, 1).replace(tzinfo=timezone.utc)
         render1.save()
         render2 = create_render(paper=paper)
+
+        # haven't updated expired status yet
+        qs = Render.objects.not_expired()
+        self.assertIn(render1, qs)
+        self.assertIn(render2, qs)
+
+        # batch job which updates the expired flag
+        Render.objects.update_is_expired()
+
+        # render1 should have expired now
         qs = Render.objects.not_expired()
         self.assertNotIn(render1, qs)
         self.assertIn(render2, qs)

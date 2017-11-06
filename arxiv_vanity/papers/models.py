@@ -71,10 +71,8 @@ class PaperQuerySet(models.QuerySet):
         return qs.filter(has_successful_render=False)
 
     def _with_has_not_expired_render_annotation(self):
-        expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
-        expired_date = timezone.now() - expired_delta
         renders = Render.objects.filter(paper=models.OuterRef('pk'),
-                                        created_at__gte=expired_date)
+                                        is_expired=False)
         return self.annotate(has_not_expired_render=models.Exists(renders))
 
     def has_not_expired_render(self):
@@ -217,9 +215,7 @@ class RenderQuerySet(models.QuerySet):
         """
         Renders which have occurred in the last PAPERS_EXPIRED_DAYS days.
         """
-        expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
-        expired_date = timezone.now() - expired_delta
-        return self.filter(created_at__gte=expired_date)
+        return self.filter(is_expired=False)
 
     def update_state(self):
         """
@@ -232,6 +228,16 @@ class RenderQuerySet(models.QuerySet):
                 # TODO: logging
                 print(f"Could not update render {render.id}: Container ID {render.container_id} does not exist")
         return self
+
+    def update_is_expired(self):
+        """
+        Set renders as expired if they were rendered more than PAPERS_EXPIRED_DAYS
+        ago.
+        """
+        expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
+        expired_date = timezone.now() - expired_delta
+        qs = self.filter(is_expired=False, created_at__lte=expired_date)
+        return qs.update(is_expired=True)
 
 
 class Render(models.Model):
@@ -248,6 +254,7 @@ class Render(models.Model):
         (STATE_SUCCESS, 'Success'),
         (STATE_FAILURE, 'Failure'),
     ))
+    is_expired = models.BooleanField(default=False)
     container_id = models.CharField(max_length=64, null=True, blank=True)
     container_inspect = JSONField(null=True, blank=True)
     container_logs = models.TextField(null=True, blank=True)

@@ -7,3 +7,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         Render.objects.update_state()
+        Render.objects.update_is_expired()
