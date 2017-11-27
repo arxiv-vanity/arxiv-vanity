@@ -11,7 +11,7 @@ lxml==4.1.1
 django-storages==1.6.5
 boto3==1.4.7
 git+https://github.com/tardyp/hyper_sh.git@56175bc094f6c2dcac50ed9825d95a47abf6d6fe#egg=hyper-sh
-django-basicauth==0.4.1
+django-basicauth==0.4.2
 git+https://github.com/bfirsh/PyGithub@3b9b1734903ec7a6b16410f5efe48407f5ffe111#egg=pyGithub
 django-typogrify==1.3.3
 randomcolor==0.4.4.5
