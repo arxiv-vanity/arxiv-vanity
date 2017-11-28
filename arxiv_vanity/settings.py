@@ -197,13 +197,6 @@ if ENGRAFO_USE_HYPER_SH:
 # The prefix to use for Engrafo webhooks
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 
-# Basic auth
-if env('BASICAUTH_USERNAME', default='') and env('BASICAUTH_PASSWORD', default=''):
-    BASICAUTH_USERS = {
-        env('BASICAUTH_USERNAME'): env('BASICAUTH_PASSWORD')
-    }
-    MIDDLEWARE.append('basicauth.middleware.BasicAuthMiddleware')
-
 # Google Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = env('GOOGLE_ANALYTICS_PROPERTY_ID', default='UA-107304984-2')
 
