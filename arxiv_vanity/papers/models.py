@@ -239,6 +239,13 @@ class RenderQuerySet(models.QuerySet):
         qs = self.filter(is_expired=False, created_at__lte=expired_date)
         return qs.update(is_expired=True)
 
+    def force_expire(self):
+        """
+        Mark renders as expired even if they haven't. Useful for forcing
+        re-rendering.
+        """
+        return self.update(is_expired=True)
+
 
 class Render(models.Model):
     STATE_UNSTARTED = 'unstarted'

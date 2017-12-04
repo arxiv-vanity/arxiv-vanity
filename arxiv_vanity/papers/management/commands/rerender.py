@@ -5,7 +5,7 @@ from ...models import Paper, Render
 
 
 class Command(BaseCommand):
-    help = 'Rerender all papers which have a render that has not expired'
+    help = 'Rerender all papers which have a render that has not expired. You might want to do ./manage.py mark_all_renders_as_expired instead'
 
     def handle(self, *args, **options):
         print("Rendering papers", end='')
