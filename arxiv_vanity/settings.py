@@ -193,7 +193,9 @@ if ENGRAFO_USE_HYPER_SH:
     HYPER_ACCESS_KEY = env('HYPER_ACCESS_KEY')
     HYPER_SECRET_KEY = env('HYPER_SECRET_KEY')
     HYPER_ENDPOINT = env('HYPER_ENDPOINT', default='https://us-west-1.hyper.sh:443/v1.23')
-    HYPER_INSTANCE_TYPE = env('HYPER_INSTANCE_TYPE', default='s4')
+    # https://hyper.sh/pricing.html
+    # m1 = 1 GB RAM
+    HYPER_INSTANCE_TYPE = env('HYPER_INSTANCE_TYPE', default='m1')
 # The prefix to use for Engrafo webhooks
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 
