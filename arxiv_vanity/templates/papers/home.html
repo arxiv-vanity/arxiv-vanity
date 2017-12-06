@@ -39,21 +39,31 @@
 {% block extra_js %}
 <script>
   var HOME_EXAMPLE_PAPERS = [
-    {"id": "1512.03385", "title": "Deep Residual Learning for Image Recognition"},
-    {"id": "1705.06031v2", "title": "Learning to Identify Ambiguous and Misleading News Headlines"},
-    {"id": "1610.05256v1", "title": "Achieving Human Parity in Conversational Speech Recognition"},
-    {"id": "1411.4555", "title": "Show and Tell: A Neural Image Caption Generator"},
-    {"id": "1708.05866", "title": "A Brief Survey of Deep Reinforcement Learning"},
-    // {"id": "1708.03492v1", "title": "Break it Down for Me: A Study in Automated Lyric Annotation"},
     {"id": "1710.07035", "title": "Generative Adversarial Networks: An Overview"},
     {"id": "1708.00884", "title": "Efficient Fingerprint Extraction and Matching Using Smartphone Camera"},
     {"id": "1709.00440", "title": "PassGAN: A Deep Learning Approach for Password Guessing"},
     {"id": "1705.04085v3", "title": "Automatic Extrinsic Calibration for Lidar-Stereo Vehicle Sensor Setups"},
-    {"id": "1609.03499v2", "title": "WaveNet: A Generative Model for Raw Audio"},
     {"id": "1708.06733", "title": "BadNets: Identifying Vulnerabilities in the Machine Learning Model Supply Chain"},
     {"id": "1710.06542", "title": "Asymmetric Actor Critic for Image-Based Robot Learning"},
     {"id": "1710.06363", "title": "The Case for Future Hadron Colliders From B → K(*)μ+μ- Decays"},
     {"id": "1703.07815", "title": "Cross-View Image Matching for Geo-localization in Urban Environments"},
+
+    // disabled
+    // https://github.com/arxiv-vanity/engrafo/issues/218
+    // {"id": "1705.06031v2", "title": "Learning to Identify Ambiguous and Misleading News Headlines"},
+    // too much broken stuff
+    // {"id": "1512.03385", "title": "Deep Residual Learning for Image Recognition"},
+    // trivial author fix
+    // {"id": "1610.05256v1", "title": "Achieving Human Parity in Conversational Speech Recognition"},
+    // images
+    // {"id": "1411.4555", "title": "Show and Tell: A Neural Image Caption Generator"},
+    // failed render
+    // {"id": "1708.05866", "title": "A Brief Survey of Deep Reinforcement Learning"},
+    // a few minor things
+    // {"id": "1708.03492v1", "title": "Break it Down for Me: A Study in Automated Lyric Annotation"},
+    // too many errors
+    // {"id": "1609.03499v2", "title": "WaveNet: A Generative Model for Raw Audio"},
+
   ];
   (function() {
     var example = HOME_EXAMPLE_PAPERS[Math.floor(Math.random() * HOME_EXAMPLE_PAPERS.length)];
