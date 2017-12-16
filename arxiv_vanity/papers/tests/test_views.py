@@ -51,12 +51,16 @@ class PaperDetailViewTest(TestCase):
         )
         render = create_render_with_html(paper=paper)
         res = self.client.get('/papers/1234.5678/')
+        content = res.content.decode('utf-8')
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
-        self.assertIn('Some paper', str(res.content))
-        self.assertIn('script was inserted', str(res.content))
-        self.assertIn('style-was-inserted', str(res.content))
-        self.assertIn('body was inserted', str(res.content))
-        self.assertIn('Submitted on 5 August 2017', str(res.content))
+        self.assertIn('Some paper', content)
+        self.assertIn('script was inserted', content)
+        self.assertIn('style-was-inserted', content)
+        self.assertIn('body was inserted', content)
+        self.assertIn('Submitted on 5 August 2017', content)
+
+        # literal new line, caused by django naively converting bytes to str
+        self.assertNotIn('\\n', content)
 
     def test_it_shows_an_error_if_a_paper_is_not_renderable(self):
         paper = create_paper(

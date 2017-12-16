@@ -24,7 +24,10 @@ def process_render(fh, path_prefix, context):
         metadata[0].append(BeautifulSoup(rendered_contents, 'lxml'))
 
     return {
-        "body": soup.body.encode_contents(),
+        # FIXME: This should be str but it's bytes for some reason.
+        # It's very odd - BeautifulSoup's docs insists everything is unicode,
+        # and even trying to force the input to be utf-8 doesn't help.
+        "body": soup.body.encode_contents().decode('utf-8'),
         "styles": ''.join(e.prettify() for e in styles),
         "scripts": ''.join(e.prettify() for e in scripts),
     }
