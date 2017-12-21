@@ -1,4 +1,4 @@
-FROM python:3.6.3
+FROM python:3.6.4
 RUN apt-get update -qq && apt-get install -qy netcat
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
