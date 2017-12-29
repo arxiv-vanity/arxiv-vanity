@@ -112,6 +112,7 @@ class FeedbackForm {
         <p>You can also attach a screenshot, if you like.</p>
         <p><button class="btn btn-secondary feedback-screenshot-button">Take screenshot</button></p>
         <p class="feedback-current-screenshot"></p>
+        <p>This feature doesn't work on some browsers. If you just see a blank square, please describe the issue in the text box above.</p>
       </div>
 
       <div class="modal-footer">
