@@ -16,5 +16,5 @@ django-typogrify==1.3.3
 randomcolor==0.4.4.5
 raven==6.4.0
 vcrpy==1.11.1
-django-db-geventpool==1.21
+django-db-geventpool==2
 gevent==1.2.2
