@@ -94,6 +94,12 @@ class PaperDetailViewTest(TestCase):
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         self.assertIn('This paper failed to render', str(res.content))
 
+    def test_it_redirects_different_versions_to_a_canonical_one(self):
+        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        render = create_render(paper=paper, state=Render.STATE_RUNNING)
+        res = self.client.get('/papers/1234.5678v1/')
+        self.assertRedirects(res, '/papers/1234.5678/')
+
 
 class TestPaperConvert(TestCase):
     def test_convert_query_to_arxiv_id(self):

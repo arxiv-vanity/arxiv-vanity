@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from .models import Paper, Render, PaperIsNotRenderableError
+from ..scraper.arxiv_ids import remove_version_from_arxiv_id
 from ..scraper.query import PaperNotFoundError
 
 
@@ -38,6 +39,10 @@ class PaperListView(ListView):
 
 
 def paper_detail(request, arxiv_id):
+    arxiv_id, version = remove_version_from_arxiv_id(arxiv_id)
+    if version is not None:
+        return redirect("paper_detail", arxiv_id=arxiv_id)
+
     # Get the requested paper
     try:
         paper = Paper.objects.get(arxiv_id=arxiv_id)
