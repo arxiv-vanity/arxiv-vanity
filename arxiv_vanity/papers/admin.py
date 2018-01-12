@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.template.defaultfilters import truncatechars
 from django.utils.safestring import mark_safe
 import json
-from .models import Paper, Render, PaperIsNotRenderableError
+from .models import Paper, Render, PaperIsNotRenderableError, SourceFile, SourceFileBulkTarball
 
 
 class IsDownloadedListFilter(admin.SimpleListFilter):
@@ -120,3 +120,17 @@ class RenderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Render, RenderAdmin)
+
+
+class SourceFileBulkTarballAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(SourceFileBulkTarball, SourceFileBulkTarballAdmin)
+
+
+class SourceFileAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(SourceFile, SourceFileAdmin)

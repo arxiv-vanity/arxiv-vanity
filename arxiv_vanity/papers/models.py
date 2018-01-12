@@ -383,3 +383,54 @@ class Render(models.Model):
         }
         with default_storage.open(self.get_html_path()) as fh:
             return process_render(fh, self.get_output_url(), context=context)
+
+
+class SourceFileBulkTarball(models.Model):
+    """
+    A tarball of sources that is listed in Arxiv's bulk sources manifest.
+
+    We keep track of these so we know which tarballs we have already
+    downloaded. They're quite big so we don't want to get them every time.
+    """
+    filename = models.CharField(max_length=255, unique=True)
+
+    content_md5sum = models.TextField()
+    first_item = models.TextField()
+    last_item = models.TextField()
+    md5sum = models.TextField()
+    num_items = models.IntegerField()
+    seq_num = models.IntegerField()
+    size = models.IntegerField()
+    timestamp = models.TextField()
+    yymm = models.TextField()
+
+    def __str__(self):
+        return self.filename
+
+
+class SourceFileQuerySet(models.QuerySet):
+    def filename_exists(self, fn):
+        return self.filter(file=f'source-files/{fn}').exists()
+
+
+class SourceFile(models.Model):
+    """
+    Represents a paper source file from Arxiv.
+
+    NOTE: This is a new system, not yet used by the `Paper` model. Initially,
+    we are downloading Arxiv's bulk papers into this model, then we can switch
+    `Paper` to use this model.
+    """
+    file = models.FileField(upload_to='source-files/')
+    bulk_tarball = models.ForeignKey(
+        SourceFileBulkTarball,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text="If this source file is from Arxiv's bulk download service, this is the tarball it was in."
+    )
+
+    objects = SourceFileQuerySet.as_manager()
+
+    def __str__(self):
+        return str(self.file)
