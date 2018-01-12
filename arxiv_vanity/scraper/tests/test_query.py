@@ -12,18 +12,19 @@ class QueryTest(TestCase):
     def test_parse(self):
         papers = parse(open(TEST_DATA_PATH).read())
         self.assertEqual(list(papers)[0], {
-            'arxiv_id': '1708.03312v1',
+            'arxiv_id': '1708.03312',
+            'arxiv_version': 1,
             'title': 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
             'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
             'updated': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
-            'arxiv_url': 'http://arxiv.org/abs/1708.03312v1',
+            'arxiv_url': 'http://arxiv.org/abs/1708.03312',
             'authors': [{'affiliation': [], 'name': 'Yuanzhi Ke'},
                         {'affiliation': [], 'name': 'Masafumi Hagiwara'}],
             'categories': ['cs.CL'],
             'comment': '12 pages, 4 figures',
             'doi': None,
             'journal_ref': None,
-            'pdf_url': 'http://arxiv.org/pdf/1708.03312v1',
+            'pdf_url': 'http://arxiv.org/pdf/1708.03312',
             'primary_category': 'cs.CL',
             'summary': '  The character vocabulary can be very large in non-alphabetic languages such\n'
                 'as Chinese and Japanese, which makes neural network models huge to process such\n'

@@ -65,7 +65,7 @@ class PaperDetailViewTest(TestCase):
     def test_it_shows_an_error_if_a_paper_is_not_renderable(self):
         paper = create_paper(
             arxiv_id="1234.5678",
-            pdf_url="http://arxiv.org/pdf/1708.03312v1",
+            pdf_url="http://arxiv.org/pdf/1234.5678",
             source_file="foo.pdf"
         )
         res = self.client.get('/papers/1234.5678/')
@@ -73,7 +73,7 @@ class PaperDetailViewTest(TestCase):
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         # FIXME: quotes aren't working in this, so just check this substr
         self.assertIn("have LaTeX source code", str(res.content))
-        self.assertIn('https://arxiv.org/pdf/1708.03312v1', str(res.content))
+        self.assertIn('https://arxiv.org/pdf/1234.5678', str(res.content))
 
     def test_it_creates_new_papers_if_they_dont_exist(self):
         # TODO(bfirsh): needs mocking of the arxiv API and creating new renders

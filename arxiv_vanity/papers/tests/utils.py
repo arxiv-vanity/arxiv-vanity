@@ -10,6 +10,7 @@ def create_paper(arxiv_id=None, title=None, updated=None, source_file=None,
                  arxiv_url=None, pdf_url=None, categories=None):
     return Paper.objects.create(**{
         'arxiv_id': arxiv_id or uuid.uuid4(),
+        'arxiv_version': 1,
         'title': title or 'Radical-level Ideograph Encoder for RNN-based Sentiment Analysis of Chinese and Japanese',
         'published': datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),
         'updated': updated or datetime.datetime(2017, 8, 10, 17, 46, 28, tzinfo=datetime.timezone.utc),

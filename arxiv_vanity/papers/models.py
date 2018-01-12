@@ -108,6 +108,7 @@ class PaperQuerySet(models.QuerySet):
 class Paper(models.Model):
     # ArXiV fields
     arxiv_id = models.CharField(max_length=50, unique=True)
+    arxiv_version = models.IntegerField()
     title = models.TextField()
     published = models.DateTimeField()
     updated = models.DateTimeField()

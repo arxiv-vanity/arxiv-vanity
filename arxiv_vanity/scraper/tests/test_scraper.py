@@ -11,7 +11,7 @@ class ScraperTest(TestCase):
     @vcr.use_cassette(os.path.join(FIXTURES_PATH, 'query.yaml'))
     def test_query_and_create_papers(self):
         # Insert paper that is at position 111 in query.yaml
-        paper = create_paper(arxiv_id='1709.09354v1')
+        paper = create_paper(arxiv_id='1709.09354')
 
         # NOTE: If this raises vcr.errors.CannotOverwriteExistingCassetteException,
         # that means it is probably not stopping paginating when it has reached 1709.09354v1

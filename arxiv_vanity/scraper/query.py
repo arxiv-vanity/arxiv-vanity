@@ -3,6 +3,8 @@ from xml.etree import ElementTree
 import dateutil.parser
 import requests
 
+from .arxiv_ids import remove_version_from_arxiv_id, remove_version_from_arxiv_url
+
 ROOT_URL = 'http://export.arxiv.org/api/'
 NS = {
     'atom': 'http://www.w3.org/2005/Atom',
@@ -114,5 +116,10 @@ def convert_entry_to_paper(entry):
     d['doi'] = getattr(entry.find('arxiv:doi', NS), 'text', None)
     d['journal_ref'] = getattr(entry.find(
         'arxiv:journal_ref', NS), 'text', None)
+
+    # Remove version from everything
+    d['arxiv_id'], d['arxiv_version'] = remove_version_from_arxiv_id(d['arxiv_id'])
+    d['arxiv_url'] = remove_version_from_arxiv_url(d['arxiv_url'])
+    d['pdf_url'] = remove_version_from_arxiv_url(d['pdf_url'])
 
     return d
