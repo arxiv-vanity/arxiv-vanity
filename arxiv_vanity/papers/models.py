@@ -105,6 +105,14 @@ class PaperQuerySet(models.QuerySet):
         return self.filter(categories__overlap=settings.PAPERS_MACHINE_LEARNING_CATEGORIES)
 
 
+class PaperManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+    def deleted(self):
+        return super().get_queryset().filter(is_deleted=True)
+
+
 class Paper(models.Model):
     # ArXiV fields
     arxiv_id = models.CharField(max_length=50, unique=True)
@@ -124,8 +132,9 @@ class Paper(models.Model):
 
     # Arxiv Vanity fields
     source_file = models.FileField(upload_to='paper-sources/', null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)
 
-    objects = PaperQuerySet.as_manager()
+    objects = PaperManager.from_queryset(PaperQuerySet)()
 
     class Meta:
         get_latest_by = 'updated'

@@ -1,7 +1,7 @@
 import datetime
 from django.test import TestCase
 from django.utils import timezone
-from ..models import guess_extension_from_headers, Render, SourceFile
+from ..models import guess_extension_from_headers, Render, Paper, SourceFile
 from .utils import create_paper, create_render, create_source_file_bulk_tarball
 
 
@@ -48,6 +48,16 @@ class PaperTest(TestCase):
             'content-encoding': 'x-gzip',
             'content-type': 'application/x-dvi',
         }), '.dvi.gz')
+
+    def test_is_deleted(self):
+        paper = create_paper(arxiv_id='1708.03313')
+        self.assertEqual(Paper.objects.count(), 1)
+        self.assertEqual(Paper.objects.deleted().count(), 0)
+        paper.is_deleted = True
+        paper.save()
+        self.assertEqual(Paper.objects.count(), 0)
+        self.assertEqual(Paper.objects.deleted().count(), 1)
+
 
 
 class RenderTest(TestCase):
