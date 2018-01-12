@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.template.defaultfilters import truncatechars
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 import json
 from .models import Paper, Render, PaperIsNotRenderableError, SourceFile, SourceFileBulkTarball
@@ -63,8 +64,7 @@ class PaperAdmin(admin.ModelAdmin):
             render = obj.renders.latest()
         except Render.DoesNotExist:
             return ""
-        return f'<a href="../render/{render.id}/">{render.state}</a>'
-    latest_render.allow_tags = True
+        return format_html('<a href="../render/{}/">{}</a>', render.id, render.state)
 
     def download(self, request, queryset):
         for paper in queryset:
