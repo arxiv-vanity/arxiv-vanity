@@ -3,7 +3,7 @@ import os
 import shutil
 import uuid
 from django.conf import settings
-from ..models import Paper, Render
+from ..models import Paper, Render, SourceFileBulkTarball
 
 
 def create_paper(arxiv_id=None, title=None, updated=None, source_file=None,
@@ -52,3 +52,18 @@ def create_render_with_html(paper=None):
     os.makedirs(output_dir)
     shutil.copyfile(source_path, os.path.join(output_dir, 'index.html'))
     return render
+
+
+def create_source_file_bulk_tarball(num_items=None):
+    return SourceFileBulkTarball.objects.create(
+        filename="abc.tar",
+        content_md5sum="edd8c013a86b474a9a934ecf673f479e",
+        first_item="1111.2222",
+        last_item="3333.4444",
+        md5sum="af3a3f12f56feacb3c188cf262802a97",
+        num_items=num_items if num_items is not None else 5,
+        seq_num=3,
+        size=2345678,
+        timestamp="2000-01-01",
+        yymm="0001"
+    )
