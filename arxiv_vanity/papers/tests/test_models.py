@@ -1,8 +1,8 @@
 import datetime
 from django.test import TestCase
 from django.utils import timezone
-from ..models import guess_extension_from_headers, Render
-from .utils import create_paper, create_render
+from ..models import guess_extension_from_headers, Render, SourceFile
+from .utils import create_paper, create_render, create_source_file_bulk_tarball
 
 
 class PaperTest(TestCase):
@@ -75,3 +75,12 @@ class RenderTest(TestCase):
         qs = Render.objects.not_expired()
         self.assertNotIn(render1, qs)
         self.assertIn(render2, qs)
+
+
+class SourceFileBulkTarballTest(TestCase):
+    def test_has_correct_number_of_items(self):
+        tarball = create_source_file_bulk_tarball(num_items=2)
+        SourceFile.objects.create(file="1.gz", bulk_tarball=tarball)
+        self.assertFalse(tarball.has_correct_number_of_files())
+        SourceFile.objects.create(file="2.gz", bulk_tarball=tarball)
+        self.assertTrue(tarball.has_correct_number_of_files())

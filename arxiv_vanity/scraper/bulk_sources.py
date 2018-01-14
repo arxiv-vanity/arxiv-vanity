@@ -23,11 +23,17 @@ def update_bulk_sources():
         # We've already processed this file, skip.
         # TODO: Re-process files which have been updated. (i.e. where md5 has
         # changed)
-        # TODO: Re-process files which have had errors in the past (number
-        # of actual is different from specified? a flag for success?)
-        if SourceFileBulkTarball.objects.filter(filename=f['filename']).exists():
-            print(f"Skipping {f['filename']}")
-            continue
+        try:
+            tarball = SourceFileBulkTarball.objects.get(filename=f['filename'])
+        except SourceFileBulkTarball.DoesNotExist:
+            # This is a new file
+            pass
+        else:
+            if tarball.has_correct_number_of_files():
+                print(f"Skipping {f['filename']}")
+                continue
+            else:
+                print(f"Reprocessing {f['filename']} because it has incorrect number of files")
 
         with tempfile.NamedTemporaryFile(suffix='tar') as tarfh:
 

@@ -407,6 +407,14 @@ class SourceFileBulkTarball(models.Model):
     def __str__(self):
         return self.filename
 
+    def has_correct_number_of_files(self):
+        """
+        Number of items specified in the manifest matches how many we have
+        in the database. If this is false, it suggests there was some error
+        in downloading source files.
+        """
+        return self.num_items == self.sourcefile_set.count()
+
 
 class SourceFileQuerySet(models.QuerySet):
     def filename_exists(self, fn):
