@@ -43,7 +43,10 @@ def update_bulk_sources():
             tarfh.flush()
 
             # Mark database as downloaded
-            bulk_tarball = SourceFileBulkTarball.objects.create(**f)
+            bulk_tarball = SourceFileBulkTarball.objects.get_or_create(
+                filename=f['filename'],
+                defaults=f
+            )
 
             print(f"Extracting {f['filename']}...")
             for name, f in extract_tarball(tarfh.name):
