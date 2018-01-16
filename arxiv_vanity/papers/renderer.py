@@ -59,11 +59,6 @@ def render_paper(source, output_path, webhook_url=None):
         environment['AWS_S3_REGION_NAME'] = settings.AWS_S3_REGION_NAME
     # Development
     else:
-        try:
-            os.makedirs(output_path)
-        except FileExistsError:
-            pass
-
         # HACK(bfirsh): MEDIA_ROOT is an absolute path to something on
         # the host machine. We need to make this relative to a mount inside the
         # Docker container.
