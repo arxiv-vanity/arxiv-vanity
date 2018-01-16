@@ -75,10 +75,10 @@ def render_paper(source, output_path, webhook_url=None):
         # HOST_PWD is set in docker-compose.yml
         volumes[os.environ['HOST_PWD']] = {'bind': '/mnt', 'mode': 'rw'}
 
-        network = 'arxivvanity_default'
-
     if settings.ENGRAFO_USE_HYPER_SH:
         labels['sh_hyper_instancetype'] = settings.HYPER_INSTANCE_TYPE
+    else:
+        network = 'arxivvanity_default'
 
     container = client.containers.run(
         settings.ENGRAFO_IMAGE,
