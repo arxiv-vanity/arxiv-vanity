@@ -354,7 +354,7 @@ class Render(models.Model):
         try:
             container = client.containers.get(self.container_id)
             self.container_inspect = container.attrs
-            self.container_logs = container.logs()
+            self.container_logs = str(container.logs(), 'utf-8')
         except docker.errors.NotFound:
             # Container has been removed for some reason, so mark it as
             # removed so we don't try to update its state again
