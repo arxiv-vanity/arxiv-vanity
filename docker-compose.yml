@@ -4,6 +4,8 @@ services:
     image: postgres
   web:
     build: .
+    stdin_open: true
+    tty: true
     command: python -Wd manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
