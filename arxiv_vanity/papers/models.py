@@ -433,7 +433,10 @@ class SourceFileQuerySet(models.QuerySet):
     def get_by_arxiv_id(self, arxiv_id):
         # For old Arxiv ID format
         arxiv_id = arxiv_id.replace('/', '')
-        return self.get(file=f'source-files/{arxiv_id}.gz')
+        try:
+            return self.get(file=f'source-files/{arxiv_id}.gz')
+        except SourceFile.DoesNotExist:
+            return self.get(file=f'source-files/{arxiv_id}.pdf')
 
 
 class SourceFile(models.Model):
@@ -457,3 +460,6 @@ class SourceFile(models.Model):
 
     def __str__(self):
         return str(self.file)
+
+    def is_pdf(self):
+        return self.file.name.endswith('.pdf')
