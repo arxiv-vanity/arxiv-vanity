@@ -19,6 +19,8 @@ def create_client():
                 }
             }
         })
+        # Sometimes Hyper.sh is very slow.
+        client.api.timeout = 60 * 5
     return client
 
 
