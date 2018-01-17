@@ -328,7 +328,7 @@ class Render(models.Model):
             self.paper.source_file.name,
             self.get_output_path(),
             webhook_url=self.get_webhook_url()
-        )
+        ).id
         self.state = Render.STATE_RUNNING
         self.save()
 

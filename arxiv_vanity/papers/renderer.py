@@ -76,7 +76,7 @@ def render_paper(source, output_path, webhook_url=None):
     else:
         network = 'arxivvanity_default'
 
-    container = client.containers.run(
+    return client.containers.run(
         settings.ENGRAFO_IMAGE,
         'sh -c ' + shlex.quote('; '.join(make_command(source, output_path, webhook_url))),
         volumes=volumes,
@@ -85,7 +85,6 @@ def render_paper(source, output_path, webhook_url=None):
         network=network,
         detach=True,
     )
-    return container.id
 
 
 def pull_image():
