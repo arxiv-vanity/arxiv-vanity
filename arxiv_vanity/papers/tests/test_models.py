@@ -59,7 +59,6 @@ class PaperTest(TestCase):
         self.assertEqual(Paper.objects.deleted().count(), 1)
 
 
-
 class RenderTest(TestCase):
     def test_get_webhook_url(self):
         paper = create_paper()
@@ -94,3 +93,13 @@ class SourceFileBulkTarballTest(TestCase):
         self.assertFalse(tarball.has_correct_number_of_files())
         SourceFile.objects.create(file="2.gz", bulk_tarball=tarball)
         self.assertTrue(tarball.has_correct_number_of_files())
+
+
+class SourceFileTest(TestCase):
+    def test_get_by_arxiv_id(self):
+        sf = SourceFile.objects.create(file='source-files/1234.5678.gz')
+        self.assertEqual(SourceFile.objects.get_by_arxiv_id('1234.5678').pk, sf.pk)
+
+        # Old ID format
+        sf = SourceFile.objects.create(file='source-files/astro-ph9501058.gz')
+        self.assertEqual(SourceFile.objects.get_by_arxiv_id('astro-ph/9501058').pk, sf.pk)
