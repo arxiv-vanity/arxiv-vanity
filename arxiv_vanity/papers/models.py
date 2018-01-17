@@ -447,7 +447,7 @@ class SourceFile(models.Model):
     we are downloading Arxiv's bulk papers into this model, then we can switch
     `Paper` to use this model.
     """
-    file = models.FileField(upload_to='source-files/')
+    file = models.FileField(upload_to='source-files/', unique=True)
     bulk_tarball = models.ForeignKey(
         SourceFileBulkTarball,
         on_delete=models.SET_NULL,
