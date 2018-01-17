@@ -41,7 +41,7 @@ def make_command(source, output_path, webhook_url):
     return command
 
 
-def render_paper(source, output_path, webhook_url=None):
+def render_paper(source, output_path, webhook_url=None, output_bucket=None):
     """
     Render a source directory using Engrafo.
     """
@@ -54,8 +54,10 @@ def render_paper(source, output_path, webhook_url=None):
 
     # Production
     if settings.MEDIA_USE_S3:
+        if output_bucket is None:
+            output_bucket = settings.AWS_STORAGE_BUCKET_NAME
         source = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{source}"
-        output_path = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{output_path}"
+        output_path = f"s3://{output_bucket}/{output_path}"
         environment['AWS_ACCESS_KEY_ID'] = settings.AWS_ACCESS_KEY_ID
         environment['AWS_SECRET_ACCESS_KEY'] = settings.AWS_SECRET_ACCESS_KEY
         environment['AWS_S3_REGION_NAME'] = settings.AWS_S3_REGION_NAME
