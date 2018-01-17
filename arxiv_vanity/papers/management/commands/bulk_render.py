@@ -37,7 +37,12 @@ class BulkRenderer(object):
         self.concurrency = concurrency
         self.output_bucket = output_bucket
 
-    def run(self, arxiv_ids):
+    def run(self, id_filename):
+        s3 = S3Boto3Storage().connection
+        obj = s3.Object(self.output_bucket, id_filename)
+        arxiv_id_str = obj.get()['Body'].read().decode('utf-8')
+        arxiv_ids = [s.strip() for s in arxiv_id_str.split() if s.strip()]
+
         # We can't access database inside our gevent pool because of max
         # connections, so first figure out which IDs we actually want to
         # render.
@@ -110,20 +115,15 @@ class BulkRenderer(object):
 
 
 class Command(BaseCommand):
-    help = 'Render a set of Arxiv IDs to an S3 bucket, keyed by Arxiv ID. Arxiv IDs are read from STDIN, one per line.'
+    help = 'Render a set of Arxiv IDs to an S3 bucket, keyed by Arxiv ID. Arxiv IDs are read from a file in the bucket, one per line.'
 
     def add_arguments(self, parser):
         parser.add_argument('output_bucket', nargs=1, help="S3 bucket to write result to.")
+        parser.add_argument('id_filename', nargs=1, help="File in S3 containing Arxiv IDs.")
 
     def handle(self, *args, **options):
-        arxiv_ids = []
-        for line in sys.stdin:
-            line = line.strip()
-            if line:
-                arxiv_ids.append(line)
-
         renderer = BulkRenderer(
             concurrency=500,
             output_bucket=options['output_bucket'][0]
         )
-        renderer.run(arxiv_ids)
+        renderer.run(options['id_filename'][0])
