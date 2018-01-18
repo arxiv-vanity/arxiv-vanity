@@ -185,7 +185,9 @@ if ENABLE_SSL:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Paper rendering
-ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='engrafo:latest')
+# HACK: If image is set to blank string in environment, resolve default.
+# django-environ's defaults only work if envvar is actually unset
+ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='') or 'engrafo:latest'
 ENGRAFO_USE_HYPER_SH = env.bool('ENGRAFO_USE_HYPER_SH', default=False)
 if ENGRAFO_USE_HYPER_SH:
     if not MEDIA_USE_S3:
