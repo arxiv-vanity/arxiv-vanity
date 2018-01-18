@@ -16,6 +16,8 @@ class BulkRenderer(object):
         pool = Pool(self.concurrency)
         done = 0
         for result in pool.imap_unordered(self.render, arxiv_ids):
+            if not result:
+                continue
             arxiv_id, exit_code = result
             if exit_code == 0:
                 status = "success"
