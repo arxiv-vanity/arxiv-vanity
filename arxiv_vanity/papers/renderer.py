@@ -9,7 +9,9 @@ def create_client():
     """
     Create a client to either a local Docker instance or Hyper.sh.
     """
-    client = docker.from_env()
+    # Sometimes Hyper.sh is very slow.
+    timeout = 60 * 10
+    client = docker.from_env(timeout=timeout)
     if settings.ENGRAFO_USE_HYPER_SH:
         client.api = hyper_sh.Client({
             'clouds': {
@@ -19,8 +21,7 @@ def create_client():
                 }
             }
         })
-        # Sometimes Hyper.sh is very slow.
-        client.api.timeout = 60 * 5
+        client.api.timeout = timeout
     return client
 
 
@@ -41,7 +42,7 @@ def make_command(source, output_path, webhook_url):
     return command
 
 
-def render_paper(source, output_path, webhook_url=None, output_bucket=None):
+def render_paper(source, output_path, webhook_url=None, output_bucket=None, extra_run_kwargs=None):
     """
     Render a source directory using Engrafo.
     """
@@ -80,6 +81,8 @@ def render_paper(source, output_path, webhook_url=None, output_bucket=None):
     else:
         network = 'arxivvanity_default'
 
+    if extra_run_kwargs is None:
+        extra_run_kwargs = {}
     return client.containers.run(
         settings.ENGRAFO_IMAGE,
         'sh -c ' + shlex.quote('; '.join(make_command(source, output_path, webhook_url))),
@@ -88,6 +91,7 @@ def render_paper(source, output_path, webhook_url=None, output_bucket=None):
         labels=labels,
         network=network,
         detach=True,
+        **extra_run_kwargs
     )
 
 
