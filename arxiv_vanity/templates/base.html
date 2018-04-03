@@ -54,7 +54,13 @@
         </div>
       </div>
     {% endwith %}
-    {% block before_content %}{% endblock %}
+    {% block before_content %}
+      <div class="wtf-is-this-bar">
+        <div class="container">
+          <p><a href="https://docs.google.com/forms/d/e/1FAIpQLScpVZtKDSrjK-5tLkEBU2jggyJNnM7Ox_3znPllUUkBsLXo-w/viewform?usp=sf_link"><strong>Please take our survey!</strong></a> We’re trying to understand who is using Arxiv Vanity. It’s only 3 multiple choice questions.
+        </div>
+      </div>
+    {% endblock %}
     <div class="content">
       {% block content %}(no content){% endblock %}
     </div>
