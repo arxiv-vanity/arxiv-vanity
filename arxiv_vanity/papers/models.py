@@ -10,6 +10,7 @@ from django.utils import timezone
 import os
 import requests
 from ..scraper.query import query_single_paper
+from ..utils import log_exception
 from .processor import process_render
 from .renderer import render_paper, create_client
 
@@ -234,9 +235,8 @@ class RenderQuerySet(models.QuerySet):
         for render in self.exclude(state=Render.STATE_UNSTARTED).filter(container_is_removed=False):
             try:
                 render.update_state()
-            except docker.errors.NotFound:
-                # TODO: logging
-                print(f"Could not update render {render.id}: Container ID {render.container_id} does not exist")
+            except:
+                log_exception()
         return self
 
     def update_is_expired(self):
@@ -372,6 +372,11 @@ class Render(models.Model):
             else:
                 self.state = Render.STATE_FAILURE
 
+        # Deleting containers on Hyper.sh often fails, so save here so we at
+        # least save the state. If remove fails, this will get retried by
+        # the update_render_state cron job.
+        self.save()
+
         if container.status == 'exited':
             try:
                 container.remove()
@@ -379,8 +384,8 @@ class Render(models.Model):
                 # Somebody got in there before us. Oh well.
                 pass
             self.container_is_removed = True
+            self.save()
 
-        self.save()
 
     def get_processed_render(self):
         """
