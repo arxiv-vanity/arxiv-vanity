@@ -79,7 +79,7 @@ def render_paper(source, output_path, webhook_url=None, output_bucket=None, extr
     if settings.ENGRAFO_USE_HYPER_SH:
         labels['sh_hyper_instancetype'] = settings.HYPER_INSTANCE_TYPE
     else:
-        network = 'arxivvanity_default'
+        network = 'arxiv-vanity_default'
 
     if extra_run_kwargs is None:
         extra_run_kwargs = {}
