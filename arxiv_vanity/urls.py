@@ -13,8 +13,8 @@ from .papers.views import HomeView, PaperListView, paper_detail, paper_convert, 
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path('papers/', PaperListView.as_view(), name='paper_list'),
-    path('papers/feed/', LatestPapersFeed(), name='paper_feed'),
+    # path('papers/', PaperListView.as_view(), name='paper_list'),
+    # path('papers/feed/', LatestPapersFeed(), name='paper_feed'),
     path('papers/<arxiv_id>/', paper_detail, name='paper_detail'),
     path('papers/<arxiv_id>/render-state/', paper_render_state, name='paper_render_state'),
     path('renders/<int:pk>/update-state/', render_update_state, name='render_update_state'),

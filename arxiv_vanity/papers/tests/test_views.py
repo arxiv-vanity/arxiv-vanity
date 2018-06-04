@@ -1,6 +1,7 @@
 import datetime
 import os
 import shutil
+import unittest
 from unittest import mock
 from django.conf import settings
 from django.test import TestCase, override_settings
@@ -10,6 +11,7 @@ from .utils import create_paper, create_render, create_render_with_html
 
 
 class PaperListViewTest(TestCase):
+    @unittest.skip
     def test_view(self):
         paper1 = create_paper(title="Paper no render")
         paper2 = create_paper(title="Paper unstarted render")
