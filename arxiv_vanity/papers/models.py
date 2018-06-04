@@ -361,7 +361,7 @@ class Render(models.Model):
             self.container_is_removed = True
             # Give it a failed state if the render was still running
             if self.state == Render.STATE_RUNNING:
-                self.state = Render.STATE_FAILED
+                self.state = Render.STATE_FAILURE
             self.save()
             return
 
