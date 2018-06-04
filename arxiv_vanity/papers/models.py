@@ -359,6 +359,9 @@ class Render(models.Model):
             # Container has been removed for some reason, so mark it as
             # removed so we don't try to update its state again
             self.container_is_removed = True
+            # Give it a failed state if the render was still running
+            if self.state == Render.STATE_RUNNING:
+                self.state = Render.STATE_FAILED
             self.save()
             return
 

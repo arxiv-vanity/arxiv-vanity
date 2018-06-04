@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from ...models import Render
+from ...renderer import remove_long_running_containers
 
 
 class Command(BaseCommand):
@@ -8,3 +9,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         Render.objects.update_state()
         Render.objects.update_is_expired()
+        remove_long_running_containers()

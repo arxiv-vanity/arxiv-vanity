@@ -1,8 +1,11 @@
+import datetime
 import os
 import shlex
 import docker
 import hyper_sh
 from django.conf import settings
+import dateutil.parser
+from ..utils import log_exception
 
 
 def create_client():
@@ -113,3 +116,18 @@ def prune_images():
                 print(f"Image {image_id} in use")
             else:
                 raise
+
+def remove_long_running_containers():
+    """
+    Sometimes either a container will get stuck, or the container can't
+    be removed. So, just keep on sweeping up.
+    """
+    client = create_client()
+    for container in client.api.containers(all=True):
+        delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(container['Created'])
+        if delta > datetime.timedelta(minutes=5):
+            print(f"Container {container['Id'][:12]} has been running for >5 mins, force removing")
+            try:
+                client.api.remove_container(container['Id'], force=True)
+            except:
+                log_exception()
