@@ -382,7 +382,8 @@ class Render(models.Model):
 
         if container.status == 'exited':
             try:
-                container.remove()
+                # Force, or Hyper.sh often throws a 500
+                container.remove(force=True)
             except docker.errors.NotFound:
                 # Somebody got in there before us. Oh well.
                 pass
