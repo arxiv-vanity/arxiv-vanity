@@ -55,3 +55,9 @@ It'll probably fetch quite a lot, so hit `ctrl-C` when you've got enough.
 ## Running tests
 
     $ script/test
+
+## Sponsors
+
+Thanks to our generous sponsors for supporting the development of Arxiv Vanity! [Sponsor us to get your logo here.](https://www.patreon.com/arxivvanity)
+
+[<img src="docs/sponsor-yld.png" alt="YLD" width="250" />](https://www.yld.io/)
