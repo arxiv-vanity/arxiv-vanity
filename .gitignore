@@ -3,3 +3,5 @@
 __pycache__
 media
 /local
+codeship.aes
+.codeship-heroku.env

@@ -14,4 +14,9 @@ services:
   dockercfg_generator:
     image: codeship/heroku-dockercfg-generator
     add_docker: true
-    encrypted_env_file: .codeship-heroku.env
+    encrypted_env_file: .codeship-heroku.env.encrypted
+  herokudeployment:
+    image: codeship/heroku-deployment
+    encrypted_env_file: .codeship-heroku.env.encrypted
+    volumes:
+      - ./:/deploy

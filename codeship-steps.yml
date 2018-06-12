@@ -1,10 +1,13 @@
 - name: Test
   service: web
   command: sh -c "while ! nc -w 1 -z db 5432; do sleep 1; done; ./manage.py test"
-- name: Deploy
+- name: Push
   service: web
   type: push
   image_name: registry.heroku.com/arxiv-vanity/web
   registry: registry.heroku.com
   dockercfg_service: dockercfg_generator
   tag: master
+- name: Deploy
+  service: herokudeployment
+  command: sh -c "heroku update && heroku container:release -a arxiv-vanity web"
