@@ -52,6 +52,11 @@ a:hover {
   border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }
 
+a.image-link,
+a.image-link {
+  border-bottom: none;
+}
+
 /* Forms */
 
 form,
@@ -201,6 +206,11 @@ footer span {
 .paper-detail-status h2,
 .paper-detail-status h3 {
   font-family: Baskerville, Georgia, serif;
+}
+
+.page-container {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
 }
 
 .wtf-is-this-bar {

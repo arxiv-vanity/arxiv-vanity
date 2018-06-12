@@ -41,6 +41,9 @@
                   <a class="nav-link{% if url_name == 'home' %} active{% endif %}" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link{% if url_name == 'sponsors' %} active{% endif %}" href="{% url 'sponsors' %}">Sponsors</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="https://github.com/arxiv-vanity">GitHub</a>
                 </li>
               </ul>
@@ -63,7 +66,7 @@
 
     <footer class="{% block footer_class %}{% endblock %}">
       <div class="container">
-        <span>Built by <a href="https://github.com/andreasjansson">Andreas Jansson</a> and <a href="https://twitter.com/bfirsh">Ben Firshman</a>, with help from <a href="http://dlmf.nist.gov/LaTeXML/">LaTeXML</a> and <a href="https://github.com/distillpub/template">Distill</a>.</span>
+        <span>Built by <a href="https://github.com/andreasjansson">Andreas Jansson</a> and <a href="https://twitter.com/bfirsh">Ben Firshman</a>, with help from <a href="http://dlmf.nist.gov/LaTeXML/">LaTeXML</a>, <a href="https://github.com/distillpub/template">Distill</a>, and <a href="{% url 'sponsors' %}">our sponsors</a>.</span>
         <span><a href="https://github.com/arxiv-vanity">Contribute on GitHub</a>.</span>
       </div>
     </footer>
