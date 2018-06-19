@@ -130,7 +130,7 @@ admin.site.register(SourceFileBulkTarball, SourceFileBulkTarballAdmin)
 
 
 class SourceFileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['file', 'arxiv_id', 'bulk_tarball']
 
 
 admin.site.register(SourceFile, SourceFileAdmin)
