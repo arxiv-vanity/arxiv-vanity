@@ -62,7 +62,9 @@ def update_bulk_sources():
                 # to S3 instead of loading into memory (in theory)
                 wrapped_f = File(f)
                 wrapped_f.name = name
+                arxiv_id = name.rsplit('.', 1)[0]
                 source_file = SourceFile.objects.create(
+                    arxiv_id=arxiv_id,
                     file=wrapped_f,
                     bulk_tarball=bulk_tarball
                 )
