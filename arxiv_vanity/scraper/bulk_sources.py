@@ -1,12 +1,29 @@
 import tarfile
 import tempfile
 import os
+import os.path
+import re
 
 from django.core.files import File
 from storages.backends.s3boto3 import S3Boto3Storage
 from xml.etree import ElementTree
 
 from ..papers.models import SourceFile, SourceFileBulkTarball
+
+
+def convert_source_file_to_arxiv_id(filename):
+    """
+    Converts a source file name into an ArXiV ID.
+    """
+    # Remove folder and extension
+    arxiv_id, _ = os.path.splitext(os.path.basename(filename))
+
+    # Add a slash to old arxiv ID format
+    match = re.match(r'([a-z-]+)([0-9]+)', arxiv_id)
+    if match:
+        return f"{match.group(1)}/{match.group(2)}"
+
+    return arxiv_id
 
 
 def update_bulk_sources():
@@ -62,7 +79,7 @@ def update_bulk_sources():
                 # to S3 instead of loading into memory (in theory)
                 wrapped_f = File(f)
                 wrapped_f.name = name
-                arxiv_id = name.rsplit('.', 1)[0]
+                arxiv_id = convert_source_file_to_arxiv_id(name)
                 source_file = SourceFile.objects.create(
                     arxiv_id=arxiv_id,
                     file=wrapped_f,
