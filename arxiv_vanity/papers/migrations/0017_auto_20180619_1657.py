@@ -5,7 +5,7 @@ from django.db import migrations
 
 def generate_arxiv_ids(apps, schema_editor):
     SourceFile = apps.get_model('papers', 'SourceFile')
-    for sf in SourceFile.objects.all():
+    for sf in SourceFile.objects.iterator():
         if not sf.arxiv_id:
             sf.arxiv_id = sf.file.name.rsplit('.', 1)[0]
             sf.save()
