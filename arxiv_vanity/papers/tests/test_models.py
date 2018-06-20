@@ -89,27 +89,27 @@ class RenderTest(TestCase):
 class SourceFileBulkTarballTest(TestCase):
     def test_has_correct_number_of_items(self):
         tarball = create_source_file_bulk_tarball(num_items=2)
-        SourceFile.objects.create(file="1.gz", bulk_tarball=tarball)
+        SourceFile.objects.create(arxiv_id="1", file="1.gz", bulk_tarball=tarball)
         self.assertFalse(tarball.has_correct_number_of_files())
-        SourceFile.objects.create(file="2.gz", bulk_tarball=tarball)
+        SourceFile.objects.create(arxiv_id="2", file="2.gz", bulk_tarball=tarball)
         self.assertTrue(tarball.has_correct_number_of_files())
 
 
 class SourceFileTest(TestCase):
     def test_get_by_arxiv_id(self):
-        sf = SourceFile.objects.create(file='source-files/1234.5678.gz')
+        sf = SourceFile.objects.create(arxiv_id="1234.5678", file='source-files/1234.5678.gz')
         self.assertEqual(SourceFile.objects.get_by_arxiv_id('1234.5678').pk, sf.pk)
 
         # Old ID format
-        sf = SourceFile.objects.create(file='source-files/astro-ph9501058.gz')
+        sf = SourceFile.objects.create(arxiv_id="astro-ph/9501058", file='source-files/astro-ph9501058.gz')
         self.assertEqual(SourceFile.objects.get_by_arxiv_id('astro-ph/9501058').pk, sf.pk)
 
         # PDF
-        sf = SourceFile.objects.create(file='source-files/1234.5679.pdf')
+        sf = SourceFile.objects.create(arxiv_id='1234.5679', file='source-files/1234.5679.pdf')
         self.assertEqual(SourceFile.objects.get_by_arxiv_id('1234.5679').pk, sf.pk)
 
     def test_is_pdf(self):
-        sf = SourceFile.objects.create(file='source-files/1234.5678.pdf')
+        sf = SourceFile.objects.create(arxiv_id='1234.5678', file='source-files/1234.5678.pdf')
         self.assertTrue(sf.is_pdf())
-        sf = SourceFile.objects.create(file='source-files/1234.5678.gz')
+        sf = SourceFile.objects.create(arxiv_id='1234.5679', file='source-files/1234.5679.gz')
         self.assertFalse(sf.is_pdf())
