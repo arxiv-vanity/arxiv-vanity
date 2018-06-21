@@ -439,14 +439,6 @@ class SourceFileQuerySet(models.QuerySet):
     def filename_exists(self, fn):
         return self.filter(file=f'source-files/{fn}').exists()
 
-    def get_by_arxiv_id(self, arxiv_id):
-        # For old Arxiv ID format
-        arxiv_id = arxiv_id.replace('/', '')
-        try:
-            return self.get(file=f'source-files/{arxiv_id}.gz')
-        except SourceFile.DoesNotExist:
-            return self.get(file=f'source-files/{arxiv_id}.pdf')
-
 
 class SourceFile(models.Model):
     """

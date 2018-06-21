@@ -96,18 +96,6 @@ class SourceFileBulkTarballTest(TestCase):
 
 
 class SourceFileTest(TestCase):
-    def test_get_by_arxiv_id(self):
-        sf = SourceFile.objects.create(arxiv_id="1234.5678", file='source-files/1234.5678.gz')
-        self.assertEqual(SourceFile.objects.get_by_arxiv_id('1234.5678').pk, sf.pk)
-
-        # Old ID format
-        sf = SourceFile.objects.create(arxiv_id="astro-ph/9501058", file='source-files/astro-ph9501058.gz')
-        self.assertEqual(SourceFile.objects.get_by_arxiv_id('astro-ph/9501058').pk, sf.pk)
-
-        # PDF
-        sf = SourceFile.objects.create(arxiv_id='1234.5679', file='source-files/1234.5679.pdf')
-        self.assertEqual(SourceFile.objects.get_by_arxiv_id('1234.5679').pk, sf.pk)
-
     def test_is_pdf(self):
         sf = SourceFile.objects.create(arxiv_id='1234.5678', file='source-files/1234.5678.pdf')
         self.assertTrue(sf.is_pdf())
