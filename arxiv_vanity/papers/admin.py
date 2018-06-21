@@ -29,6 +29,7 @@ class PaperAdmin(admin.ModelAdmin):
     list_filter = [HasSuccessfulRenderListFilter]
     list_per_page = 250
     search_fields = ['arxiv_id', 'title']
+    raw_id_fields = ("source_file",)
 
     def has_source_file(self, obj):
         return bool(obj.source_file)
