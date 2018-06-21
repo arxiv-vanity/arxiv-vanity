@@ -67,7 +67,7 @@ class BulkRenderer(object):
         source_paths = []
         for arxiv_id in arxiv_ids:
             try:
-                source_file = SourceFile.objects.get_by_arxiv_id(arxiv_id)
+                source_file = SourceFile.objects.get(arxiv_id=arxiv_id)
             except SourceFile.DoesNotExist:
                 print(f"{arxiv_id} has no source file, skipping")
                 continue
