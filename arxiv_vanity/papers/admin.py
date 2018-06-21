@@ -107,8 +107,27 @@ class SourceFileBulkTarballAdmin(admin.ModelAdmin):
 admin.site.register(SourceFileBulkTarball, SourceFileBulkTarballAdmin)
 
 
+class IsFromBulkTarballFilter(admin.SimpleListFilter):
+    title = 'is from bulk tarball'
+    parameter_name = 'is_from_bulk_tarball'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('1', 'Yes'),
+            ('0', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '1':
+            return queryset.filter(bulk_tarball__isnull=False)
+        if self.value() == '0':
+            return queryset.filter(bulk_tarball__isnull=True)
+
+
 class SourceFileAdmin(admin.ModelAdmin):
     list_display = ['file', 'arxiv_id', 'bulk_tarball']
+    list_filter = [IsFromBulkTarballFilter]
+    search_fields = ['arxiv_id']
 
 
 admin.site.register(SourceFile, SourceFileAdmin)
