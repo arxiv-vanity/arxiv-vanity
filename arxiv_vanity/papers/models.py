@@ -3,20 +3,15 @@ import docker.errors
 from django.conf import settings
 from django.db import models
 from django.contrib.postgres.fields import ArrayField, JSONField
-from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.urls import reverse
 from django.utils import timezone
 import os
-import requests
 from ..scraper.query import query_single_paper
 from ..utils import log_exception
+from .downloader import download_source_file
 from .processor import process_render
 from .renderer import render_paper, create_client
-
-
-class DownloadError(Exception):
-    """Error downloading a paper."""
 
 
 class RenderError(Exception):
@@ -33,28 +28,6 @@ class RenderAlreadyStartedError(RenderError):
 
 class RenderWrongStateError(RenderError):
     """The state of a render is being updated when it has not been started."""
-
-
-def guess_extension_from_headers(h):
-    """
-    Given headers from an ArXiV e-print response, try and guess what the file
-    extension should be.
-
-    Based on: https://arxiv.org/help/mimetypes
-    """
-    if h.get('content-type') == 'application/pdf':
-        return '.pdf'
-    if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/postscript':
-        return '.ps.gz'
-    if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/x-eprint-tar':
-        return '.tar.gz'
-    # content-encoding is x-gzip but this appears to normally be a lie - it's
-    # just plain text
-    if h.get('content-type') == 'application/x-eprint':
-        return '.tex'
-    if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/x-dvi':
-        return '.dvi.gz'
-    return None
 
 
 class PaperQuerySet(models.QuerySet):
@@ -132,7 +105,13 @@ class Paper(models.Model):
     journal_ref = models.TextField(null=True, blank=True, max_length=100)
 
     # Arxiv Vanity fields
-    source_file = models.FileField(upload_to='paper-sources/', null=True, blank=True)
+    source_file = models.ForeignKey(
+        'SourceFile',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    source_file_old = models.FileField(upload_to='paper-sources/', null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
 
     objects = PaperManager.from_queryset(PaperQuerySet)()
@@ -147,16 +126,6 @@ class Paper(models.Model):
     def get_absolute_url(self):
         return reverse('paper_detail', args=(self.arxiv_id,))
 
-    def get_source_url(self):
-        # This URL is normally a tarball, but sometimes something else.
-        # ArXiV provides a /src/ URL which always serves up a tarball,
-        # but if we used this, we'd have to untar the file to figure out
-        # whether it's renderable or not. By using the /e-print/ endpoint
-        # we can figure out straight away whether we should bother rendering
-        # it or not.
-        # https://arxiv.org/help/mimetypes has more info
-        return 'https://arxiv.org/e-print/' + self.arxiv_id
-
     def get_https_arxiv_url(self):
         url = self.arxiv_url
         if url.startswith('http://arxiv.org'):
@@ -169,43 +138,29 @@ class Paper(models.Model):
             url = 'https' + url.lstrip('http')
         return url
 
-    def download(self):
-        """
-        Download the LaTeX source of this paper and save to storage. It will
-        save the model.
-        """
-        # Delete an existing file if it exists so we don't clutter up storage
-        # with dupes. This might mean we lose a file the download fails,
-        # but we can just download it again.
-        if self.source_file.name:
-            self.source_file.delete()
-
-        res = requests.get(self.get_source_url())
-        res.raise_for_status()
-        extension = guess_extension_from_headers(res.headers)
-        if not extension:
-            raise DownloadError("Could not determine file extension from "
-                                "headers: Content-Type: {}; "
-                                "Content-Encoding: {}".format(
-                                    res.headers.get('content-type'),
-                                    res.headers.get('content-encoding')))
-        content = ContentFile(res.content)
-        self.source_file.save(self.arxiv_id + extension, content)
-
     def is_renderable(self):
         """
         Returns whether it is possible to render this paper.
         """
-        return self.source_file.name is not None and self.source_file.name.endswith('.tar.gz')
+        return self.source_file and self.source_file.is_renderable()
+
+    def get_or_download_source_file(self):
+        """
+        Attempts to get the source file from a bulk data download, otherwise
+        downloads it and creates it.
+        """
+        self.source_file = SourceFile.objects.get_or_download(self.arxiv_id)
+        self.save()
+        return self.source_file
 
     def render(self):
         """
         Make a new render of this paper. Will download the source file and save
         itself if it hasn't already.
         """
-        if not self.source_file.name:
-            self.download()
-        if not self.is_renderable():
+        if not self.source_file:
+            self.get_or_download_source_file()
+        if not self.source_file.is_renderable():
             raise PaperIsNotRenderableError("This paper is not renderable.")
         render = Render.objects.create(paper=self)
         render.run()
@@ -325,7 +280,7 @@ class Render(models.Model):
         if self.state != Render.STATE_UNSTARTED:
             raise RenderAlreadyStartedError(f"Render {self.id} has already been started")
         self.container_id = render_paper(
-            self.paper.source_file.name,
+            self.paper.source_file.file.name,
             self.get_output_path(),
             webhook_url=self.get_webhook_url()
         ).id
@@ -390,7 +345,6 @@ class Render(models.Model):
             self.container_is_removed = True
             self.save()
 
-
     def get_processed_render(self):
         """
         Do final processing on this render and returns it as a dictionary of
@@ -436,6 +390,27 @@ class SourceFileBulkTarball(models.Model):
 
 
 class SourceFileQuerySet(models.QuerySet):
+    def get_or_download(self, arxiv_id):
+        """
+        Returns a source file for an arxiv ID if it exists (probably created
+        from a bulk source download), otherwise downloads and creates it.
+        """
+        try:
+            return self.get(arxiv_id=arxiv_id)
+        except SourceFile.DoesNotExist:
+            return self.download_and_create(arxiv_id)
+
+    def download_and_create(self, arxiv_id):
+        """
+        Download the LaTeX source of this paper, save to storage, and create
+        SourceFile.
+        """
+        file = download_source_file(arxiv_id)
+        return self.create(
+            arxiv_id=arxiv_id,
+            file=file,
+        )
+
     def filename_exists(self, fn):
         return self.filter(file=f'source-files/{fn}').exists()
 
@@ -465,3 +440,13 @@ class SourceFile(models.Model):
 
     def is_pdf(self):
         return self.file.name.endswith('.pdf')
+
+    def is_renderable(self):
+        """
+        Returns whether it is possible to render this file.
+        """
+        name = self.file.name
+        return (name is not None
+                and name.endswith('.gz')
+                and not name.endswith('.ps.gz')
+                and not name.endswith('.dvi.gz'))
