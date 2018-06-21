@@ -67,18 +67,17 @@ def paper_detail(request, arxiv_id):
     try:
         r = paper.renders.succeeded().not_expired().latest()
     except Render.DoesNotExist:
-        # If there is no latest paper and the paper is not renderable, then
-        # give up now.
-        if not paper.is_renderable():
-            res = render(request, "papers/paper_detail_not_renderable.html",
-                         {"paper": paper}, status=404)
-            return add_paper_cache_control(res)
         # See if there is a render running
         try:
             r = paper.renders.not_expired().latest()
         except Render.DoesNotExist:
-            # Either rendering has not started or it has expired.
-            r = paper.render()
+            try:
+                # Either rendering has not started or it has expired.
+                r = paper.render()
+            except PaperIsNotRenderableError:
+                res = render(request, "papers/paper_detail_not_renderable.html",
+                             {"paper": paper}, status=404)
+                return add_paper_cache_control(res)
 
         if r.state in (Render.STATE_UNSTARTED, Render.STATE_RUNNING):
             res = render(request, "papers/paper_detail_rendering.html", {
