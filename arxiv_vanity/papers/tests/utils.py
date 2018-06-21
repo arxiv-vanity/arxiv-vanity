@@ -3,7 +3,7 @@ import os
 import shutil
 import uuid
 from django.conf import settings
-from ..models import Paper, Render, SourceFileBulkTarball
+from ..models import Paper, Render, SourceFileBulkTarball, SourceFile
 
 
 def create_paper(arxiv_id=None, arxiv_version=None, title=None, updated=None,
@@ -68,4 +68,11 @@ def create_source_file_bulk_tarball(num_items=None):
         size=2345678,
         timestamp="2000-01-01",
         yymm="0001"
+    )
+
+
+def create_source_file(arxiv_id=None, file=None):
+    return SourceFile.objects.create(
+        arxiv_id=arxiv_id or uuid.uuid4(),
+        file=file
     )

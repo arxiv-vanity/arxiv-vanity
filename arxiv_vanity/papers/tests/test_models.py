@@ -1,15 +1,11 @@
 import datetime
 from django.test import TestCase
 from django.utils import timezone
-from ..models import guess_extension_from_headers, Render, Paper, SourceFile
-from .utils import create_paper, create_render, create_source_file_bulk_tarball
+from ..models import Render, Paper, SourceFile
+from .utils import create_paper, create_render, create_source_file_bulk_tarball, create_source_file
 
 
 class PaperTest(TestCase):
-    def test_get_source_url(self):
-        paper = create_paper(arxiv_id='1708.03313')
-        self.assertEqual(paper.get_source_url(), 'https://arxiv.org/e-print/1708.03313')
-
     def test_get_https_arxiv_url(self):
         paper = create_paper(arxiv_url='http://arxiv.org/abs/1708.03313')
         self.assertEqual(paper.get_https_arxiv_url(), 'https://arxiv.org/abs/1708.03313')
@@ -22,32 +18,9 @@ class PaperTest(TestCase):
         paper = create_paper(source_file=None)
         self.assertFalse(paper.is_renderable())
 
-        paper = create_paper(source_file="foo.pdf")
-        self.assertFalse(paper.is_renderable())
-
-        paper = create_paper(source_file="foo.tar.gz")
+        source_file = create_source_file(file='foo.tar.gz')
+        paper = create_paper(source_file=source_file)
         self.assertTrue(paper.is_renderable())
-
-    def test_guess_extension_from_headers(self):
-        self.assertEqual(guess_extension_from_headers({
-            'content-type': 'application/pdf',
-        }), '.pdf')
-        self.assertEqual(guess_extension_from_headers({
-            'content-encoding': 'x-gzip',
-            'content-type': 'application/postscript',
-        }), '.ps.gz')
-        self.assertEqual(guess_extension_from_headers({
-            'content-encoding': 'x-gzip',
-            'content-type': 'application/x-eprint-tar',
-        }), '.tar.gz')
-        self.assertEqual(guess_extension_from_headers({
-            'content-encoding': 'x-gzip',
-            'content-type': 'application/x-eprint',
-        }), '.tex')
-        self.assertEqual(guess_extension_from_headers({
-            'content-encoding': 'x-gzip',
-            'content-type': 'application/x-dvi',
-        }), '.dvi.gz')
 
     def test_is_deleted(self):
         paper = create_paper(arxiv_id='1708.03313')
@@ -97,7 +70,20 @@ class SourceFileBulkTarballTest(TestCase):
 
 class SourceFileTest(TestCase):
     def test_is_pdf(self):
-        sf = SourceFile.objects.create(arxiv_id='1234.5678', file='source-files/1234.5678.pdf')
+        sf = create_source_file(arxiv_id='1234.5678', file='source-files/1234.5678.pdf')
         self.assertTrue(sf.is_pdf())
-        sf = SourceFile.objects.create(arxiv_id='1234.5679', file='source-files/1234.5679.gz')
+        sf = create_source_file(arxiv_id='1234.5679', file='source-files/1234.5679.gz')
         self.assertFalse(sf.is_pdf())
+
+    def test_is_renderable(self):
+        sf = create_source_file(file="foo.pdf")
+        self.assertFalse(sf.is_renderable())
+
+        sf = create_source_file(file="foo.ps.gz")
+        self.assertFalse(sf.is_renderable())
+
+        sf = create_source_file(file="foo.tar.gz")
+        self.assertTrue(sf.is_renderable())
+
+        sf = create_source_file(file="foo.gz")
+        self.assertTrue(sf.is_renderable())

@@ -6,23 +6,6 @@ import json
 from .models import Paper, Render, PaperIsNotRenderableError, SourceFile, SourceFileBulkTarball
 
 
-class IsDownloadedListFilter(admin.SimpleListFilter):
-    title = 'is downloaded'
-    parameter_name = 'is_downloaded'
-
-    def lookups(self, request, model_admin):
-        return (
-            ('1', 'Yes'),
-            ('0', 'No'),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == '1':
-            return queryset.downloaded()
-        if self.value() == '0':
-            return queryset.not_downloaded()
-
-
 class HasSuccessfulRenderListFilter(admin.SimpleListFilter):
     title = 'has successful render'
     parameter_name = 'has_successful_render'
@@ -41,15 +24,15 @@ class HasSuccessfulRenderListFilter(admin.SimpleListFilter):
 
 
 class PaperAdmin(admin.ModelAdmin):
-    actions = ['download', 'render']
-    list_display = ['arxiv_id', 'title', 'is_downloaded', 'is_renderable', 'has_successful_render', 'latest_render']
-    list_filter = [IsDownloadedListFilter, HasSuccessfulRenderListFilter]
+    actions = ['render']
+    list_display = ['arxiv_id', 'title', 'has_source_file', 'is_renderable', 'has_successful_render', 'latest_render']
+    list_filter = [HasSuccessfulRenderListFilter]
     list_per_page = 250
     search_fields = ['arxiv_id', 'title']
 
-    def is_downloaded(self, obj):
-        return bool(obj.source_file.name)
-    is_downloaded.boolean = True
+    def has_source_file(self, obj):
+        return bool(obj.source_file)
+    has_source_file.boolean = True
 
     def is_renderable(self, obj):
         return obj.is_renderable()
@@ -65,11 +48,6 @@ class PaperAdmin(admin.ModelAdmin):
         except Render.DoesNotExist:
             return ""
         return format_html('<a href="../render/{}/">{}</a>', render.id, render.state)
-
-    def download(self, request, queryset):
-        for paper in queryset:
-            paper.download()
-    download.short_description = 'Download selected papers'
 
     def render(self, request, queryset):
         rendered = 0

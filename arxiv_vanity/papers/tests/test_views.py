@@ -7,7 +7,7 @@ from django.conf import settings
 from django.test import TestCase, override_settings
 from ..models import Render
 from ..views import convert_query_to_arxiv_id
-from .utils import create_paper, create_render, create_render_with_html
+from .utils import create_paper, create_render, create_render_with_html, create_source_file
 
 
 class PaperListViewTest(TestCase):
@@ -44,10 +44,11 @@ class PaperDetailViewTest(TestCase):
             pass
 
     def test_it_outputs_rendered_papers(self):
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
         paper = create_paper(
             arxiv_id="1234.5678",
             title="Some paper",
-            source_file='foo.tar.gz',
+            source_file=source_file,
             updated=datetime.datetime(2017, 8, 5, 17, 46, 28,
                                       tzinfo=datetime.timezone.utc),
         )
@@ -65,10 +66,11 @@ class PaperDetailViewTest(TestCase):
         self.assertNotIn('\\n', content)
 
     def test_it_shows_an_error_if_a_paper_is_not_renderable(self):
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.pdf')
         paper = create_paper(
             arxiv_id="1234.5678",
             pdf_url="http://arxiv.org/pdf/1234.5678",
-            source_file="foo.pdf"
+            source_file=source_file
         )
         res = self.client.get('/papers/1234.5678/')
         self.assertEqual(res.status_code, 404)
@@ -82,14 +84,16 @@ class PaperDetailViewTest(TestCase):
         pass
 
     def test_it_shows_a_message_if_the_paper_is_being_rendered(self):
-        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         res = self.client.get('/papers/1234.5678/')
         self.assertEqual(res['Cache-Control'], 'max-age=0, no-cache, no-store, must-revalidate')
         self.assertIn('This paper is rendering', str(res.content))
 
     def test_it_shows_an_error_if_the_paper_has_failed_to_render(self):
-        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
         render = create_render(paper=paper, state=Render.STATE_FAILURE)
         res = self.client.get('/papers/1234.5678/')
         self.assertEqual(res.status_code, 500)
@@ -97,7 +101,8 @@ class PaperDetailViewTest(TestCase):
         self.assertIn('This paper failed to render', str(res.content))
 
     def test_it_redirects_different_versions_to_a_canonical_one(self):
-        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         res = self.client.get('/papers/1234.5678v1/')
         self.assertRedirects(res, '/papers/1234.5678/')
@@ -135,7 +140,8 @@ class TestPaperConvert(TestCase):
 
 class TestPaperRenderState(TestCase):
     def test_render_state(self):
-        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         res = self.client.get('/papers/1234.5678/render-state/')
         self.assertEqual(res.json()['state'], 'running')
@@ -147,7 +153,8 @@ class TestPaperRenderState(TestCase):
 
 class TestRenderUpdateState(TestCase):
     def test_render_update_state(self):
-        paper = create_paper(arxiv_id="1234.5678", source_file='foo.tar.gz')
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         with mock.patch('arxiv_vanity.papers.models.Render.update_state') as m:
             res = self.client.post(f'/renders/{render.pk}/update-state/', {'exit_code': '1'})
