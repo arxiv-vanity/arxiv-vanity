@@ -9,7 +9,7 @@ docker==2.5.1
 beautifulsoup4==4.6.0
 lxml==4.2.2
 django-storages==1.6.6
-boto3==1.5.0
+boto3==1.7.45
 git+https://github.com/tardyp/hyper_sh.git@56175bc094f6c2dcac50ed9825d95a47abf6d6fe#egg=hyper-sh
 git+https://github.com/PyGithub/PyGithub@317079efff8a29312408c6166bddd96ecb7e1c45#egg=pyGithub
 django-typogrify==1.3.3
