@@ -125,11 +125,12 @@ def render_update_state(request, pk):
 ARXIV_URL_RE = re.compile(r'arxiv.org/[^\/]+/([\w\.]+?)(\.pdf)?$', re.I)
 ARXIV_ID_RE = re.compile(r'^(?:arxiv:)?(\d+\.\d+(?:v\d+)?)$', re.I)
 ARXIV_VANITY_RE = re.compile(r'(?:localhost\:\d+|arxiv-vanity\.com)/[^\/]+/([\w\.]+?)\/?$', re.I)
+ARXIV_LEGACY_URL_RE = re.compile(r'arxiv.org/[^\/]+/([\w-]+\/[\w\.]+?)(\.pdf)?$', re.I)
 
 
 def convert_query_to_arxiv_id(query):
     query = query.strip()
-    for regex in [ARXIV_URL_RE, ARXIV_ID_RE, ARXIV_VANITY_RE]:
+    for regex in [ARXIV_URL_RE, ARXIV_ID_RE, ARXIV_VANITY_RE, ARXIV_LEGACY_URL_RE]:
         match = regex.search(query)
         if match:
             return match.group(1)
