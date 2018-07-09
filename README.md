@@ -1,63 +1,50 @@
-# Arxiv Vanity
+# arXiv Readability
 
-[Arxiv Vanity](https://www.arxiv-vanity.com) renders papers from [Arxiv](https://arxiv.org) as responsive web pages so you don't have to squint at a PDF.
+Since its inception, arXiv’s primary distribution format has predominantly been
+PDF generated from LaTeX submitted by authors. While there are no plans to move
+away from LaTeX as the preferred submission format, nor to abandon PDFs, we
+recognize the need to provide distribution formats that make scientific papers
+more broadly usable and accessible.
 
-It turns this sort of thing:
+- In particular, the use of mobile devices--for which PDF is unsuitable-—to
+  access internet resources including arXiv content is on the rise, especially
+  in developing countries.
+- Adopting HTML5 also opens up the potential for authors to integrate dynamic
+  content in their papers, such as embedded video or interactive elements.
+- Providing an HTML5 distribution format provides a foundation for a broader
+  array of enhancements and integrations by third-party developers and
+  researchers that can add value for arXiv authors and readers.
+- Well-formed HTML5 documents (and in particular MathML for formulae) has
+  advantages over PDF for accessibility, particularly for use with screen
+  readers and other assistive technology.
 
-<img src="docs/screenshot-pdf.png" width="600">
+## Contributors
+- Michael Kohlhase (Friedrich-Alexander Universität Erlangen-Nürnberg)
+- Ben Firshman (arXiv-Vanity)
+- Deyan Ginev (Friedrich-Alexander Universität Erlangen-Nürnberg)
+- Erick Peirson (arXiv)
+- Martin Lessmeister (arXiv)
 
-Into this:
+## Objectives
+Our top priority is to provide a high-quality service to all arXiv authors and
+readers. The overarching objective of this project is to significantly improve
+the usability and accessibility of arXiv papers. While providing HTML is not a
+panacea, it is a first step in the right direction.
 
-<img src="docs/screenshot-screens.png">
+- O1: Develop a cloud-native service that provides HTML renderings from LaTeX
+  source submitted to arXiv, leveraging LaTeXML.
+- O2: Demonstrate the feasibility and value of the service by providing it on
+  an experimental basis to arXiv authors, with links to HTML on the
+  public abstract page. This will involve providing detailed guidance and
+  feedback to authors about how to write LaTeX that generates high-quality
+  accessible HTML.
+- O3: Provided that O1 and O2 are achieved, render all arXiv papers submitted
+  as LaTeX to HTML.
+- O4: Provide HTML documents as API resources for third-party developers and
+  researchers. A crucial component of this project is promoting experimentation
+  by researchers and third-party developers, and making the results of their
+  work visible to arXiv readers and at the same time providing added-value
+  services to arXiv readers.
 
-This is the web interface for viewing papers. The actual LaTeX to HTML conversion (the interesting bit) is done by [Engrafo](https://github.com/arxiv-vanity/engrafo).
-
-## Design
-
-Arxiv Vanity downloads LaTeX source from Arxiv and renders it as HTML using the [Engrafo](https://github.com/arxiv-vanity/engrafo) LaTeX to HTML convertor.
-
-The web app runs render jobs on [Hyper.sh](https://hyper.sh/) as Docker containers, and they report their status directly back to the web app with a webhook. This approach has two neat properties:
-
-1. It effectively scales infinitely
-2. There is no worker process or message queue
-
-The process looks a bit like this:
-
-<img src="docs/architecture.svg" alt="Arxiv Vanity architecture" width="500">
-
-In detail:
-
-1. Details about the paper are fetched from the [Arxiv API](https://arxiv.org/help/api/index). Metadata is stored in a Postgres database using Django's ORM, and the paper's LaTeX source is stored on S3.
-2. Engrafo is run on Hyper.sh to convert the LaTeX source to HTML. It fetches the source and stores the result on S3. The container ID is stored in the Postgres database so the status of the rendering job can be queried.
-3. When the rendering job is finished, the Hyper.sh container makes an HTTP request to the web app to mark it as rendered.
-
-## Running in development
-
-Install Docker for Mac or Windows.
-
-Do the initial database migration and set up a user:
-
-    $ script/manage migrate
-    $ script/manage createsuperuser
-
-Then to run the app:
-
-    $ docker-compose up --build
-
-Your app is now available at [http://localhost:8000](http://localhost:8000). The admin interface is at [http://localhost:8000/admin/](http://localhost:8000/admin/).
-
-You can scrape the latest papers from Arxiv by running:
-
-    $ script/manage scrape_papers
-
-It'll probably fetch quite a lot, so hit `ctrl-C` when you've got enough.
-
-## Running tests
-
-    $ script/test
-
-## Sponsors
-
-Thanks to our generous sponsors for supporting the development of Arxiv Vanity! [Sponsor us to get your logo here.](https://www.patreon.com/arxivvanity)
-
-[<img src="arxiv_vanity/static/sponsor-yld.png" alt="YLD" width="250" />](https://www.yld.io/)
+Ultimately, we would like to incorporate HTML5 as a primary distribution format
+for arXiv papers, alongside PDF.
