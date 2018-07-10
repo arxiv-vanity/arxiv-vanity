@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'raven.contrib.django.raven_compat',
-    'typogrify',
-    'arxiv_vanity.feedback',
     'arxiv_vanity.papers',
     'arxiv_vanity.scraper',
 ]
@@ -69,7 +67,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'arxiv_vanity.context_processors.extra_settings',
             ],
         },
     },
@@ -201,15 +198,6 @@ if ENGRAFO_USE_HYPER_SH:
 # The prefix to use for Engrafo webhooks
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 
-# Google Analytics
-GOOGLE_ANALYTICS_PROPERTY_ID = env('GOOGLE_ANALYTICS_PROPERTY_ID', default='UA-107304984-2')
-
-# Paper feedback
-GITHUB_ACCESS_TOKEN = env('GITHUB_ACCESS_TOKEN', default='')
-FEEDBACK_REPO_NAME = env('FEEDBACK_REPO_NAME', default='arxiv-vanity/engrafo-issues')
-FEEDBACK_PROJECT_ID = env.int('FEEDBACK_PROJECT_ID', default=808447)
-FEEDBACK_COLUMN_ID = env.int('FEEDBACK_COLUMN_ID', default=1339203)
-
 # Papers
 PAPERS_MACHINE_LEARNING_CATEGORIES = [
     "cs.CV",
@@ -222,7 +210,3 @@ PAPERS_MACHINE_LEARNING_CATEGORIES = [
 
 # Number of days after which to re-render papers
 PAPERS_EXPIRED_DAYS = env.int('PAPERS_EXPIRED_DAYS', default=7)
-
-
-# Caching
-PAPER_CACHE_SECONDS = env.int('PAPER_CACHE_SECONDS', default=60)

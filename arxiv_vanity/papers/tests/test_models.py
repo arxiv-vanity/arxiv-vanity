@@ -33,11 +33,6 @@ class PaperTest(TestCase):
 
 
 class RenderTest(TestCase):
-    def test_get_webhook_url(self):
-        paper = create_paper()
-        render = create_render(paper=paper)
-        self.assertEqual(render.get_webhook_url(), f"http://web:8000/renders/{render.pk}/update-state/")
-
     def test_not_expired(self):
         paper = create_paper()
         render1 = create_render(paper=paper)

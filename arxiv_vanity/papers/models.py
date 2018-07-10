@@ -10,7 +10,6 @@ import os
 from ..scraper.query import query_single_paper
 from ..utils import log_exception
 from .downloader import download_source_file
-from .processor import process_render
 from .renderer import render_paper, create_client
 
 
@@ -344,18 +343,6 @@ class Render(models.Model):
                 pass
             self.container_is_removed = True
             self.save()
-
-    def get_processed_render(self):
-        """
-        Do final processing on this render and returns it as a dictionary of
-        {"body", "script", "styles"}.
-        """
-        context = {
-            'render': self,
-            'paper': self.paper,
-        }
-        with default_storage.open(self.get_html_path()) as fh:
-            return process_render(fh, self.get_output_url(), context=context)
 
 
 class SourceFileBulkTarball(models.Model):
