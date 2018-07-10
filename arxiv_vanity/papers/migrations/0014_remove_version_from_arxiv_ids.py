@@ -2,44 +2,6 @@
 
 from collections import defaultdict
 from django.db import migrations, transaction, IntegrityError
-from ...scraper.arxiv_ids import remove_version_from_arxiv_id, remove_version_from_arxiv_url
-
-
-def remove_version_from_arxiv_ids(Paper):
-    ids_and_versions = defaultdict(dict)
-
-    for paper in Paper.objects.filter(is_deleted=False):
-        id_without_version, version = remove_version_from_arxiv_id(paper.arxiv_id)
-        if version is None:
-            continue
-        ids_and_versions[id_without_version][version] = paper.arxiv_id
-
-    for new_id, versions in ids_and_versions.items():
-        # Pick which paper we want to keep
-        latest_version = max(versions.keys())
-        the_chosen_one = versions[latest_version]
-        rejects = list(filter(lambda s: s != the_chosen_one, versions.values()))
-
-        # Fix up chosen paper
-        paper = Paper.objects.get(arxiv_id=the_chosen_one)
-        paper.arxiv_id = new_id
-        paper.arxiv_version = latest_version
-        paper.arxiv_url = remove_version_from_arxiv_url(paper.arxiv_url)
-        paper.pdf_url = remove_version_from_arxiv_url(paper.pdf_url)
-        try:
-            with transaction.atomic():
-                paper.save()
-        except IntegrityError:
-            # The paper without a version was already created, probably
-            # by viewing it on the site. Nevermind! Just get rid of this.
-            rejects.append(the_chosen_one)
-
-        # Delete others
-        Paper.objects.filter(arxiv_id__in=rejects).update(is_deleted=True)
-
-
-def run_migration(apps, schema_editor):
-    remove_version_from_arxiv_ids(apps.get_model('papers', 'Paper'))
 
 
 class Migration(migrations.Migration):
@@ -49,5 +11,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(run_migration),
     ]

@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'raven.contrib.django.raven_compat',
     'arxiv_vanity.papers',
-    'arxiv_vanity.scraper',
 ]
 
 MIDDLEWARE = [
@@ -197,16 +196,6 @@ if ENGRAFO_USE_HYPER_SH:
     HYPER_INSTANCE_TYPE = env('HYPER_INSTANCE_TYPE', default='m1')
 # The prefix to use for Engrafo webhooks
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
-
-# Papers
-PAPERS_MACHINE_LEARNING_CATEGORIES = [
-    "cs.CV",
-    "cs.AI",
-    "cs.LG",
-    "cs.CL",
-    "cs.NE",
-    "stat.ML"
-]
 
 # Number of days after which to re-render papers
 PAPERS_EXPIRED_DAYS = env.int('PAPERS_EXPIRED_DAYS', default=7)

@@ -7,7 +7,6 @@ from django.core.files.storage import default_storage
 from django.urls import reverse
 from django.utils import timezone
 import os
-from ..scraper.query import query_single_paper
 from ..utils import log_exception
 from .downloader import download_source_file
 from .renderer import render_paper, create_client
@@ -61,21 +60,6 @@ class PaperQuerySet(models.QuerySet):
     def update_or_create_from_api(self, result):
         return self.update_or_create(arxiv_id=result['arxiv_id'],
                                      defaults=result)
-
-    def update_or_create_from_arxiv_id(self, arxiv_id):
-        """
-        Query the Arxiv API and create a Paper from it.
-
-        Raises:
-            `arxiv_vanity.scraper.query.PaperNotFoundError`: If paper does not exist on arxiv.
-        """
-        return self.update_or_create_from_api(query_single_paper(arxiv_id))
-
-    def machine_learning(self):
-        """
-        Return only machine learning papers.
-        """
-        return self.filter(categories__overlap=settings.PAPERS_MACHINE_LEARNING_CATEGORIES)
 
 
 class PaperManager(models.Manager):
