@@ -47,15 +47,6 @@ def create_render(paper=None, state=None):
     )
 
 
-def create_render_with_html(paper=None):
-    render = create_render(paper=paper, state=Render.STATE_SUCCESS)
-    source_path = os.path.join(os.path.dirname(__file__), 'fixtures', 'render.html')
-    output_dir = os.path.join(settings.MEDIA_ROOT, 'render-output', str(render.id))
-    os.makedirs(output_dir)
-    shutil.copyfile(source_path, os.path.join(output_dir, 'index.html'))
-    return render
-
-
 def create_source_file_bulk_tarball(num_items=None):
     return SourceFileBulkTarball.objects.create(
         filename="abc.tar",
