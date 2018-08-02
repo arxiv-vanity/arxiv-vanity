@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'raven.contrib.django.raven_compat',
-    'arxiv_vanity.papers',
+    'arxiv_html.papers',
 ]
 
 MIDDLEWARE = [
@@ -51,13 +51,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'arxiv_vanity.urls'
+ROOT_URLCONF = 'arxiv_html.urls'
 APPEND_SLASH = True
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'arxiv_vanity/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'arxiv_html/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'arxiv_vanity.wsgi.application'
+WSGI_APPLICATION = 'arxiv_html.wsgi.application'
 
 
 # Database
@@ -134,9 +134,9 @@ STATIC_URL = '/static/'
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "arxiv_vanity/static"),
+    os.path.join(BASE_DIR, "arxiv_html/static"),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "arxiv_vanity/static_root")
+STATIC_ROOT = os.path.join(BASE_DIR, "arxiv_html/static_root")
 
 # Uploaded files, including paper source and rendered articles
 MEDIA_USE_S3 = env.bool('MEDIA_USE_S3', default=False)
