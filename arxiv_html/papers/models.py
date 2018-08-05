@@ -11,38 +11,6 @@ class RenderAlreadyStartedError(RenderError):
     """Render started when render has already been started."""
 
 
-class PaperQuerySet(models.QuerySet):
-    def _with_has_successful_render_annotation(self):
-        renders = Render.objects.filter(paper=models.OuterRef('pk'),
-                                        state=Render.STATE_SUCCESS)
-        return self.annotate(has_successful_render=models.Exists(renders))
-
-    def has_successful_render(self):
-        qs = self._with_has_successful_render_annotation()
-        return qs.filter(has_successful_render=True)
-
-    def has_no_successful_render(self):
-        qs = self._with_has_successful_render_annotation()
-        return qs.filter(has_successful_render=False)
-
-
-class Paper(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
-
-    objects = PaperQuerySet.as_manager()
-
-    def __str__(self):
-        return self.id
-
-    def render(self):
-        """
-        Make a new render of this paper.
-        """
-        render = Render.objects.create(paper=self)
-        render.run()
-        return render
-
-
 class RenderQuerySet(models.QuerySet):
     def running(self):
         return self.filter(state=Render.STATE_RUNNING)
@@ -60,7 +28,14 @@ class Render(models.Model):
     STATE_SUCCESS = 'success'
     STATE_FAILURE = 'failure'
 
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name='renders')
+    ID_TYPE_ARXIV = 'arxiv'
+    ID_TYPE_SUBMISSION = 'submission'
+
+    id_type = models.CharField(max_length=20, choices=(
+        (ID_TYPE_ARXIV, 'arXiv'),
+        (ID_TYPE_SUBMISSION, 'Submission'),
+    ))
+    paper_id = models.CharField(max_length=50, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, default=STATE_UNSTARTED, choices=(
         (STATE_UNSTARTED, 'Unstarted'),
