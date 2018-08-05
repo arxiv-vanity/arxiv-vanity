@@ -3,9 +3,9 @@ RUN apt-get update -qq && apt-get install -qy netcat
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
-ADD requirements.txt /code/
+COPY requirements.txt /code/
 RUN pip install -r requirements.txt
-ADD . /code/
+COPY . /code/
 RUN SECRET_KEY=unset python manage.py collectstatic --no-input
 ENV WEB_CONCURRENCY 3
 ENV WORKER_CONNECTIONS 100
