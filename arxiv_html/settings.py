@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'raven.contrib.django.raven_compat',
-    'arxiv_html.papers',
+    'arxiv_html.renders',
 ]
 
 MIDDLEWARE = [
