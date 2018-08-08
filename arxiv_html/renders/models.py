@@ -69,16 +69,12 @@ class Render(models.Model):
         """
         Returns the URL to the output path.
         """
+        if self.state != Render.STATE_SUCCESS:
+            return None
         return settings.MEDIA_URL + self.get_output_path()
 
     def run(self):
         """
         Start running this render.
         """
-        if self.state != Render.STATE_UNSTARTED:
-            raise RenderAlreadyStartedError(f"Render {self.id} has already been started")
-
-        # TODO: create render
-
-        self.state = Render.STATE_RUNNING
-        self.save()
+        # TODO: start render
