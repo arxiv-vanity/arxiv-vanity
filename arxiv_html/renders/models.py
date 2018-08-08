@@ -35,7 +35,7 @@ class Render(models.Model):
         (ID_TYPE_ARXIV, 'arXiv'),
         (ID_TYPE_SUBMISSION, 'Submission'),
     ))
-    paper_id = models.CharField(max_length=50, primary_key=True)
+    paper_id = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, default=STATE_UNSTARTED, choices=(
         (STATE_UNSTARTED, 'Unstarted'),
