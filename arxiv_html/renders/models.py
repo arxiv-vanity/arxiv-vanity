@@ -73,6 +73,14 @@ class Render(models.Model):
             return None
         return settings.MEDIA_URL + self.get_output_path()
 
+    def set_state(self, new_state):
+        """
+        Sets the state and saves the model. Useful as a one-liner, and also
+        a place where we could perform basic checks.
+        """
+        self.state = new_state
+        self.save(update_fields=["state"])
+
     def run(self):
         """
         Start running this render.
