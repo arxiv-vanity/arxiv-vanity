@@ -1,27 +1,42 @@
-version: '2'
+version: '3.4'
+x-base-service:
+  &base-service
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/code
+    - /var/run/docker.sock:/var/run/docker.sock
+  environment:
+    DEBUG: "true"
+    SECRET_KEY: "not secure only use for development"
+    DOCKER_HOST: "unix:///var/run/docker.sock"
+    HOST_PWD: "${PWD}"
+    CELERY_BROKER_URL: "redis://redis"
+    CELERY_RESULT_BACKEND: "redis://redis"
+    # Set these envvars in a .env file to test S3 in development
+    MEDIA_USE_S3: "${MEDIA_USE_S3}"
+    AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+    AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+    AWS_STORAGE_BUCKET_NAME: "${AWS_STORAGE_BUCKET_NAME}"
+    AWS_S3_REGION_NAME: "us-east-1"
 services:
   db:
     image: postgres
+  redis:
+    image: redis
   web:
+    << : *base-service
     build: .
-    stdin_open: true
-    tty: true
     command: python -Wd manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
-      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+     - "db"
+     - "redis"
     ports:
       - "8000:8000"
-    links:
-      - db
-    environment:
-      DEBUG: "true"
-      SECRET_KEY: "not secure only use for development"
-      DOCKER_HOST: "unix:///var/run/docker.sock"
-      HOST_PWD: "${PWD}"
-      # Set these envvars in a .env file to test S3 in development
-      MEDIA_USE_S3: "${MEDIA_USE_S3}"
-      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
-      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-      AWS_STORAGE_BUCKET_NAME: "${AWS_STORAGE_BUCKET_NAME}"
-      AWS_S3_REGION_NAME: "us-east-1"
+  worker:
+    << : *base-service
+    build: .
+    command: watchmedo auto-restart -- celery -A arxiv_html worker -l info
+    depends_on:
+     - "db"
+     - "redis"

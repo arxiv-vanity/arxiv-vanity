@@ -16,6 +16,9 @@ raven = "==6.9.0"
 django-db-geventpool = "==1.21"
 gevent = "==1.2.2"
 djangorestframework = "*"
+celery = "*"
+watchdog = "*"
+redis = "*"
 
 [dev-packages]
 
