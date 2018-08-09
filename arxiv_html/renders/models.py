@@ -53,6 +53,16 @@ class Render(models.Model):
     def __str__(self):
         return self.id
 
+    def get_source_url(self):
+        """
+        Gets the source URL for this render, based on the id_type and paper_id.
+        """
+        if self.id_type == "arxiv":
+            return f"https://arxiv.org/src/{self.paper_id}"
+        elif self.id_type == "submission":
+            return f"http://fm-service-endpoint/upload/{self.paper_id}/content"
+        raise RenderError(f"Unknown id_type: {self.id_type}")
+
     def get_output_path(self):
         """
         Path to the directory that this render is in.
