@@ -1,6 +1,11 @@
+import os
+
+from celery import states
+from celery.result import AsyncResult
 from django.conf import settings
 from django.db import models
-import os
+
+from .tasks import run_engrafo_task
 
 
 class RenderError(Exception):
@@ -23,10 +28,12 @@ class RenderQuerySet(models.QuerySet):
 
 
 class Render(models.Model):
-    STATE_UNSTARTED = 'unstarted'
-    STATE_RUNNING = 'running'
-    STATE_SUCCESS = 'success'
-    STATE_FAILURE = 'failure'
+    # Convenience aliases so you don't have to import celery.states
+    STATE_PENDING = states.PENDING
+    STATE_STARTED = states.STARTED
+    STATE_RETRY = states.RETRY
+    STATE_SUCCESS = states.SUCCESS
+    STATE_FAILURE = states.FAILURE
 
     ID_TYPE_ARXIV = 'arxiv'
     ID_TYPE_SUBMISSION = 'submission'
@@ -37,11 +44,13 @@ class Render(models.Model):
     ))
     paper_id = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
-    state = models.CharField(max_length=20, default=STATE_UNSTARTED, choices=(
-        (STATE_UNSTARTED, 'Unstarted'),
-        (STATE_RUNNING, 'Running'),
-        (STATE_SUCCESS, 'Success'),
-        (STATE_FAILURE, 'Failure'),
+    task_id = models.CharField(max_length=255, unique=True, null=True)
+    state = models.CharField(max_length=20, default=states.PENDING, choices=(
+        (states.PENDING, 'Pending'),
+        (states.STARTED, 'Started'),
+        (states.RETRY, 'Retrying'),
+        (states.SUCCESS, 'Success'),
+        (states.FAILURE, 'Failure'),
     ))
     logs = models.TextField(null=True, blank=True)
 
@@ -83,16 +92,30 @@ class Render(models.Model):
             return None
         return settings.MEDIA_URL + self.get_output_path()
 
-    def set_state(self, new_state):
+    def get_task_result(self):
         """
-        Sets the state and saves the model. Useful as a one-liner, and also
-        a place where we could perform basic checks.
+        Creates a task result object from task_id. Returns None if this render
+        has not been delayed yet.
         """
-        self.state = new_state
+        if not self.task_id:
+            return None
+        return AsyncResult(self.task_id)
+
+    def update_state(self):
+        """
+        Update the state from the Celery result.
+        """
+        result = self.get_task_result()
+        if not result:
+            return
+        self.state = result.state
         self.save(update_fields=["state"])
 
-    def run(self):
+    def delay(self):
         """
-        Start running this render.
+        Delay the Celery task for this render and set task_id. This method will
+        save the model with the task_id.
         """
-        # TODO: start render
+        result = run_engrafo_task.delay(self.get_source_url())
+        self.task_id = result.task_id
+        self.save(update_fields=["task_id"])

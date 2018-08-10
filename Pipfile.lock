@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7f6797b92a26e7dc60bab6293bf947fa1d80ae23c6490dc83625ceecf5f7a5cc"
+            "sha256": "d42dd75782e2386b12aa8ca5fa90e109cb7798fda0ab1bce59d62939c213d12d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -318,12 +318,19 @@
             ],
             "version": "==1.11.0"
         },
+        "timeout-decorator": {
+            "hashes": [
+                "sha256:e49d214b17a096ca5162865ccb79f516840e5ba21b394f531f1f1d50e2e293ad"
+            ],
+            "index": "pypi",
+            "version": "==0.4.0"
+        },
         "urllib3": {
             "hashes": [
                 "sha256:a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf",
                 "sha256:b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"
             ],
-            "markers": "python_version >= '2.6' and python_version != '3.0.*' and python_version != '3.1.*' and python_version != '3.3.*' and python_version < '4' and python_version != '3.2.*'",
+            "markers": "python_version >= '2.6' and python_version != '3.1.*' and python_version != '3.2.*' and python_version < '4' and python_version != '3.3.*' and python_version != '3.0.*'",
             "version": "==1.23"
         },
         "vine": {

@@ -19,6 +19,7 @@ djangorestframework = "*"
 celery = "*"
 watchdog = "*"
 redis = "*"
+timeout-decorator = "*"
 
 [dev-packages]
 

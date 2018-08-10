@@ -16,9 +16,10 @@ class RenderDetail(mixins.UpdateModelMixin, generics.GenericAPIView):
             serializer = self.get_serializer(data=self.get_lookup_kwargs())
             serializer.is_valid(raise_exception=True)
             render = serializer.save()
-            render.run()
+            render.delay()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+        instance.update_state()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 

@@ -29,6 +29,7 @@ services:
     build: .
     command: python -Wd manage.py runserver 0.0.0.0:8000
     depends_on:
+     - "worker"
      - "db"
      - "redis"
     ports:
