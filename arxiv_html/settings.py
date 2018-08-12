@@ -152,6 +152,10 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     MEDIA_URL = '/media/'
 
+# Tests
+TEST_RUNNER = 'arxiv_html.test_runner.LocalStorageDiscoverRunner'
+
+
 # Log everything to the console, including tracebacks
 LOGGING = {
     'version': 1,
