@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d42dd75782e2386b12aa8ca5fa90e109cb7798fda0ab1bce59d62939c213d12d"
+            "sha256": "37a2c770db06b6c94d65759f9f5d8b400d5b48d914e1ed1587fb4166be335c81"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -46,10 +46,10 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:653b0badcd0c19e825b88275ac27ddab3536649f09d901410fc2c39936d77a27",
-                "sha256:9a2c41caaf225037ae21279cad3956807bbbb75be6da12149ef5cb9147e10461"
+                "sha256:82055917cb431c1cee7c737189a170cc92ffc3824a6da504e8d3ff4df9fa2eab",
+                "sha256:a288a894af5e0b2e9709d29d04536a01b9dfefd2d9d4ebac5c7d104103e6873d"
             ],
-            "version": "==1.10.74"
+            "version": "==1.10.75"
         },
         "celery": {
             "hashes": [
@@ -111,6 +111,21 @@
             ],
             "index": "pypi",
             "version": "==3.8.2"
+        },
+        "docker": {
+            "hashes": [
+                "sha256:6c4da20ef40e8d3eaf650f1488d91452b9a1128045481d7169fd34665ffa90ee",
+                "sha256:bc693be5a84b3b9e5aaf156068c5c0a445ee5138c638c3fbc857133bf67ebe07"
+            ],
+            "index": "pypi",
+            "version": "==3.5.0"
+        },
+        "docker-pycreds": {
+            "hashes": [
+                "sha256:0a941b290764ea7286bd77f54c0ace43b86a8acd6eb9ead3de9840af52384079",
+                "sha256:8b0e956c8d206f832b06aa93a710ba2c3bcbacb5a314449c040b0b814355bbff"
+            ],
+            "version": "==0.3.0"
         },
         "docutils": {
             "hashes": [
@@ -330,7 +345,7 @@
                 "sha256:a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf",
                 "sha256:b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"
             ],
-            "markers": "python_version >= '2.6' and python_version != '3.1.*' and python_version != '3.2.*' and python_version < '4' and python_version != '3.3.*' and python_version != '3.0.*'",
+            "markers": "python_version != '3.0.*' and python_version != '3.1.*' and python_version != '3.3.*' and python_version < '4' and python_version >= '2.6' and python_version != '3.2.*'",
             "version": "==1.23"
         },
         "vine": {
@@ -346,6 +361,13 @@
             ],
             "index": "pypi",
             "version": "==0.8.3"
+        },
+        "websocket-client": {
+            "hashes": [
+                "sha256:18f1170e6a1b5463986739d9fd45c4308b0d025c1b2f9b88788d8f69e8a5eb4a",
+                "sha256:db70953ae4a064698b27ae56dcad84d0ee68b7b43cb40940f537738f38f510c1"
+            ],
+            "version": "==0.48.0"
         },
         "whitenoise": {
             "hashes": [

@@ -148,6 +148,7 @@ if MEDIA_USE_S3:
     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
     MEDIA_URL = env('MEDIA_URL', default=f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/')
+    MEDIA_ROOT = None
 else:
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     MEDIA_URL = '/media/'
@@ -187,3 +188,8 @@ if ENABLE_SSL:
 # Celery
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='')
 CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='')
+
+# Engrafo
+ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='engrafo')
+
+ARXIV_SOURCE_URL_FORMAT = "https://arxiv.org/src/{paper_id}"

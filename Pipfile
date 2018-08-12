@@ -20,6 +20,7 @@ celery = "*"
 watchdog = "*"
 redis = "*"
 timeout-decorator = "*"
+docker = "*"
 
 [dev-packages]
 

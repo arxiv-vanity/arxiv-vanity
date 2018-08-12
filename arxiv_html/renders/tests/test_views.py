@@ -11,7 +11,7 @@ class ViewsTest(APITestCase):
             self.assertEqual(response.data["id_type"], "arxiv")
             self.assertEqual(response.data["paper_id"], "1234.5678v2")
             self.assertEqual(response.data["state"], "PENDING")
-            self.assertEqual(response.data["html_url"], None)
+            self.assertEqual(response.data["output_url"], None)
 
         mock_delay.assert_called_once_with()
 
@@ -21,6 +21,6 @@ class ViewsTest(APITestCase):
             self.assertEqual(response.data["id_type"], "arxiv")
             self.assertEqual(response.data["paper_id"], "1234.5678v2")
             self.assertEqual(response.data["state"], "PENDING")
-            self.assertEqual(response.data["html_url"], None)
+            self.assertEqual(response.data["output_url"], None)
 
         mock_delay.assert_not_called()

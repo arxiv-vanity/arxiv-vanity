@@ -67,7 +67,7 @@ class Render(models.Model):
         Gets the source URL for this render, based on the id_type and paper_id.
         """
         if self.id_type == "arxiv":
-            return f"https://arxiv.org/src/{self.paper_id}"
+            return settings.ARXIV_SOURCE_URL_FORMAT.format(paper_id=self.paper_id)
         elif self.id_type == "submission":
             return f"http://fm-service-endpoint/upload/{self.paper_id}/content"
         raise RenderError(f"Unknown id_type: {self.id_type}")
@@ -75,8 +75,14 @@ class Render(models.Model):
     def get_output_path(self):
         """
         Path to the directory that this render is in.
+
+        If using local filesystem, return absolute path. This makes tests
+        run in temporary directory correctly.
         """
-        return os.path.join('render-output', str(self.id))
+        path = os.path.join("render-output", str(self.id))
+        if settings.MEDIA_ROOT:
+            path = os.path.join(settings.MEDIA_ROOT, path)
+        return path
 
     def get_html_path(self):
         """
@@ -90,7 +96,7 @@ class Render(models.Model):
         """
         if self.state != Render.STATE_SUCCESS:
             return None
-        return settings.MEDIA_URL + self.get_output_path()
+        return os.path.join(settings.MEDIA_URL, "render-output", str(self.id))
 
     def get_task_result(self):
         """
@@ -108,14 +114,26 @@ class Render(models.Model):
         result = self.get_task_result()
         if not result:
             return
-        self.state = result.state
-        self.save(update_fields=["state"])
+
+        if result.state == states.SUCCESS:
+            # Celery provides no simple way of passing back data with a
+            # failure, so instead use the error code to infer the final state.
+            if result.result["exit_code"] == 0:
+                self.state = states.SUCCESS
+            else:
+                self.state = states.FAILURE
+
+            self.logs = result.result.get("logs")
+        else:
+            self.state = result.state
+
+        self.save(update_fields=["state", "logs"])
 
     def delay(self):
         """
         Delay the Celery task for this render and set task_id. This method will
         save the model with the task_id.
         """
-        result = run_engrafo_task.delay(self.get_source_url())
+        result = run_engrafo_task.delay(self.get_source_url(), self.get_output_path())
         self.task_id = result.task_id
         self.save(update_fields=["task_id"])
