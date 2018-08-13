@@ -35,14 +35,14 @@ class Render(models.Model):
     STATE_SUCCESS = states.SUCCESS
     STATE_FAILURE = states.FAILURE
 
-    ID_TYPE_ARXIV = 'arxiv'
-    ID_TYPE_SUBMISSION = 'submission'
+    SOURCE_TYPE_ARXIV = 'arxiv'
+    SOURCE_TYPE_SUBMISSION = 'submission'
 
-    id_type = models.CharField(max_length=20, choices=(
-        (ID_TYPE_ARXIV, 'arXiv'),
-        (ID_TYPE_SUBMISSION, 'Submission'),
+    source_type = models.CharField(max_length=20, choices=(
+        (SOURCE_TYPE_ARXIV, 'arXiv'),
+        (SOURCE_TYPE_SUBMISSION, 'Submission'),
     ))
-    paper_id = models.CharField(max_length=50)
+    source_id = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     task_id = models.CharField(max_length=255, unique=True, null=True)
     state = models.CharField(max_length=20, default=states.PENDING, choices=(
@@ -64,13 +64,13 @@ class Render(models.Model):
 
     def get_source_url(self):
         """
-        Gets the source URL for this render, based on the id_type and paper_id.
+        Gets the source URL for this render, based on the source_type and source_id.
         """
-        if self.id_type == "arxiv":
-            return settings.ARXIV_SOURCE_URL_FORMAT.format(paper_id=self.paper_id)
-        elif self.id_type == "submission":
-            return f"http://fm-service-endpoint/upload/{self.paper_id}/content"
-        raise RenderError(f"Unknown id_type: {self.id_type}")
+        if self.source_type == "arxiv":
+            return settings.ARXIV_SOURCE_URL_FORMAT.format(source_id=self.source_id)
+        elif self.source_type == "submission":
+            return f"http://fm-service-endpoint/upload/{self.source_id}/content"
+        raise RenderError(f"Unknown source_type: {self.source_type}")
 
     def get_output_path(self):
         """

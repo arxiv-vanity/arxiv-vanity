@@ -25,8 +25,8 @@ class RenderDetail(mixins.UpdateModelMixin, generics.GenericAPIView):
 
     def get_lookup_kwargs(self):
         return {
-            "id_type": self.request.GET["id_type"],
-            "paper_id": self.request.GET["paper_id"],
+            "source_type": self.request.GET["source_type"],
+            "source_id": self.request.GET["source_id"],
         }
 
     def get_object(self):

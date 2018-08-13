@@ -4,7 +4,7 @@ from .models import Render
 
 
 class RenderAdmin(admin.ModelAdmin):
-    list_display = ['id_type', 'paper_id', 'created_at', 'state']
+    list_display = ['source_type', 'source_id', 'created_at', 'state']
     list_filter = ['state']
     list_per_page = 250
 

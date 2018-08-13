@@ -7,5 +7,5 @@ class RenderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Render
-        fields = ('id', 'id_type', 'paper_id', 'created_at', 'state', 'output_url', 'logs')
+        fields = ('id', 'source_type', 'source_id', 'created_at', 'state', 'output_url', 'logs')
         read_only_fields = ('id', 'created_at', 'state', 'output_url', 'logs')

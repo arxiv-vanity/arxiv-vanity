@@ -192,4 +192,4 @@ CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='')
 # Engrafo
 ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='engrafo')
 
-ARXIV_SOURCE_URL_FORMAT = "https://arxiv.org/src/{paper_id}"
+ARXIV_SOURCE_URL_FORMAT = "https://arxiv.org/src/{source_id}"

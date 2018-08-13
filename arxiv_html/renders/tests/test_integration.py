@@ -8,7 +8,7 @@ import timeout_decorator
 
 
 @override_settings(
-    ARXIV_SOURCE_URL_FORMAT="/code/arxiv_html/renders/tests/fixtures/{paper_id}.tex"
+    ARXIV_SOURCE_URL_FORMAT="/code/arxiv_html/renders/tests/fixtures/{source_id}.tex"
 )
 class IntegrationTest(APITestCase):
     """
@@ -17,15 +17,15 @@ class IntegrationTest(APITestCase):
 
     @timeout_decorator.timeout(10)
     def test_creating_a_render(self):
-        response = self.client.put("/renders?id_type=arxiv&paper_id=helloworld")
+        response = self.client.put("/renders?source_type=arxiv&source_id=helloworld")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data["id_type"], "arxiv")
-        self.assertEqual(response.data["paper_id"], "helloworld")
+        self.assertEqual(response.data["source_type"], "arxiv")
+        self.assertEqual(response.data["source_id"], "helloworld")
         self.assertEqual(response.data["state"], "PENDING")
         self.assertEqual(response.data["output_url"], None)
 
         while response.data["state"] in ("PENDING", "STARTED"):
-            response = self.client.put("/renders?id_type=arxiv&paper_id=helloworld")
+            response = self.client.put("/renders?source_type=arxiv&source_id=helloworld")
             self.assertEqual(response.status_code, 200)
             time.sleep(0.1)
 
@@ -47,15 +47,15 @@ class IntegrationTest(APITestCase):
 
     @timeout_decorator.timeout(10)
     def test_creating_a_failing_render(self):
-        response = self.client.put("/renders?id_type=arxiv&paper_id=broken")
+        response = self.client.put("/renders?source_type=arxiv&source_id=broken")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data["id_type"], "arxiv")
-        self.assertEqual(response.data["paper_id"], "broken")
+        self.assertEqual(response.data["source_type"], "arxiv")
+        self.assertEqual(response.data["source_id"], "broken")
         self.assertEqual(response.data["state"], "PENDING")
         self.assertEqual(response.data["output_url"], None)
 
         while response.data["state"] in ("PENDING", "STARTED"):
-            response = self.client.put("/renders?id_type=arxiv&paper_id=broken")
+            response = self.client.put("/renders?source_type=arxiv&source_id=broken")
             self.assertEqual(response.status_code, 200)
             time.sleep(0.1)
 

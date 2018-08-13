@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             name='Render',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('id_type', models.CharField(choices=[('arxiv', 'arXiv'), ('submission', 'Submission')], max_length=20)),
-                ('paper_id', models.CharField(max_length=50)),
+                ('source_type', models.CharField(choices=[('arxiv', 'arXiv'), ('submission', 'Submission')], max_length=20)),
+                ('source_id', models.CharField(max_length=50)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('task_id', models.CharField(max_length=255, null=True, unique=True)),
                 ('state', models.CharField(choices=[('PENDING', 'Pending'), ('STARTED', 'Started'), ('RETRY', 'Retrying'), ('SUCCESS', 'Success'), ('FAILURE', 'Failure')], default='PENDING', max_length=20)),
