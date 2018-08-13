@@ -80,14 +80,6 @@ WSGI_APPLICATION = 'arxiv_html.wsgi.application'
 DATABASES = {
     'default': env.db('DATABASE_URL', default='psql://postgres@db:5432/postgres'),
 }
-DATABASES['default'].update({
-    'ENGINE': 'django_db_geventpool.backends.postgresql_psycopg2',
-    'ATOMIC_REQUESTS': False,
-    'CONN_MAX_AGE': 0,
-    'OPTIONS': {
-        'MAX_CONNS': env.int('DATABASE_MAX_CONNS', default=4)
-    }
-})
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -190,6 +182,6 @@ CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='')
 CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='')
 
 # Engrafo
-ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='engrafo')
+ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='arxivvanity/engrafo')
 
 ARXIV_SOURCE_URL_FORMAT = "https://arxiv.org/src/{source_id}"
