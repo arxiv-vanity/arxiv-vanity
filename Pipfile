@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 django = "*"
-"psycopg2" = "*"
 django-environ = "*"
 gunicorn = "*"
 whitenoise = "*"
@@ -19,6 +18,7 @@ watchdog = "*"
 redis = "*"
 timeout-decorator = "*"
 docker = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
 
