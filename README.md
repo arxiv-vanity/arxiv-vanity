@@ -48,3 +48,17 @@ panacea, it is a first step in the right direction.
 
 Ultimately, we would like to incorporate HTML5 as a primary distribution format
 for arXiv papers, alongside PDF.
+
+## Installing development environment
+
+First, install Docker and pull the Engrafo image:
+
+    $ docker pull arxivvanity/engrafo
+
+Then run the development environment:
+
+    $ docker-compose up
+
+## Running tests
+
+    $ script/test
