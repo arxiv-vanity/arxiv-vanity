@@ -5,7 +5,7 @@ gunicorn==19.9.0
 whitenoise==3.3.1
 requests==2.18.4
 python-dateutil==2.7.3
-docker==2.5.1
+docker==3.5.0
 beautifulsoup4==4.6.0
 lxml==4.2.4
 django-storages==1.6.6
