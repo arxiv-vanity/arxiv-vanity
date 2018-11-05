@@ -2,7 +2,7 @@ Django==2.0.9
 psycopg2==2.7.5
 django-environ==0.4.5
 gunicorn==19.9.0
-whitenoise==3.3.1
+whitenoise==4.1
 requests==2.18.4
 python-dateutil==2.7.5
 docker==2.5.1
