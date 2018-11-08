@@ -8,5 +8,6 @@ script:
 deploy:
   provider: script
   script: script/deploy
+  skip_cleanup: true
   on:
     branch: deployment
