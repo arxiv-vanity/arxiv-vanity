@@ -1,0 +1,5 @@
+master_name: redis-master
+slave_name: redis-redis
+app_name: readability
+labels:
+  subsystem: labs

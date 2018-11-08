@@ -1,0 +1,18 @@
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+  name: arxiv-readability
+  labels:
+    subsystem: "{{ .Values.labels.subsystem }}"
+    container: readability
+    service-group: ui
+    log-style: uwsgi
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    subsystem: "{{ .Values.labels.subsystem }}"
+    container: readability

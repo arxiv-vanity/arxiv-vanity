@@ -1,0 +1,7 @@
+name: arxiv-redis
+version: 0.1
+appVersion: 3.2.9
+description: Highly-available Redis cluster for arXiv.
+sources:
+  - https://github.com/cul-it/arxiv-k8s
+engine: gotpl

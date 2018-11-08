@@ -1,0 +1,7 @@
+name: arxiv-readability
+version: 0.1
+appVersion: 0.1
+description: Rendering HTML from arXiv LaTeX sources.
+sources:
+  - https://github.com/cul-it/arxiv-readability
+engine: gotpl

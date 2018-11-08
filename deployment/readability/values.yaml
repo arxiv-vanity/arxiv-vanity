@@ -1,0 +1,10 @@
+labels:
+  subsystem: labs
+database_url: psql://postgres@db:5432/postgres
+redis:
+  host: readability-redis-master
+  port: 6379
+namespace: development
+imageTag: latest
+secret_key: thisisnotasecret!
+script_name: /

@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ default "redis" .Values.app_name }}-{{ default "redis-master" .Values.master_name }}"
+  labels:
+    subsystem: "{{ .Values.labels.subsystem }}"
+    container: "{{ default "redis" .Values.app_name }}-redis-master"
+    service-group: backend
+    log-style: other
+spec:
+  selector:
+    matchLabels:
+      app: "{{ default "redis" .Values.app_name }}"
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "{{ default "redis" .Values.app_name }}"
+        role: master
+        tier: backend
+        subsystem: "{{ .Values.labels.subsystem }}"
+        container: "{{ default "redis" .Values.app_name }}-redis-master"
+        service-group: backend
+        log-style: other
+    spec:
+      containers:
+      - name: "{{ default "redis" .Values.app_name }}-redis-master"
+        image: arxiv/redis:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: ROLE
+          value: master
+        ports:
+        - containerPort: 6379

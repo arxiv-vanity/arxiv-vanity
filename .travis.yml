@@ -5,3 +5,8 @@ before_install:
 - docker pull arxivvanity/engrafo:latest
 script:
 - script/test
+deploy:
+  provider: script
+  script: script/deploy
+  on:
+    branch: deployment

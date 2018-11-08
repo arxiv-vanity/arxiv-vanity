@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -o pipefail
+set -o errexit
+set -o nounset
+# set -o xtrace
+
+# Build and push the docker image.
+docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
+docker build . -t arxiv/readability:${TRAVIS_COMMIT};
+docker push arxiv/readability:${TRAVIS_COMMIT}
+
+# Install kubectl & Helm
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.9.2/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+chmod 700 get_helm.sh
+sudo ./get_helm.sh
+
+# Configure Kubernetes & Helm
+echo $CA_CERT | base64 --decode > ${HOME}/ca.crt
+
+kubectl config set-cluster $CLUSTER_NAME --embed-certs=true --server=$CLUSTER_ENDPOINT --certificate-authority=${HOME}/ca.crt
+kubectl config set-credentials $CLUSTER_SA --token=$(echo $SA_TOKEN | base64 --decode)
+kubectl config set-context travis --cluster=$CLUSTER_NAME --user=$CLUSTER_SA --namespace=$CLUSTER_NAMESPACE
+kubectl config use-context travis
+kubectl config current-context
+
+helm init --client-only --tiller-namespace $CLUSTER_NAMESPACE --namespace $CLUSTER_NAMESPACE
+
+# Deploy to Kubernetes.
+helm upgrade readability ./deployment/readability --set=script_name=/dev/html --tiller-namespace $CLUSTER_NAMESPACE --namespace $CLUSTER_NAMESPACE
+
+function cleanup {
+    printf "Cleaning up...\n"
+    rm -vf "${HOME}/ca.crt"
+    printf "Cleaning done."
+}
+
+trap cleanup EXIT

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ default "redis" .Values.app_name }}-redis-master"
+  labels:
+    app: "{{ default "redis" .Values.app_name }}"
+    role: master
+    tier: backend
+    subsystem: "{{ .Values.labels.subsystem }}"
+    container: "{{ default "redis" .Values.app_name }}-redis-master"
+    service-group: backend
+    log-style: other
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: "{{ default "redis" .Values.app_name }}"
+    role: master
+    tier: backend
