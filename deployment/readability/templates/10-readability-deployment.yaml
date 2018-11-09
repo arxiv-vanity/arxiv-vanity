@@ -34,14 +34,10 @@ spec:
           value: "redis://{{ .Values.redis.host }}:{{ .Values.redis.port}}"
         - name: SECRET_KEY
           value: "{{ .Values.secret_key }}"
-        - name: DEBUG
-          value: "1"
         - name: SCRIPT_NAME
           value: "{{ .Values.script_name }}"
         - name: FORCE_SCRIPT_NAME
           value: "{{ .Values.script_name }}"
-        - name: DJANGO_LOG_LEVEL
-          value: "DEBUG"
         - name: ALLOWED_HOSTS
           value: "*"
 ---
