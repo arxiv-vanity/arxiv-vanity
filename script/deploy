@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-set -v
+# set -v
 set -o pipefail
 set -o errexit
 set -o nounset
