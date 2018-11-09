@@ -23,12 +23,12 @@ sudo ./get_helm.sh
 echo $CA_CERT | base64 --decode > ${HOME}/ca.crt
 
 kubectl config set-cluster $CLUSTER_NAME --embed-certs=true --server=$CLUSTER_ENDPOINT --certificate-authority=${HOME}/ca.crt
-kubectl config set-credentials $CLUSTER_SA --token=$(echo $SA_TOKEN | base64 --decode)
+kubectl config set-credentials $CLUSTER_SA --token=$(echo $USER_TOKEN | base64 --decode)
 kubectl config set-context travis --cluster=$CLUSTER_NAME --user=$CLUSTER_SA --namespace=$CLUSTER_NAMESPACE
 kubectl config use-context travis
 kubectl config current-context
 
-helm init --client-only --tiller-namespace $CLUSTER_NAMESPACE 
+helm init --client-only --tiller-namespace $CLUSTER_NAMESPACE
 
 # Deploy to Kubernetes.
 helm upgrade readability ./deployment/readability --set=imageTag=$TRAVIS_COMMIT --set=script_name=/dev/html --tiller-namespace $CLUSTER_NAMESPACE --namespace $CLUSTER_NAMESPACE
