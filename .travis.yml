@@ -10,4 +10,4 @@ deploy:
   script: script/deploy
   skip_cleanup: true
   on:
-    branch: deployment
+    branch: master
