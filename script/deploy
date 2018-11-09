@@ -28,7 +28,7 @@ kubectl config set-context travis --cluster=$CLUSTER_NAME --user=$CLUSTER_SA --n
 kubectl config use-context travis
 kubectl config current-context
 
-helm init --client-only --tiller-namespace $CLUSTER_NAMESPACE --namespace $CLUSTER_NAMESPACE
+helm init --client-only --tiller-namespace $CLUSTER_NAMESPACE 
 
 # Deploy to Kubernetes.
 helm upgrade readability ./deployment/readability --set=imageTag=$TRAVIS_COMMIT --set=script_name=/dev/html --tiller-namespace $CLUSTER_NAMESPACE --namespace $CLUSTER_NAMESPACE
