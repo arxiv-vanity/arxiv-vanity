@@ -72,7 +72,7 @@ spec:
           - "sh"
           - "-c"
           - >
-            watchmedo auto-restart --recursive -d . -p '*.py' -- celery -A arxiv_html worker -l info
+            celery -A arxiv_html worker -l info
         env:
         - name: DATABASE_URL
           value: "{{ .Values.database_url }}"
