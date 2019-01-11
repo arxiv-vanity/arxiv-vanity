@@ -79,7 +79,11 @@ def paper_detail(request, arxiv_id):
                              {"paper": paper}, status=404)
                 return add_paper_cache_control(res)
 
-        if r.state in (Render.STATE_UNSTARTED, Render.STATE_RUNNING):
+        # Stuck for some reason
+        if r.state == Render.STATE_UNSTARTED:
+            r = paper.render()
+
+        if r.state in Render.STATE_RUNNING:
             res = render(request, "papers/paper_detail_rendering.html", {
                 'paper': paper,
                 'render': r,
