@@ -111,7 +111,6 @@ class Paper(models.Model):
         null=True,
         blank=True,
     )
-    source_file_old = models.FileField(upload_to='paper-sources/', null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
 
     objects = PaperManager.from_queryset(PaperQuerySet)()
