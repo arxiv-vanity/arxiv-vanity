@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'raven.contrib.django.raven_compat',
-    'typogrify',
     'arxiv_vanity.feedback',
     'arxiv_vanity.papers',
     'arxiv_vanity.scraper',
