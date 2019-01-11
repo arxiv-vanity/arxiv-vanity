@@ -1,20 +1,39 @@
 import datetime
 import os
 import shlex
-import docker
+from docker import DockerClient
+from docker.tls import TLSConfig
 import hyper_sh
 from django.conf import settings
 import dateutil.parser
+import tempfile
 from ..utils import log_exception
+
+
+def env_to_file(env):
+    with tempfile.NamedTemporaryFile(delete=False) as f:
+        f.write(os.environ[env].encode('utf-8'))
+        return f.name
 
 
 def create_client():
     """
     Create a client to either a local Docker instance or Hyper.sh.
     """
-    # Sometimes Hyper.sh is very slow.
-    timeout = 60 * 10
-    client = docker.from_env(timeout=timeout)
+    kwargs = {
+        'base_url': os.environ.get('DOCKER_HOST'),
+        # Sometimes Hyper.sh is very slow.
+        'timeout': 60 * 10
+    }
+
+    if os.environ.get('DOCKER_TLS_VERIFY'):
+        kwargs['tls'] = TLSConfig(
+            client_cert=(env_to_file('DOCKER_CLIENT_CERT'), env_to_file('DOCKER_CLIENT_KEY')),
+            ca_cert=env_to_file('DOCKER_CA_CERT'),
+            verify=True
+        )
+
+    client = DockerClient(**kwargs)
     if settings.ENGRAFO_USE_HYPER_SH:
         client.api = hyper_sh.Client({
             'clouds': {
@@ -81,7 +100,10 @@ def render_paper(source, output_path, webhook_url=None, output_bucket=None, extr
 
     if settings.ENGRAFO_USE_HYPER_SH:
         labels['sh_hyper_instancetype'] = settings.HYPER_INSTANCE_TYPE
-    else:
+
+    # If running on the local machine, we need to add the container to the same network
+    # as the web app so it can call the callback
+    if os.environ.get("DOCKER_HOST") == "unix:///var/run/docker.sock":
         network = 'arxiv-vanity_default'
 
     if extra_run_kwargs is None:

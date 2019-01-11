@@ -2,4 +2,5 @@
 *.pyc
 .env
 media
+docker-compose.override.yml
 local
