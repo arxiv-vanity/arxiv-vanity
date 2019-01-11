@@ -33,7 +33,7 @@
           return response.json();
         })
         .then(function(res) {
-          if (res.state === "running") {
+          if (res.state === "running" || res.state === "unstarted") {
             _this.checkStateTimeout();
           } else {
             window.location.reload();
