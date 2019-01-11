@@ -1,7 +1,7 @@
 import datetime
 import os
 import shlex
-from docker import DockerClient
+import docker
 from docker.tls import TLSConfig
 import hyper_sh
 from django.conf import settings
@@ -33,7 +33,7 @@ def create_client():
             verify=True
         )
 
-    client = DockerClient(**kwargs)
+    client = docker.DockerClient(**kwargs)
     if settings.ENGRAFO_USE_HYPER_SH:
         client.api = hyper_sh.Client({
             'clouds': {
@@ -43,7 +43,7 @@ def create_client():
                 }
             }
         })
-        client.api.timeout = timeout
+        client.api.timeout = kwargs['timeout']
     return client
 
 
