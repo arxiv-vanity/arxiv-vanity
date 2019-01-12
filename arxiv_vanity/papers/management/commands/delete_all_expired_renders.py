@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Deletes output of all expired renders'
 
     def handle(self, *args, **options):
-        for render in Render.objects.expired():
+        for render in Render.objects.expired().iterator():
             try:
                 render.delete_output()
             except FileNotFoundError:
