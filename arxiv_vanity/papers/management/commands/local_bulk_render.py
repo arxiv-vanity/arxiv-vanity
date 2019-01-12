@@ -44,7 +44,6 @@ class Command(BaseCommand):
     Arxiv IDs are read from a file in the bucket, one per line.
 
     Designed to work on a local Docker instance with a lot of RAM.
-    See "bulk_render" for the Hyper.sh version.
     """
 
     def add_arguments(self, parser):
@@ -55,8 +54,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if not settings.MEDIA_USE_S3:
             raise CommandError("MEDIA_USE_S3 is False. This command is designed to work with S3.")
-        if settings.ENGRAFO_USE_HYPER_SH:
-            raise CommandError("ENGRAFO_USE_HYPER_SH is True. This command is designed to work with a local Docker instance.")
         renderer = BulkRenderer(
             concurrency=options['concurrency'],
             output_bucket=options['output_bucket'][0]

@@ -26,8 +26,4 @@ services:
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       AWS_STORAGE_BUCKET_NAME: "${AWS_STORAGE_BUCKET_NAME}"
       AWS_S3_REGION_NAME: "us-east-1"
-      # Set these envvars in an .env file to test Hyper.sh
-      ENGRAFO_USE_HYPER_SH: "${ENGRAFO_USE_HYPER_SH}"
-      HYPER_ACCESS_KEY: "${HYPER_ACCESS_KEY}"
-      HYPER_SECRET_KEY: "${HYPER_SECRET_KEY}"
       ENGRAFO_IMAGE: "${ENGRAFO_IMAGE}"

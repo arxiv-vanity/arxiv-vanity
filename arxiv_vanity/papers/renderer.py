@@ -3,7 +3,6 @@ import os
 import shlex
 import docker
 from docker.tls import TLSConfig
-import hyper_sh
 from django.conf import settings
 import dateutil.parser
 import tempfile
@@ -18,12 +17,10 @@ def env_to_file(env):
 
 def create_client():
     """
-    Create a client to either a local Docker instance or Hyper.sh.
+    Create a client to either a Docker instance.
     """
     kwargs = {
-        'base_url': os.environ.get('DOCKER_HOST'),
-        # Sometimes Hyper.sh is very slow.
-        'timeout': 60 * 10
+        'base_url': os.environ.get('DOCKER_HOST')
     }
 
     if os.environ.get('DOCKER_TLS_VERIFY'):
@@ -33,18 +30,7 @@ def create_client():
             verify=True
         )
 
-    client = docker.DockerClient(**kwargs)
-    if settings.ENGRAFO_USE_HYPER_SH:
-        client.api = hyper_sh.Client({
-            'clouds': {
-                settings.HYPER_ENDPOINT: {
-                    'accesskey': settings.HYPER_ACCESS_KEY,
-                    'secretkey': settings.HYPER_SECRET_KEY,
-                }
-            }
-        })
-        client.api.timeout = kwargs['timeout']
-    return client
+    return docker.DockerClient(**kwargs)
 
 
 def make_command(source, output_path, webhook_url):
@@ -97,9 +83,6 @@ def render_paper(source, output_path, webhook_url=None, output_bucket=None, extr
         output_path = os.path.join(docker_media_root, output_path)
         # HOST_PWD is set in docker-compose.yml
         volumes[os.environ['HOST_PWD']] = {'bind': '/mnt', 'mode': 'rw'}
-
-    if settings.ENGRAFO_USE_HYPER_SH:
-        labels['sh_hyper_instancetype'] = settings.HYPER_INSTANCE_TYPE
 
     # If running on the local machine, we need to add the container to the same network
     # as the web app so it can call the callback

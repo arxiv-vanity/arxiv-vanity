@@ -187,16 +187,6 @@ if ENABLE_SSL:
 # HACK: If image is set to blank string in environment, resolve default.
 # django-environ's defaults only work if envvar is actually unset
 ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='') or 'engrafo:latest'
-ENGRAFO_USE_HYPER_SH = env.bool('ENGRAFO_USE_HYPER_SH', default=False)
-if ENGRAFO_USE_HYPER_SH:
-    if not MEDIA_USE_S3:
-        raise ImproperlyConfigured('When the setting ENGRAFO_USE_HYPER_SH is True, MEDIA_USE_S3 must also be True.')
-    HYPER_ACCESS_KEY = env('HYPER_ACCESS_KEY')
-    HYPER_SECRET_KEY = env('HYPER_SECRET_KEY')
-    HYPER_ENDPOINT = env('HYPER_ENDPOINT', default='https://us-west-1.hyper.sh:443/v1.23')
-    # https://hyper.sh/pricing.html
-    # m1 = 1 GB RAM
-    HYPER_INSTANCE_TYPE = env('HYPER_INSTANCE_TYPE', default='m1')
 # The prefix to use for Engrafo webhooks
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 
