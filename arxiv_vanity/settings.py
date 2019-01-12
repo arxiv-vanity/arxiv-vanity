@@ -150,6 +150,8 @@ if MEDIA_USE_S3:
     AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
     AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_BUCKET_ACL = "public-read"
     MEDIA_URL = env('MEDIA_URL', default=f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/')
 else:
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
