@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 import os
 from ..scraper.query import query_single_paper
+from ..storage import storage_delete_path
 from ..utils import log_exception
 from .downloader import download_source_file
 from .processor import process_render
@@ -181,6 +182,9 @@ class RenderQuerySet(models.QuerySet):
         Renders which have occurred in the last PAPERS_EXPIRED_DAYS days.
         """
         return self.filter(is_expired=False)
+    
+    def expired(self):
+        return self.filter(is_expired=True)
 
     def update_state(self):
         """
@@ -201,14 +205,18 @@ class RenderQuerySet(models.QuerySet):
         expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
         expired_date = timezone.now() - expired_delta
         qs = self.filter(is_expired=False, created_at__lte=expired_date)
-        return qs.update(is_expired=True)
+        for render in qs:
+            render.expire()
+        return qs
 
     def force_expire(self):
         """
         Mark renders as expired even if they haven't. Useful for forcing
         re-rendering.
         """
-        return self.update(is_expired=True)
+        for render in self:
+            render.expire()
+        return self
 
 
 class Render(models.Model):
@@ -355,6 +363,24 @@ class Render(models.Model):
         }
         with default_storage.open(self.get_html_path()) as fh:
             return process_render(fh, self.get_output_url(), context=context)
+
+    def expire(self):
+        """
+        Mark render as expired.
+        """
+        self.is_expired = True
+        self.save()
+        try:
+            self.delete_output()
+        except FileNotFoundError:
+            log_exception()
+
+    def delete_output(self):
+        """
+        Delete output path.
+        """
+        storage_delete_path(default_storage, self.get_output_path())
+
 
 
 class SourceFileBulkTarball(models.Model):

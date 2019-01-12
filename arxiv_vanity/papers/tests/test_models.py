@@ -1,8 +1,11 @@
 import datetime
-from django.test import TestCase
+from django.conf import settings
+from django.test import TestCase, override_settings
 from django.utils import timezone
+import os
+import shutil
 from ..models import Render, Paper, SourceFile
-from .utils import create_paper, create_render, create_source_file_bulk_tarball, create_source_file
+from .utils import create_paper, create_render, create_source_file_bulk_tarball, create_source_file, create_render_with_html
 
 
 class PaperTest(TestCase):
@@ -32,7 +35,16 @@ class PaperTest(TestCase):
         self.assertEqual(Paper.objects.deleted().count(), 1)
 
 
+TEST_MEDIA_ROOT = os.path.join(settings.MEDIA_ROOT, 'test')
+
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
 class RenderTest(TestCase):
+    def tearDown(self):
+        try:
+            shutil.rmtree(TEST_MEDIA_ROOT)
+        except FileNotFoundError:
+            pass
+
     def test_get_webhook_url(self):
         paper = create_paper()
         render = create_render(paper=paper)
@@ -57,6 +69,21 @@ class RenderTest(TestCase):
         qs = Render.objects.not_expired()
         self.assertNotIn(render1, qs)
         self.assertIn(render2, qs)
+
+
+    def test_expired_deletes_render_output(self):
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        paper = create_paper(
+            arxiv_id="1234.5678",
+            title="Some paper",
+            source_file=source_file,
+            updated=datetime.datetime(2017, 8, 5, 17, 46, 28,
+                                      tzinfo=datetime.timezone.utc),
+        )
+        render = create_render_with_html(paper=paper)
+        self.assertTrue(os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path())))
+        render.expire()
+        self.assertFalse(os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path())))
 
 
 class SourceFileBulkTarballTest(TestCase):

@@ -70,11 +70,18 @@ class PaperAdmin(admin.ModelAdmin):
 admin.site.register(Paper, PaperAdmin)
 
 
+def make_expired(modeladmin, request, queryset):
+    for render in queryset:
+        render.expire()
+make_expired.short_description = "Mark selected renders as expired"
+
+
 class RenderAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'short_paper_title', 'state', 'short_container_id', 'is_expired']
     list_filter = ['state', 'is_expired']
     list_per_page = 250
     list_select_related = ['paper']
+    actions = [make_expired]
 
     # The fields except the ones we're formatting
     RENDER_FIELDS = [
