@@ -10,7 +10,7 @@ class Command(BaseCommand):
             try:
                 render.delete_output()
             except FileNotFoundError:
-                print(f"❌  Render {render.id} already deleted")
+                print(f"❌  Render {render.id} already deleted", flush=True)
             else:
-                print(f"✅  Render {render.id} deleted")
+                print(f"✅  Render {render.id} deleted", flush=True)
 
