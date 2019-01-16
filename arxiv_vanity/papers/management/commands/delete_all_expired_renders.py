@@ -4,9 +4,12 @@ from ...models import Render
 
 class Command(BaseCommand):
     help = 'Deletes output of all expired renders'
+    
+    def add_arguments(self, parser):
+        parser.add_argument('--start', type=int, default=0, help='ID to start at')
 
     def handle(self, *args, **options):
-        pointer = 0
+        pointer = options['start']
         batch_size = 1000
         qs = Render.objects.expired()
 
