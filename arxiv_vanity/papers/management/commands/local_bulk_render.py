@@ -40,15 +40,15 @@ class BulkRenderer(object):
 
 
 class Command(BaseCommand):
-    help = """Render a set of Arxiv IDs to an S3 bucket, keyed by Arxiv ID.
-    Arxiv IDs are read from a file in the bucket, one per line.
+    help = """Render a set of arXiv IDs to an S3 bucket, keyed by arXiv ID.
+    arXiv IDs are read from a file in the bucket, one per line.
 
     Designed to work on a local Docker instance with a lot of RAM.
     """
 
     def add_arguments(self, parser):
         parser.add_argument('output_bucket', nargs=1, help="S3 bucket to write result to.")
-        parser.add_argument('id_filename', nargs=1, help="Path to file containing Arxiv IDs.")
+        parser.add_argument('id_filename', nargs=1, help="Path to file containing arXiv IDs.")
         parser.add_argument('--concurrency', type=int, default=10, help='number of parallel instances to run (default: 10)')
 
     def handle(self, *args, **options):

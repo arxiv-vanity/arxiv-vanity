@@ -1,6 +1,6 @@
-# Arxiv Vanity
+# arXiv Vanity
 
-[Arxiv Vanity](https://www.arxiv-vanity.com) renders papers from [Arxiv](https://arxiv.org) as responsive web pages so you don't have to squint at a PDF.
+[arXiv Vanity](https://www.arxiv-vanity.com) renders papers from [arXiv](https://arxiv.org) as responsive web pages so you don't have to squint at a PDF.
 
 It turns this sort of thing:
 
@@ -27,7 +27,7 @@ Then to run the app:
 
 Your app is now available at [http://localhost:8000](http://localhost:8000). The admin interface is at [http://localhost:8000/admin/](http://localhost:8000/admin/).
 
-You can scrape the latest papers from Arxiv by running:
+You can scrape the latest papers from arXiv by running:
 
     $ script/manage scrape_papers
 
@@ -39,6 +39,6 @@ It'll probably fetch quite a lot, so hit `ctrl-C` when you've got enough.
 
 ## Sponsors
 
-Thanks to our generous sponsors for supporting the development of Arxiv Vanity! [Sponsor us to get your logo here.](https://www.patreon.com/arxivvanity)
+Thanks to our generous sponsors for supporting the development of arXiv Vanity! [Sponsor us to get your logo here.](https://www.patreon.com/arxivvanity)
 
 [<img src="arxiv_vanity/static/sponsor-yld.png" alt="YLD" width="250" />](https://www.yld.io/)

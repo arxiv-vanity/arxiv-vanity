@@ -115,11 +115,11 @@ class BulkRenderer(object):
 
 
 class Command(BaseCommand):
-    help = 'Render a set of Arxiv IDs to an S3 bucket, keyed by Arxiv ID. Arxiv IDs are read from a file in the bucket, one per line.'
+    help = 'Render a set of arXiv IDs to an S3 bucket, keyed by arXiv ID. arXiv IDs are read from a file in the bucket, one per line.'
 
     def add_arguments(self, parser):
         parser.add_argument('output_bucket', nargs=1, help="S3 bucket to write result to.")
-        parser.add_argument('id_filename', nargs=1, help="File in S3 containing Arxiv IDs.")
+        parser.add_argument('id_filename', nargs=1, help="File in S3 containing arXiv IDs.")
 
     def handle(self, *args, **options):
         renderer = BulkRenderer(

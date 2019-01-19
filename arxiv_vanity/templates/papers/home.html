@@ -2,7 +2,7 @@
 {% load humanize %}
 {% load papers %}
 
-{% block whole_title %}Arxiv Vanity – Read academic papers from Arxiv as web pages{% endblock %}
+{% block whole_title %}arXiv Vanity – Read academic papers from arXiv as web pages{% endblock %}
 
 {% block footer_class %}fixed{% endblock %}
 
@@ -10,11 +10,11 @@
   <div class="container page-home">
     <div class="row justify-content-center mb-5">
       <div class="col-lg-9 text-center">
-        <p class="tagline">Arxiv Vanity renders academic papers from <a href="https://arxiv.org/">Arxiv</a> as responsive web pages so you don&rsquo;t have to squint at a PDF. <!-- <a href="/about/">Learn more.</a> --></p>
+        <p class="tagline">arXiv Vanity renders academic papers from <a href="https://arxiv.org/">arXiv</a> as responsive web pages so you don&rsquo;t have to squint at a PDF. <!-- <a href="/about/">Learn more.</a> --></p>
         <div class="d-none d-md-block">
           <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
             <div class="input-group input-group-lg">
-              <input type="text" name="query" value="" class="form-control" placeholder="Enter an Arxiv URL">
+              <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
               <span class="input-group-btn">
                 <button type="submit" class="btn btn-primary">Convert to web page</button>
               </span>
@@ -24,13 +24,13 @@
         <div class="d-md-none">
           <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
             <div class="form-group">
-              <input type="text" name="query" value="" class="form-control" placeholder="Enter an Arxiv URL">
+              <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
             </div>
             <button type="submit" class="btn btn-primary">Convert to web page</button>
           </form>
         </div>
         <p><small>For example, <a href="/papers/1705.06031v2/" class="home-example-paper">Learning to Identify Ambiguous and Misleading News Headlines</a></small></p>
-        <p class="mt-5">To convert papers with one click, drag this bookmarklet to your bookmarks bar:</p><p><a href="javascript:(function(){window.location='https://www.arxiv-vanity.com/convert/?query='+encodeURIComponent(window.location)})()" class="btn btn-primary ml-1">Arxiv to web page 💅</a></p>
+        <p class="mt-5">To convert papers with one click, drag this bookmarklet to your bookmarks bar:</p><p><a href="javascript:(function(){window.location='https://www.arxiv-vanity.com/convert/?query='+encodeURIComponent(window.location)})()" class="btn btn-primary ml-1">arXiv to web page 💅</a></p>
       </div>
     </div>
   </div>

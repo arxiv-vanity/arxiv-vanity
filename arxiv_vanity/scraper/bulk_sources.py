@@ -28,7 +28,7 @@ def convert_source_file_to_arxiv_id(filename):
 
 def update_bulk_sources():
     """
-    Check for new bulk sources in the Arxiv bulk data S3 bucket:
+    Check for new bulk sources in the arXiv bulk data S3 bucket:
 
     https://arxiv.org/help/bulk_data_s3
 

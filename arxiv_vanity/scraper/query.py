@@ -43,7 +43,7 @@ def query_single_paper(paper_id):
 def query(search_query=None, id_list=None, results_per_iteration=100,
           wait_time=5.0, max_index=10000):
     """
-    Returns an iterator of parsed results from Arxiv's API.
+    Returns an iterator of parsed results from arXiv's API.
     """
     for i in range(0, max_index, results_per_iteration):
         print(f"Downloading page starting from {i}...", flush=True)
@@ -54,7 +54,7 @@ def query(search_query=None, id_list=None, results_per_iteration=100,
 
 def query_page(search_query=None, id_list=None, start=0, max_results=100):
     """
-    Download a single page of results from Arxiv's API and returns an iterator
+    Download a single page of results from arXiv's API and returns an iterator
     of parsed results.
     """
     url_args = {"start": start,
@@ -71,10 +71,10 @@ def query_page(search_query=None, id_list=None, start=0, max_results=100):
 
 def parse(s):
     """
-    Returns an iterator of parsed results given an API response from Arxiv.
+    Returns an iterator of parsed results given an API response from arXiv.
     """
     # We're not using Feedparser here because it eats a lot of the extra
-    # data that Arxiv adds. By manually reading the XML, we can be sure we've
+    # data that arXiv adds. By manually reading the XML, we can be sure we've
     # got everything.
     root = ElementTree.fromstring(s)
     for entry in root.findall("atom:entry", NS):

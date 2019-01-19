@@ -66,7 +66,7 @@ class PaperQuerySet(models.QuerySet):
 
     def update_or_create_from_arxiv_id(self, arxiv_id):
         """
-        Query the Arxiv API and create a Paper from it.
+        Query the arXiv API and create a Paper from it.
 
         Raises:
             `arxiv_vanity.scraper.query.PaperNotFoundError`: If paper does not exist on arxiv.
@@ -105,7 +105,7 @@ class Paper(models.Model):
     doi = models.CharField(null=True, blank=True, max_length=100)
     journal_ref = models.TextField(null=True, blank=True, max_length=100)
 
-    # Arxiv Vanity fields
+    # arXiv Vanity fields
     source_file = models.ForeignKey(
         'SourceFile',
         on_delete=models.SET_NULL,
@@ -385,7 +385,7 @@ class Render(models.Model):
 
 class SourceFileBulkTarball(models.Model):
     """
-    A tarball of sources that is listed in Arxiv's bulk sources manifest.
+    A tarball of sources that is listed in arXiv's bulk sources manifest.
 
     We keep track of these so we know which tarballs we have already
     downloaded. They're quite big so we don't want to get them every time.
@@ -442,10 +442,10 @@ class SourceFileQuerySet(models.QuerySet):
 
 class SourceFile(models.Model):
     """
-    Represents a paper source file from Arxiv.
+    Represents a paper source file from arXiv.
 
     NOTE: This is a new system, not yet used by the `Paper` model. Initially,
-    we are downloading Arxiv's bulk papers into this model, then we can switch
+    we are downloading arXiv's bulk papers into this model, then we can switch
     `Paper` to use this model.
     """
     arxiv_id = models.CharField(max_length=50, unique=True)
@@ -455,7 +455,7 @@ class SourceFile(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text="If this source file is from Arxiv's bulk download service, this is the tarball it was in. If null, this source file was downloaded individually."
+        help_text="If this source file is from arXiv's bulk download service, this is the tarball it was in. If null, this source file was downloaded individually."
     )
 
     objects = SourceFileQuerySet.as_manager()

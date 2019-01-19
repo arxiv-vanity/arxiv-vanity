@@ -53,7 +53,7 @@ def paper_detail(request, arxiv_id):
         try:
             paper, created = Paper.objects.update_or_create_from_arxiv_id(arxiv_id)
         except PaperNotFoundError:
-            raise Http404(f"Paper '{arxiv_id}' not found on Arxiv")
+            raise Http404(f"Paper '{arxiv_id}' not found on arXiv")
         if created:
             try:
                 paper.render()
@@ -148,6 +148,6 @@ def paper_convert(request):
     arxiv_id = convert_query_to_arxiv_id(request.GET['query'])
     if not arxiv_id:
         return render(request, "papers/paper_convert_error.html", {
-            "message": "Could not find Arxiv ID in that URL. Are you sure it's an arxiv.org URL?"
+            "message": "Could not find arXiv ID in that URL. Are you sure it's an arxiv.org URL?"
         })
     return redirect("paper_detail", arxiv_id=arxiv_id)

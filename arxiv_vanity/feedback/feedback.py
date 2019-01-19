@@ -17,7 +17,7 @@ class Feedback(object):
         title = text if len(text) <= 50 else text[:50] + '...'
         body = text
 
-        body += '\n\nArxiv ID: ' + arxiv_id
+        body += '\n\narXiv ID: ' + arxiv_id
         body += '\n\nhttps://www.arxiv-vanity.com/papers/' + arxiv_id + '/'
         body += '\n\nhttp://localhost:8010/html/' + arxiv_id + '/'
 
