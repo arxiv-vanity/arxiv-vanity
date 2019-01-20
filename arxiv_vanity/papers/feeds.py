@@ -3,9 +3,9 @@ from django.urls import reverse
 from .models import Paper
 
 class LatestPapersFeed(Feed):
-    title = "Arxiv Vanity – Latest machine learning papers"
+    title = "arXiv Vanity – Latest machine learning papers"
     link = "/papers/"
-    description = "Latest machine learning papers from Arxiv rendered as web pages"
+    description = "Latest machine learning papers from arXiv rendered as web pages"
 
     def items(self):
         qs = Paper.objects.machine_learning().has_successful_render()
