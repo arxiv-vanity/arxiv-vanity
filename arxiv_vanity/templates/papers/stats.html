@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Stats{% endblock %}
+{% block content %}
+  <div class="container page-container">
+    <h2>Stats</h2>
+    <hr>
+    <h3 class="mb-4">Past 30 days</h3>
+    <dl class="row">
+      <dt class="col-sm-3">Successful renders</dt>
+      <dd class="col-sm-9">{{ successful_renders_30_days }} ({% widthratio successful_renders_30_days total_renders_30_days 100 %}%)</dd>
+      <dt class="col-sm-3">Failed renders</dt>
+      <dd class="col-sm-9">{{ failed_renders_30_days }} ({% widthratio failed_renders_30_days total_renders_30_days 100 %}%)</dd>
+    </dl>
+    <hr>
+    <h3 class="mb-4">All time</h3>
+    <dl class="row">
+      <dt class="col-sm-3">Successful renders</dt>
+      <dd class="col-sm-9">{{ successful_renders }} ({% widthratio successful_renders total_renders 100 %}%)</dd>
+      <dt class="col-sm-3">Failed renders</dt>
+      <dd class="col-sm-9">{{ failed_renders }} ({% widthratio failed_renders total_renders 100 %}%)</dd>
+    </dl>
+  </div>
+{% endblock %}
+

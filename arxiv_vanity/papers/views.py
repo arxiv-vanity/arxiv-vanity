@@ -1,3 +1,4 @@
+import datetime
 import re
 from django.conf import settings
 from django.http import Http404, HttpResponse, JsonResponse
@@ -151,3 +152,15 @@ def paper_convert(request):
             "message": "Could not find arXiv ID in that URL. Are you sure it's an arxiv.org URL?"
         })
     return redirect("paper_detail", arxiv_id=arxiv_id)
+
+
+def stats(request):
+    past_30_days = Render.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30))
+    return render(request, "papers/stats.html", {
+        "total_renders": Render.objects.count(),
+        "successful_renders": Render.objects.filter(state=Render.STATE_SUCCESS).count(),
+        "failed_renders": Render.objects.filter(state=Render.STATE_FAILURE).count(),
+        "total_renders_30_days": past_30_days.count(),
+        "successful_renders_30_days": past_30_days.filter(state=Render.STATE_SUCCESS).count(),
+        "failed_renders_30_days": past_30_days.filter(state=Render.STATE_FAILURE).count(),
+    })
