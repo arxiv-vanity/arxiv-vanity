@@ -2,6 +2,7 @@ import datetime
 import re
 from django.conf import settings
 from django.http import Http404, HttpResponse, JsonResponse
+from django.db.models import OuterRef, Subquery
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.cache import add_never_cache_headers, patch_cache_control
 from django.views.decorators.cache import cache_control, never_cache
@@ -156,6 +157,10 @@ def paper_convert(request):
 
 def stats(request):
     past_30_days = Render.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30))
+
+    newest_renders = Render.objects.filter(paper=OuterRef('pk')).order_by('-created_at')
+    papers = Paper.objects.annotate(last_render_state=Subquery(newest_renders.values('state')[:1])).exclude(last_render_state=None)
+
     return render(request, "papers/stats.html", {
         "total_renders": Render.objects.count(),
         "successful_renders": Render.objects.filter(state=Render.STATE_SUCCESS).count(),
@@ -163,4 +168,7 @@ def stats(request):
         "total_renders_30_days": past_30_days.count(),
         "successful_renders_30_days": past_30_days.filter(state=Render.STATE_SUCCESS).count(),
         "failed_renders_30_days": past_30_days.filter(state=Render.STATE_FAILURE).count(),
+        "total_papers": papers.count(),
+        "successful_papers": papers.filter(last_render_state=Render.STATE_SUCCESS).count(),
+        "failed_papers": papers.filter(last_render_state=Render.STATE_FAILURE).count(),
     })
