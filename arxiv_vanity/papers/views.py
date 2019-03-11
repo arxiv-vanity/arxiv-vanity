@@ -155,6 +155,7 @@ def paper_convert(request):
     return redirect("paper_detail", arxiv_id=arxiv_id)
 
 
+@cache_control(public=True, max_age=30)
 def stats(request):
     past_30_days = Render.objects.filter(created_at__gt=datetime.datetime.today() - datetime.timedelta(days=30))
 
