@@ -163,13 +163,13 @@ def stats(request):
     papers = Paper.objects.annotate(last_render_state=Subquery(newest_renders.values('state')[:1])).exclude(last_render_state=None)
 
     return render(request, "papers/stats.html", {
-        "total_renders": Render.objects.count(),
-        "successful_renders": Render.objects.filter(state=Render.STATE_SUCCESS).count(),
-        "failed_renders": Render.objects.filter(state=Render.STATE_FAILURE).count(),
-        "total_renders_30_days": past_30_days.count(),
-        "successful_renders_30_days": past_30_days.filter(state=Render.STATE_SUCCESS).count(),
-        "failed_renders_30_days": past_30_days.filter(state=Render.STATE_FAILURE).count(),
-        "total_papers": papers.count(),
-        "successful_papers": papers.filter(last_render_state=Render.STATE_SUCCESS).count(),
-        "failed_papers": papers.filter(last_render_state=Render.STATE_FAILURE).count(),
+        "total_renders": int(Render.objects.count()),
+        "successful_renders": int(Render.objects.filter(state=Render.STATE_SUCCESS).count()),
+        "failed_renders": int(Render.objects.filter(state=Render.STATE_FAILURE).count()),
+        "total_renders_30_days": int(past_30_days.count()),
+        "successful_renders_30_days": int(past_30_days.filter(state=Render.STATE_SUCCESS).count()),
+        "failed_renders_30_days": int(past_30_days.filter(state=Render.STATE_FAILURE).count()),
+        "total_papers": int(papers.count()),
+        "successful_papers": int(papers.filter(last_render_state=Render.STATE_SUCCESS).count()),
+        "failed_papers": int(papers.filter(last_render_state=Render.STATE_FAILURE).count()),
     })
