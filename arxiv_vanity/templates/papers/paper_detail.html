@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% block title %}{{ paper.title }}{% endblock %}
 {% block extra_head %}
+  {{ links|safe }}
   {{ styles|safe }}
   {{ scripts|safe }}
   <link rel="stylesheet" href="{% static "css/feedback.css" %}" media="screen" title="no title" charset="utf-8">

@@ -104,6 +104,7 @@ def paper_detail(request, arxiv_id):
         'paper': paper,
         'render': r,
         'body': processed_render['body'],
+        'links': processed_render['links'],
         'scripts': processed_render['scripts'],
         'styles': processed_render['styles'],
     })
