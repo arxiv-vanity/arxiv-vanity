@@ -1,80 +1,49 @@
 /* Layout */
 
-/* Make stuff the same width as distill */
-
-.container {
-  width: auto;
-  margin-left: 24px;
-  margin-right: 24px;
-  padding: 0;
-}
-@media (min-width: 768px) {
-  .container {
-    margin-left: 72px;
-    margin-right: 72px;
-  }
-}
-
-@media (min-width: 1080px) {
-  .container {
-    /* 984 (distill width) + 15 * 2 (padding in bootstrap) */
-    width: 984px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-/* Type */
-
-body {
-  color: rgba(0,0,0,0.8);
+.arxiv-vanity-wrapper {
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
   font-weight: 300;
   font-size: 16px;
 }
-
 @media (min-width: 1080px) {
-  body {
+  .arxiv-vanity-wrapper {
     font-size: 18px;
   }
 }
 
-/* HACK: damn these style sheets and their cascading */
-dt-appendix h3 {
-  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-}
-
-a,
-a:hover {
+.arxiv-vanity-wrapper a,
+.arxiv-vanity-wrapper a:hover {
   color: rgba(0,0,0,0.8);
   text-decoration: none;
   color: inherit;
   border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-a.image-link,
-a.image-link {
+.arxiv-vanity-wrapper a.image-link {
   border-bottom: none;
 }
 
 /* Forms */
 
-form,
-.btn,
-.modal,
-.pagination {
+.arxiv-vanity-wrapper form,
+.arxiv-vanity-wrapper .btn,
+.arxiv-vanity-wrapper .modal,
+.arxiv-vanity-wrapper .pagination {
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
 }
 
-.btn-primary, .btn-primary:hover {
+.arxiv-vanity-wrapper .btn-primary,
+.arxiv-vanity-wrapper .btn-primary:hover {
   background-color: rgba(0,0,0,0.8);
   border-color: rgba(0,0,0,0.8);
+  color: #fff;
 }
 
 
 /* Components */
 
-footer {
+
+.arxiv-vanity-wrapper footer {
   font-size: 14px;
   color: rgba(0,0,0,0.5);
   padding-top: 26px;
@@ -83,7 +52,7 @@ footer {
 }
 
 @media (min-width: 768px) {
-  footer.fixed {
+  .arxiv-vanity-wrapper footer.fixed {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -91,11 +60,7 @@ footer {
   }
 }
 
-footer.footer-paper {
-  background: rgb(250, 250, 250);
-}
-
-footer span {
+.arxiv-vanity-wrapper footer span {
   margin-right: 0.5em;
 }
 
@@ -120,7 +85,7 @@ footer span {
   /*color: rgba(0,0,0,0.5);*/
   background: rgb(250, 250, 250);
   position: relative;
-  padding: 1rem 0;
+  padding: 1rem 2rem;
   font-size: 14px;
 }
 
