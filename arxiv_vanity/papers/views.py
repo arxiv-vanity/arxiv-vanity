@@ -27,19 +27,6 @@ class HomeView(TemplateView):
         return add_paper_cache_control(res)
 
 
-class PaperListView(ListView):
-    model = Paper
-    paginate_by = 25
-
-    def get_queryset(self):
-        qs = super(PaperListView, self).get_queryset()
-        return qs.machine_learning().has_successful_render()
-
-    def dispatch(self, *args, **kwargs):
-        res = super(PaperListView, self).dispatch(*args, **kwargs)
-        return add_paper_cache_control(res)
-
-
 def paper_detail(request, arxiv_id):
     arxiv_id, version = remove_version_from_arxiv_id(arxiv_id)
     if version is not None:
