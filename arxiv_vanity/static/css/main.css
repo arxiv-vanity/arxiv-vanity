@@ -74,14 +74,6 @@ form,
 
 /* Components */
 
-.badge {
-  padding: 0.4rem 0.5rem;
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: normal;
-  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-}
-
 .navbar-container {
   background-color: hsla(0, 59%, 40%, 0.9);
 }
@@ -142,59 +134,6 @@ footer.footer-paper {
 
 footer span {
   margin-right: 0.5em;
-}
-
-.paper-list {
-  font-family: Georgia, serif;
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-}
-
-.paper-list h1,
-.paper-list h2,
-.paper-list h3 {
-  font-family: Baskerville, Georgia, serif;
-}
-
-.paper-list > .row {
-  margin-bottom: 4rem;
-}
-
-.paper-list-item {
-  margin-bottom: 2rem;
-}
-.paper-list-item img {
-  width: 100%;
-  margin-top: 2rem;
-}
-.paper-list-item h3 {
-  font-size: 1.5rem;
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-}
-@media (min-width: 768px) {
-  .paper-list-item h3 {
-    font-size: 1.75rem;
-  }
-}
-
-.paper-list-item h3 a,
-.paper-list-item h3 a:hover {
-  color: rgba(0, 0, 0, 0.8);
-  font-weight: normal;
-  border-bottom: none;
-}
-
-.paper-list-item .abstract,
-.paper-list-item .abstract a {
-  color: rgba(0, 0, 0, 0.8);
-}
-.paper-list-item .author {
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.5);
-}
-.paper-list-item.abstract a {
-  text-decoration: underline;
 }
 
 .paper-detail-status {

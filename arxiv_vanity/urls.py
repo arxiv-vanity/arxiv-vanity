@@ -9,13 +9,10 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic.base import TemplateView
 from .feedback.views import submit_feedback
-from .papers.feeds import LatestPapersFeed
-from .papers.views import HomeView, PaperListView, paper_detail, paper_convert, paper_render_state, render_update_state, stats
+from .papers.views import HomeView, paper_detail, paper_convert, paper_render_state, render_update_state, stats
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    # path('papers/', PaperListView.as_view(), name='paper_list'),
-    # path('papers/feed/', LatestPapersFeed(), name='paper_feed'),
     path('papers/<arxiv_id>/', paper_detail, name='paper_detail'),
     path('papers/<arxiv_id>/render-state/', paper_render_state, name='paper_render_state'),
     path('renders/<int:pk>/update-state/', render_update_state, name='render_update_state'),
