@@ -22,6 +22,15 @@
     transition: padding 0.2s, opacity 0.2s;
     border-radius: 3px 3px 0 0;
     font-size: 14px;
+    background-color: rgba(0,0,0,0.8);
+    border-color: rgba(0,0,0,0.8);
+    color: #fff;
+}
+
+.feedback-lip-button:hover {
+    background-color: rgba(0,0,0,0.8);
+    border-color: rgba(0,0,0,0.8);
+    color: #fff;
 }
 
 @media (min-width: 1024px) {
