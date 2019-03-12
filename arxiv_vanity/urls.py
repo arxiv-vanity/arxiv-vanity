@@ -19,7 +19,6 @@ urlpatterns = [
     path('convert/', paper_convert, name='paper_convert'),
     path('submit-feedback/', submit_feedback),
     path('stats/', stats),
-    path('sponsors/', TemplateView.as_view(template_name='sponsors.html'), name='sponsors'),
     path('admin/', admin.site.urls),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 ]
