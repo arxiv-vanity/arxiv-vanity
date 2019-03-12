@@ -23,13 +23,7 @@
     {% block extra_head %}{% endblock %}
   </head>
   <body>
-    {% block before_content %}
-      <div class="arxiv-vanity-wrapper">
-        <div class="wtf-is-this-bar">
-          <p>Do you like arXiv Vanity? <a href="https://www.patreon.com/arxivvanity">Support us on Patreon!</a></p>
-        </div>
-      </div>
-    {% endblock %}
+    {% block before_content %}{% endblock %}
 
     {% block content %}(no content){% endblock %}
 
@@ -37,7 +31,8 @@
       <footer class="{% block footer_class %}{% endblock %}">
         <div class="container">
           <span>Built by <a href="https://github.com/andreasjansson">Andreas Jansson</a> and <a href="https://twitter.com/bfirsh">Ben Firshman</a>, with help from <a href="http://dlmf.nist.gov/LaTeXML/">LaTeXML</a>, <a href="https://github.com/distillpub/template">Distill</a>, and <a href="{% url 'sponsors' %}">our sponsors</a>.</span>
-          <span><a href="https://github.com/arxiv-vanity">Contribute on GitHub</a>.</span>
+          <span><a href="https://github.com/arxiv-vanity">Contribute on GitHub.</a></span>
+          <span><a href="https://www.patreon.com/arxivvanity">Support us on Patreon.</a></span>
         </div>
       </footer>
     </div>
