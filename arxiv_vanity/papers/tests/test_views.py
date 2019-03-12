@@ -60,7 +60,6 @@ class PaperDetailViewTest(TestCase):
         self.assertIn('script was inserted', content)
         self.assertIn('style-was-inserted', content)
         self.assertIn('body was inserted', content)
-        self.assertIn('Submitted on 5 August 2017', content)
 
         # literal new line, caused by django naively converting bytes to str
         self.assertNotIn('\\n', content)

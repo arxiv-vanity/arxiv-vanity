@@ -26,12 +26,6 @@ def process_render(fh, path_prefix, context):
     styles = soup.head.find_all('style')
     scripts = soup.head.find_all('script')
 
-    # Insert metadata into header of article
-    rendered_contents = render_to_string('papers/processor/metadata.html', context)
-    metadata = soup.select('.engrafo-metadata-custom')
-    if metadata:
-        metadata[0].append(BeautifulSoup(rendered_contents, 'lxml'))
-
     return {
         # FIXME: This should be str but it's bytes for some reason.
         # It's very odd - BeautifulSoup's docs insists everything is unicode,
