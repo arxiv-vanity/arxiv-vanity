@@ -6,5 +6,6 @@ class Command(BaseCommand):
     help = 'Marks all renders as expired so they will be rerendered'
 
     def handle(self, *args, **options):
-        count = Render.objects.all().force_expire()
-        print(f"Marked {count} renders as expired")
+        qs = Render.objects.not_expired()
+        qs.force_expire()
+        print(f"Done")
