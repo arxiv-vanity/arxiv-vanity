@@ -92,12 +92,12 @@ class PaperDetailViewTest(TestCase):
 
     def test_it_shows_an_error_if_the_paper_has_failed_to_render(self):
         source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
-        paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
+        paper = create_paper(arxiv_id="1234.5678", source_file=source_file, title="Theory of everything")
         render = create_render(paper=paper, state=Render.STATE_FAILURE)
         res = self.client.get('/papers/1234.5678/')
         self.assertEqual(res.status_code, 500)
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
-        self.assertIn('This paper failed to render', str(res.content))
+        self.assertIn('The paper "Theory of everything" failed to render', str(res.content))
 
     def test_it_redirects_different_versions_to_a_canonical_one(self):
         source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')

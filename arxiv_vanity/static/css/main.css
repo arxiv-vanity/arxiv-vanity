@@ -73,14 +73,18 @@ html, body {
 }
 
 .paper-detail-status {
-  margin-top: 4rem;
-  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2em;
+  padding-bottom: 160px;
+  font-size: 26px;
+  text-align: center;
 }
 
-.paper-detail-status h1,
-.paper-detail-status h2,
-.paper-detail-status h3 {
-  font-family: Baskerville, Georgia, serif;
+.paper-detail-status-inner {
+  max-width: 800px;
 }
 
 .page-container {

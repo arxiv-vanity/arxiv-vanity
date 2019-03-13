@@ -1,18 +1,11 @@
 {% extends "base.html" %}
 {% block title %}{{ paper.title }}{% endblock %}
+{% block footer_class %}fixed{% endblock %}
 {% block content %}
-  <div class="container paper-detail-status">
-    <div class="row">
-      <div class="col-12">
-        <h1>{{ paper.title }}</h1>
-      </div>
-    </div>
-    <div class="row justify-content-left">
-      <div class="col-lg-9">
-        <hr>
-        <div class="waiter-spinner my-5" style="height: 100px; position: relative"></div>
-        <p>This paper is rendering! Your browser will automatically refresh when it is finished. It should take less than a minute.</p>
-      </div>
+  <div class="arxiv-vanity-wrapper paper-detail-status">
+    <div class="paper-detail-status-inner">
+      <div class="waiter-spinner my-5" style="height: 100px; position: relative"></div>
+      <p>This paper is rendering! Your browser will automatically refresh when it is finished. It should take less than a minute.</p>
     </div>
   </div>
 {% endblock %}
