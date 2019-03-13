@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 from django.core.exceptions import ImproperlyConfigured
 import environ
+import logging
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env()
 
@@ -38,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'raven.contrib.django.raven_compat',
     'arxiv_vanity.feedback',
     'arxiv_vanity.papers',
     'arxiv_vanity.scraper',
@@ -162,20 +164,36 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'root': {
-        'handlers': ['console', 'sentry'],
+        'handlers': ['console'],
+        'level': 'DEBUG'
     },
     'handlers': {
-        'sentry': {
-            'level': 'ERROR',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            'tags': {'custom-tag': 'x'},
-        },
         'console': {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
         },
     },
 }
+
+# Suppress "Starting new HTTPS connection" messages
+logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.ERROR)
+
+SENTRY_DSN = env('SENTRY_DSN', default='')
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()]
+    )
 
 # SSL
 ENABLE_SSL = env.bool('ENABLE_SSL', default=False)
