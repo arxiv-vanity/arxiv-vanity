@@ -1,17 +1,11 @@
 {% extends "base.html" %}
 {% block title %}{{ paper.title }}{% endblock %}
+{% block footer_class %}fixed{% endblock %}
 {% block content %}
-  <div class="container paper-detail-status">
-    <div class="row">
-      <div class="col-12">
-        <h1>{{ paper.title }}</h1>
-      </div>
-    </div>
-    <div class="row justify-content-left">
-      <div class="col-lg-9">
-        <hr class="mb-5">
-        <p>This paper failed to render. Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
-      </div>
+  <div class="arxiv-vanity-wrapper paper-detail-status">
+    <div class="paper-detail-status-inner">
+      <p>The paper "{{ paper.title }}" failed to render. Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
+      <p><a href="/">Go back home</a></p>
     </div>
   </div>
 {% endblock %}
