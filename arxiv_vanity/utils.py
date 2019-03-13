@@ -1,16 +1,25 @@
+from django.conf import settings
 from functools import wraps
 import traceback
 import os
-from raven.contrib.django.raven_compat.models import client
+from sentry_sdk import capture_exception
 
 
 def log_exception():
+    """
+    Log an exception that has been raised to the console and Sentry.
+    Must be called within an `except ...:` statement.
+    """
     traceback.print_exc()
-    if os.environ.get('SENTRY_DSN'):
-        client.captureException()
+    if settings.SENTRY_DSN:
+        capture_exception()
 
 
 def catch_exceptions(f):
+    """
+    A decorator that makes a function never raise an exception.
+    If it does, it will log it to the console and Sentry.
+    """
     @wraps(f)
     def inner(*args, **kwargs):
         try:
