@@ -21,7 +21,7 @@
   {{ body|safe }}
 {% endblock %}
 {% block extra_js %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+  <script src="{% static "js/vendor/html2canvas.min.js" %}"></script>
   <script src="{% static "js/feedback.js" %}"></script>
   <script>
     $(function() {
