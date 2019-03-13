@@ -194,9 +194,9 @@ class Screenshooter {
     this.state = Screenshooter.PROCESSING;
     $('#screenshot-rect').addClass('processing');
 
-    return this.takeScreenshot({
-      x: startX,
-      y: startY,
+    this.takeScreenshot({
+      x: startX + window.scrollX,
+      y: startY + window.scrollY,
       width: width,
       height: height,
     })
@@ -248,25 +248,7 @@ class Screenshooter {
   }
 
   takeScreenshot(options) {
-    let cropper = document.createElement('canvas').getContext('2d');
-    // save the passed width and height
-    let finalWidth = options.width;
-    let finalHeight = options.height;
-
-    // update the options value so we can pass it to h2c
-    options.width = finalWidth + options.x + 100;
-    options.height = finalHeight + options.y + 100;
-
-    return new Promise((resolve, reject) => {
-      options.onrendered = (canvas) => {
-        // do our cropping
-        cropper.canvas.width = finalWidth;
-        cropper.canvas.height = finalHeight;
-        cropper.drawImage(canvas, -options.x, -options.y);
-        resolve(cropper.canvas);
-      }
-      html2canvas($('body')[0], options);
-    });
+    return html2canvas($('body')[0], options);
   }
 
 }
