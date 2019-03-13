@@ -48,7 +48,7 @@ html, body {
 
 
 .arxiv-vanity-wrapper footer {
-  font-size: 14px;
+  font-size: 12px;
   color: rgba(0,0,0,0.5);
   padding-top: 26px;
   padding-bottom: 60px;
@@ -56,6 +56,10 @@ html, body {
 }
 
 @media (min-width: 768px) {
+  .arxiv-vanity-wrapper footer {
+    font-size: 14px;
+  }
+
   .arxiv-vanity-wrapper footer.fixed {
     position: fixed;
     bottom: 0;
@@ -110,7 +114,7 @@ html, body {
 
 .page-home-inner {
   margin: 2em;
-  margin-top: 4em;
+  margin-top: 6em;
 }
 
 .page-home .tagline {
@@ -118,6 +122,13 @@ html, body {
 }
 .page-home input {
   font-weight: 300;
+}
+.page-home input:focus {
+  border: 1px solid rgba(0,0,0,.15);
+}
+
+.page-home .bookmarklet {
+  margin-top: 5rem;
 }
 
 @media (min-width: 768px) {
@@ -134,6 +145,6 @@ html, body {
     max-width: 800px;
   }
   .page-home .tagline {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 }
