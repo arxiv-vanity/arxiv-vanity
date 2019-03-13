@@ -32,9 +32,9 @@ class Feedback(object):
 
     def commit_image(self, jpg_data):
         image_sha1 = hashlib.sha1(jpg_data).hexdigest()
-        image_filename = '/images/%s.jpg' % image_sha1
+        image_filename = 'images/%s.jpg' % image_sha1
         message = '[issue-bot-commit] Created image: %s' % image_filename
         self.repo.update_file(image_filename, message, jpg_data,
                               sha=image_sha1)
-        raw_path = 'https://github.com/andreasjansson/engrafo-issues/raw/master%s' % image_filename
+        raw_path = 'https://github.com/andreasjansson/engrafo-issues/raw/master/%s' % image_filename
         return raw_path
