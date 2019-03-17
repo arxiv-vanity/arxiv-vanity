@@ -106,6 +106,19 @@ class PaperDetailViewTest(TestCase):
         res = self.client.get('/papers/1234.5678v1/')
         self.assertRedirects(res, '/papers/1234.5678/')
 
+    def test_arxiv_style_paths(self):
+
+        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        title = "Decoupling Virtual Machines from Semaphores in Model Checking"
+        create_paper(arxiv_id="1234.5678", source_file=source_file, title=title)
+
+        responses = map(lambda x: self.client.get(x), [
+            '/abs/1234.5678/', '/format/1234.5678/',
+            '/pdf/1234.5678/', '/pdf/1234.5678.pdf/'])
+
+        for res in responses:
+            self.assertIn(title, str(res.content))
+
 
 class TestPaperConvert(TestCase):
     def test_convert_query_to_arxiv_id(self):
