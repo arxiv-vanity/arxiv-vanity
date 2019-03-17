@@ -117,7 +117,7 @@ class PaperDetailViewTest(TestCase):
             '/pdf/1234.5678/', '/pdf/1234.5678.pdf/'])
 
         for res in responses:
-            self.assertRedirects(res, '/papers/1234.5678/')
+            self.assertRedirects(res, '/papers/1234.5678/', fetch_redirect_response=False)
             
 
 class TestPaperConvert(TestCase):
