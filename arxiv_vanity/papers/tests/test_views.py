@@ -117,8 +117,8 @@ class PaperDetailViewTest(TestCase):
             '/pdf/1234.5678/', '/pdf/1234.5678.pdf/'])
 
         for res in responses:
-            self.assertIn(title, str(res.content))
-
+            self.assertRedirects(res, '/papers/1234.5678/')
+            
 
 class TestPaperConvert(TestCase):
     def test_convert_query_to_arxiv_id(self):
