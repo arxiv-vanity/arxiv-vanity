@@ -140,6 +140,7 @@ def paper_convert(request):
         return render(request, "papers/paper_convert_error.html", {
             "message": "Could not find arXiv ID in that URL. Are you sure it's an arxiv.org URL?"
         })
+    arxiv_id, _ = remove_version_from_arxiv_id(arxiv_id)
     return redirect("paper_detail", arxiv_id=arxiv_id)
 
 
