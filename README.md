@@ -21,6 +21,10 @@ Do the initial database migration and set up a user:
     $ script/manage migrate
     $ script/manage createsuperuser
 
+Build engrafo-dev docker image (needed for rendering papers):
+
+    $ docker build https://github.com/arxiv-vanity/engrafo.git -t engrafo-dev
+
 Then to run the app:
 
     $ docker-compose up --build
