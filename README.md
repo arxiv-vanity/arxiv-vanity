@@ -21,9 +21,9 @@ Do the initial database migration and set up a user:
     $ script/manage migrate
     $ script/manage createsuperuser
 
-Build engrafo-dev docker image (needed for rendering papers):
+Pull the Engrafo Docker image, which is needed for rendering papers:
 
-    $ docker build https://github.com/arxiv-vanity/engrafo.git -t engrafo-dev
+    $ docker pull arxivvanity/engrafo
 
 Then to run the app:
 
@@ -40,6 +40,18 @@ It'll probably fetch quite a lot, so hit `ctrl-C` when you've got enough.
 ## Running tests
 
     $ script/test
+
+## Using a development version of Engrafo
+
+[Engrafo](https://github.com/arxiv-vanity/engrafo) is the LaTeX to HTML converter. If you are working on Engrafo, you might want to use the version you are working on locally.
+
+To do that, run `script/docker-build` in your local Engrafo directory. This will create an image called `engrafo-dev`.
+
+Then, in the arXiv Vanity directory (the same one this readme is in), create a file called `.env` to tell arXiv Vanity to use that image to render papers:
+
+```
+ENGRAFO_IMAGE=engrafo-dev
+```
 
 ## Sponsors
 
