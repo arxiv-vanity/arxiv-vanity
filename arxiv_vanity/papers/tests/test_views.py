@@ -124,6 +124,7 @@ class TestPaperConvert(TestCase):
     def test_convert_query_to_arxiv_id(self):
         # arxiv URLs
         self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/abs/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/abs/astro-ph/0601001'), 'astro-ph/0601001')
         self.assertEqual(convert_query_to_arxiv_id('http://arXiv.org/abs/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/abs/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('http://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
@@ -134,6 +135,7 @@ class TestPaperConvert(TestCase):
         # arxiv IDs
         self.assertEqual(convert_query_to_arxiv_id('1709.04466'), '1709.04466')
         self.assertEqual(convert_query_to_arxiv_id('1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('astro-ph/0601001v1'), 'astro-ph/0601001v1')
         self.assertEqual(convert_query_to_arxiv_id('arxiv:1709.04466'), '1709.04466')
         self.assertEqual(convert_query_to_arxiv_id('arXiv:1709.04466'), '1709.04466')
 

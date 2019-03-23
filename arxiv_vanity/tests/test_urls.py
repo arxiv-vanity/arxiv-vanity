@@ -13,3 +13,9 @@ class UrlsTest(TestCase):
 
         resolver = resolve('/papers/1703.07815/render-state/')
         self.assertEquals(resolver.view_name, 'paper_render_state')
+
+        resolver = resolve('/papers/astro-ph/0601001/')
+        self.assertEquals(resolver.view_name, 'paper_detail')
+
+        resolver = resolve('/papers/astro-ph/0601001/render-state/')
+        self.assertEquals(resolver.view_name, 'paper_render_state')

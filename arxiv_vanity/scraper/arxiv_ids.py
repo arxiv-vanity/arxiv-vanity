@@ -1,6 +1,6 @@
 import re
 
-ARXIV_ID_PATTERN = r'(\d+\.\d+)(v\d+)?'
+ARXIV_ID_PATTERN = r'([a-z\-]+(?:\.[A-Z]{2})?/\d{7}|\d+\.\d+)(v\d+)?'
 ARXIV_ID_RE = re.compile(ARXIV_ID_PATTERN)
 
 
