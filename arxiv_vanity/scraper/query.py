@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 import dateutil.parser
 import requests
 
-from .arxiv_ids import remove_version_from_arxiv_id, remove_version_from_arxiv_url
+from .arxiv_ids import remove_version_from_arxiv_id, remove_version_from_arxiv_url, ARXIV_ID_RE
 
 ROOT_URL = 'http://export.arxiv.org/api/'
 NS = {
@@ -90,7 +90,7 @@ def convert_entry_to_paper(entry):
     with.
     """
     d = {}
-    d['arxiv_id'] = entry.find("atom:id", NS).text.split('/')[-1]
+    d['arxiv_id'] = ARXIV_ID_RE.search(entry.find("atom:id", NS).text).group()
     d['title'] = entry.find("atom:title", NS).text
     d['title'] = d['title'].replace('\n', '').replace('  ', ' ')
     d['published'] = dateutil.parser.parse(
