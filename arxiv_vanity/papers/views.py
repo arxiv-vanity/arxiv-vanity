@@ -8,7 +8,7 @@ from django.utils.cache import add_never_cache_headers, patch_cache_control
 from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.views.generic import ListView, TemplateView
+from django.views.generic import TemplateView
 from .models import Paper, Render, PaperIsNotRenderableError
 from ..scraper.arxiv_ids import remove_version_from_arxiv_id
 from ..scraper.query import PaperNotFoundError

@@ -4,7 +4,6 @@ import shlex
 import docker
 from docker.tls import TLSConfig
 from django.conf import settings
-import dateutil.parser
 import tempfile
 from ..utils import log_exception
 
