@@ -16,3 +16,8 @@
     </div>
   </div>
 {% endblock %}
+{% block extra_js %}
+  <script>
+    mixpanel.track("Paper Not Renderable", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
+  </script>
+{% endblock %}

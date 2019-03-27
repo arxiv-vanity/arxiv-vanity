@@ -47,5 +47,7 @@
 
     var spinner = new Spinner().spin();
     document.querySelector(".waiter-spinner").appendChild(spinner.el);
+
+    mixpanel.track("Paper Rendering", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
   </script>
 {% endblock %}

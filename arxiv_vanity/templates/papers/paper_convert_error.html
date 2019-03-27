@@ -9,3 +9,10 @@
     </div>
   </div>
 {% endblock %}
+{% block extra_js %}
+  {% if query %}
+  <script>
+    mixpanel.track("Invalid Query", {"query": "{{ query|escapejs }}"});
+  </script>
+  {% endif %}
+{% endblock %}

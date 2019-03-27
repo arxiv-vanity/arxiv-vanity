@@ -9,3 +9,8 @@
     </div>
   </div>
 {% endblock %}
+{% block extra_js %}
+  <script>
+    mixpanel.track("Render Failed", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
+  </script>
+{% endblock %}

@@ -75,6 +75,8 @@
     exampleEl.setAttribute("href", "/papers/" + example.id + "/");
     exampleEl.innerHTML = example.title;
   })();
+
+  mixpanel.track("View Home Page");
 </script>
 
 {% endblock %}

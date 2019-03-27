@@ -210,8 +210,9 @@ ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='') or 'arxivvanity/engrafo:latest'
 # The prefix to use for Engrafo webhooks
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 
-# Google Analytics
+# Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = env('GOOGLE_ANALYTICS_PROPERTY_ID', default='UA-107304984-2')
+MIXPANEL_TOKEN = env('MIXPANEL_TOKEN', default='')
 
 # Paper feedback
 GITHUB_ACCESS_TOKEN = env('GITHUB_ACCESS_TOKEN', default='')
