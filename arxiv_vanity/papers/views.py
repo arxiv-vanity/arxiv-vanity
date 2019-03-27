@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from .models import Paper, Render, PaperIsNotRenderableError
-from ..scraper.arxiv_ids import remove_version_from_arxiv_id, ARXIV_ID_PATTERN
+from ..scraper.arxiv_ids import remove_version_from_arxiv_id, ARXIV_URL_RE, ARXIV_DOI_RE, ARXIV_VANITY_RE
 from ..scraper.query import PaperNotFoundError
 
 
@@ -114,11 +114,6 @@ def render_update_state(request, pk):
     r = get_object_or_404(Render, pk=pk, container_is_removed=False)
     r.update_state(exit_code=request.POST.get('exit_code'))
     return HttpResponse()
-
-
-ARXIV_URL_RE = re.compile(fr'arxiv.org/[^\/]+/({ARXIV_ID_PATTERN})(\.pdf)?$', re.I)
-ARXIV_DOI_RE = re.compile(fr'^(?:arxiv:)?({ARXIV_ID_PATTERN})$', re.I)
-ARXIV_VANITY_RE = re.compile(fr'(?:localhost\:\d+|arxiv-vanity\.com)/[^\/]+/({ARXIV_ID_PATTERN})\/?$', re.I)
 
 
 def convert_query_to_arxiv_id(query):
