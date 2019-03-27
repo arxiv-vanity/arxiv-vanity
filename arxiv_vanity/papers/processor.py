@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
+from django.urls import reverse
 import os
+from ..scraper.arxiv_ids import ARXIV_URL_RE
 
 
 def process_render(fh, path_prefix, context):
@@ -23,6 +25,15 @@ def process_render(fh, path_prefix, context):
     for el in soup.find_all('img'):
         if not el['src'].startswith('data:'):
             el['src'] = os.path.join(path_prefix, el['src'])
+    
+    # Turn arxiv.org links into vanity links
+    for el in soup.find_all('a'):
+        if el.get('href'):
+            match = ARXIV_URL_RE.search(el['href'])
+            if match:
+                arxiv_id = match.group(1)
+                el['href'] = reverse('paper_detail', args=(arxiv_id,))
+            
 
     return {
         # FIXME: This should be str but it's bytes for some reason.
