@@ -39,6 +39,17 @@ def arxiv_id_to_source_url(arxiv_id):
     return 'https://arxiv.org/e-print/' + arxiv_id
 
 
+def arxiv_id_to_source_file(arxiv_id):
+    """
+    Convert an arXiv ID into the filename the source file should be stored as,
+    without extension.
+
+    This is the inverse of `convert_source_file_to_arxiv_id()` in 
+    `arxiv_vanity/scraper/bulk_sources.py`.
+    """
+    return arxiv_id.replace("/", "")
+
+
 def download_source_file(arxiv_id):
     """
     Download the LaTeX source of this paper and returns as ContentFile.
@@ -54,5 +65,5 @@ def download_source_file(arxiv_id):
                                 res.headers.get('content-type'),
                                 res.headers.get('content-encoding')))
     file = ContentFile(res.content)
-    file.name = arxiv_id + extension
+    file.name = arxiv_id_to_source_file(arxiv_id) + extension
     return file
