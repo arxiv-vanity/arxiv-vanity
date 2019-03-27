@@ -11,7 +11,7 @@ lxml==4.3.2
 django-storages==1.7.1
 boto3==1.5.0
 PyGithub==1.43.5
-sentry-sdk==0.7.7
+sentry-sdk==0.7.8
 vcrpy==2.0.1
 django-db-geventpool==3.0.1
 gevent==1.4.0
