@@ -10,20 +10,19 @@ def process_render(fh, path_prefix, context):
     """
     soup = BeautifulSoup(fh, 'lxml')
 
+    links = soup.find_all('link')
+    styles = soup.find_all('style')
+    scripts = soup.find_all('script')
+
     # Add prefixes
-    for el in soup.find_all('link'):
+    for el in links:
         el['href'] = os.path.join(path_prefix, el['href'])
-    for el in soup.find_all('script'):
+    for el in scripts:
         if el.get('src'):
             el['src'] = os.path.join(path_prefix, el['src'])
     for el in soup.find_all('img'):
         if not el['src'].startswith('data:'):
             el['src'] = os.path.join(path_prefix, el['src'])
-
-
-    links = soup.head.find_all('link')
-    styles = soup.head.find_all('style')
-    scripts = soup.head.find_all('script')
 
     return {
         # FIXME: This should be str but it's bytes for some reason.
