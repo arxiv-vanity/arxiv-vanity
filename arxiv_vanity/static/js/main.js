@@ -3,9 +3,9 @@
 document.addEventListener('DOMSubtreeModified', function (e) {
   if (e.target.tagName === 'HTML') {
     if (e.target.className.match('translated')) {
-      gtag('event', 'translate', {
-        'language': e.target.getAttribute('lang')
-      });
+      var language = e.target.getAttribute('lang');
+      gtag('event', 'translate', {'language': language});
+      mixpanel.track('Translate', {'language': language});
     }
   }
 }, true);
