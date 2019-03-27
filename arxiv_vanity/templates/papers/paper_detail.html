@@ -31,7 +31,7 @@
     });
 
     mixpanel.track("View Paper", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
-    mixpanel.track_links(".ltx_bibliography a", "Click Link In Bibliography")
+    mixpanel.track_links(".ltx_bibliography a", "Click Link In Bibliography", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"})
 
     // track_links isn't live, so we need to re-run when tooltips are opened
     if (window.MutationObserver) {
@@ -39,7 +39,10 @@
         var selector = ".tippy-popper .ltx_bibitem a";
         // mixpanel throws error if nothing is selected
         if (document.querySelector(selector)) {
-          mixpanel.track_links(selector, "Click Link In Bibliography", {"tooltip": true})
+          mixpanel.track_links(selector, "Click Link In Bibliography", {
+            "arxiv_id": "{{ paper.arxiv_id|escapejs }}",
+            "tooltip": true
+          })
         }
       });
       obs.observe(document.body, {childList: true})
