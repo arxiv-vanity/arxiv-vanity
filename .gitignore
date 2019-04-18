@@ -4,4 +4,4 @@ __pycache__
 media
 /local
 docker-compose.override.yml
-.vscode
+/venv

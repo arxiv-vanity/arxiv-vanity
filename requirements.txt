@@ -15,3 +15,5 @@ sentry-sdk==0.7.9
 vcrpy==2.0.1
 django-db-geventpool==3.1.0
 gevent==1.4.0
+pylint==2.3.1
+pylint-django==2.0.8
