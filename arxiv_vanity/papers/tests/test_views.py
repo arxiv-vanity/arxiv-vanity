@@ -101,8 +101,12 @@ class PaperDetailViewTest(TestCase):
 
     def test_it_redirects_different_versions_to_a_canonical_one(self):
         source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
-        paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
-        render = create_render(paper=paper, state=Render.STATE_RUNNING)
+        paper = create_paper(
+            arxiv_id="1234.5678",
+            title="Some paper",
+            source_file=source_file,
+        )
+        render = create_render_with_html(paper=paper)
         res = self.client.get('/papers/1234.5678v1/')
         self.assertRedirects(res, '/papers/1234.5678/')
 

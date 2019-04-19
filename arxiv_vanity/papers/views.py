@@ -76,7 +76,7 @@ def paper_detail(request, arxiv_id):
             res = render(request, "papers/paper_detail_rendering.html", {
                 'paper': paper,
                 'render': r,
-            })
+            }, status=503)
             add_never_cache_headers(res)
             return res
 
