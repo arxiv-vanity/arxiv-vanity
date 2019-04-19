@@ -99,6 +99,7 @@ html, body {
   position: relative;
   padding: 1rem 14px;
   font-size: 14px;
+  text-align: center;
 }
 
 @media (min-width: 768px) {

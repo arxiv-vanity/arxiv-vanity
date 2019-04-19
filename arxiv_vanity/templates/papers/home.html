@@ -6,29 +6,37 @@
 {% block footer_class %}fixed{% endblock %}
 
 {% block content %}
-  <div class="arxiv-vanity-wrapper page-home">
-    <div class="page-home-inner text-center">
-      <p class="tagline">arXiv Vanity renders academic papers from <a href="https://arxiv.org/">arXiv</a> as responsive web pages so you don&rsquo;t have to squint at a PDF. <!-- <a href="/about/">Learn more.</a> --></p>
-      <div class="d-none d-md-block">
-        <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
-          <div class="input-group input-group-lg">
-            <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary">Convert to web page</button>
-            </span>
-          </div>
-        </form>
+  <div class="arxiv-vanity-wrapper">
+    <div class="wtf-is-this-bar">
+      <p><strong>
+        Want to help make arXiv Vanity better? Got another problem in your work you want fixed?
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScJPbrDuQUw9Qamz6wnEhUXarYSlzvibfHRViB7HFfM4l4FdQ/viewform?usp=sf_link">We want to talk to you!</a>
+      </strong></p>
+    </div>
+    <div class="page-home">
+      <div class="page-home-inner text-center">
+        <p class="tagline">arXiv Vanity renders academic papers from <a href="https://arxiv.org/">arXiv</a> as responsive web pages so you don&rsquo;t have to squint at a PDF. <!-- <a href="/about/">Learn more.</a> --></p>
+        <div class="d-none d-md-block">
+          <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
+            <div class="input-group input-group-lg">
+              <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary">Convert to web page</button>
+              </span>
+            </div>
+          </form>
+        </div>
+        <div class="d-md-none">
+          <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
+            <div class="form-group">
+              <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
+            </div>
+            <button type="submit" class="btn btn-primary">Convert to web page</button>
+          </form>
+        </div>
+        <p><small>For example, <a href="/papers/1710.07035/" class="home-example-paper">Generative Adversarial Networks: An Overview</a></small></p>
+        <p class="bookmarklet"><small>To convert papers with one click, drag this bookmarklet to your bookmarks bar:</p><p><a href="javascript:(function(){window.location='https://www.arxiv-vanity.com/convert/?query='+encodeURIComponent(window.location)})()" class="btn btn-primary ml-1">arXiv to web page 💅</a></small></p>
       </div>
-      <div class="d-md-none">
-        <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
-          <div class="form-group">
-            <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
-          </div>
-          <button type="submit" class="btn btn-primary">Convert to web page</button>
-        </form>
-      </div>
-      <p><small>For example, <a href="/papers/1710.07035/" class="home-example-paper">Generative Adversarial Networks: An Overview</a></small></p>
-      <p class="bookmarklet"><small>To convert papers with one click, drag this bookmarklet to your bookmarks bar:</p><p><a href="javascript:(function(){window.location='https://www.arxiv-vanity.com/convert/?query='+encodeURIComponent(window.location)})()" class="btn btn-primary ml-1">arXiv to web page 💅</a></small></p>
     </div>
   </div>
 {% endblock %}
