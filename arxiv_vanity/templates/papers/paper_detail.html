@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}{{ paper.title }}{% endblock %}
 {% block extra_head %}
+  <meta name="twitter:card" content="summary_large_image">
   <meta property="og:url" content="{{ ROOT_URL }}{{ paper.get_absolute_url }}">
   <meta property="og:title" content="{{ paper.title }}">
   <meta property="og:description" content="{{ abstract|default:'' }}">
