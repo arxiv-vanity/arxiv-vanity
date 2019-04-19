@@ -1,5 +1,2 @@
-User-agent: Twitterbot
-Disallow:
-
 User-agent: *
-Disallow: /papers/
+Crawl-delay: 30
