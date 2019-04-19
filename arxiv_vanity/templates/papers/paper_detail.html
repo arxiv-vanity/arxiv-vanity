@@ -2,15 +2,15 @@
 {% load static %}
 {% block title %}{{ paper.title }}{% endblock %}
 {% block extra_head %}
-  {{ links|safe }}
-  {{ styles|safe }}
-  {{ scripts|safe }}
-  <link rel="stylesheet" href="{% static "css/feedback.css" %}" media="screen" title="no title" charset="utf-8">
-
   <meta property="og:url" content="{{ ROOT_URL }}{{ paper.get_absolute_url }}">
   <meta property="og:title" content="{{ paper.title }}">
   <meta property="og:description" content="{{ abstract|default:'' }}">
   <meta property="og:image" content="{{ first_image|default:'' }}">
+
+  {{ links|safe }}
+  {{ styles|safe }}
+  {{ scripts|safe }}
+  <link rel="stylesheet" href="{% static "css/feedback.css" %}" media="screen" title="no title" charset="utf-8">
 {% endblock %}
 {% block before_content %}
   <div class="arxiv-vanity-wrapper">
