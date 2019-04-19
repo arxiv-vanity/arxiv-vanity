@@ -94,6 +94,8 @@ def paper_detail(request, arxiv_id):
         'links': processed_render['links'],
         'scripts': processed_render['scripts'],
         'styles': processed_render['styles'],
+        'abstract': processed_render['abstract'],
+        'first_image': processed_render['first_image'],
     })
     return add_paper_cache_control(res)
 

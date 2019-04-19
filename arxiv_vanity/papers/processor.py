@@ -33,7 +33,22 @@ def process_render(fh, path_prefix, context):
             if match:
                 arxiv_id = match.group(1)
                 el['href'] = reverse('paper_detail', args=(arxiv_id,))
-            
+
+    # Stuff for opengraph tags
+    abstract = None
+    abstract_tag = soup.find("div", class_="ltx_abstract")
+    if abstract_tag:
+        first_paragraph = abstract_tag.find("p")
+        if first_paragraph:
+            abstract = first_paragraph.get_text()
+
+    first_image = None
+    for figure in soup.find_all("figure", class_="ltx_figure"):
+        img = figure.find('img')
+        print(img)
+        if img:
+            first_image = img['src']
+            break
 
     return {
         # FIXME: This should be str but it's bytes for some reason.
@@ -43,4 +58,6 @@ def process_render(fh, path_prefix, context):
         "links": ''.join(e.prettify() for e in links),
         "styles": ''.join(e.prettify() for e in styles),
         "scripts": ''.join(e.prettify() for e in scripts),
+        "abstract": abstract,
+        "first_image": first_image,
     }
