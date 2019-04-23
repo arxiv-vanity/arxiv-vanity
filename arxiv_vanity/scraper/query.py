@@ -110,7 +110,8 @@ def convert_entry_to_paper(entry):
     d['primary_category'] = entry.find(
         'arxiv:primary_category', NS).attrib['term']
     d['categories'] = [e.attrib['term']
-                       for e in entry.findall('atom:category', NS)]
+                       for e in entry.findall('atom:category', NS)
+                       if len(e.attrib['term']) < 25]
     # Optional
     d['comment'] = getattr(entry.find('arxiv:comment', NS), 'text', None)
     d['doi'] = getattr(entry.find('arxiv:doi', NS), 'text', None)
