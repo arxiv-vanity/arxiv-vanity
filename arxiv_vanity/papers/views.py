@@ -1,5 +1,4 @@
 import datetime
-import re
 from django.conf import settings
 from django.http import Http404, HttpResponse, JsonResponse
 from django.db.models import OuterRef, Subquery
@@ -35,69 +34,63 @@ def paper_detail(request, arxiv_id):
     # Get the requested paper
     try:
         paper = Paper.objects.get(arxiv_id=arxiv_id)
-    # If it doesn't exist, render it!
+    # If it doesn't exist, fetch from arXiv API
     except Paper.DoesNotExist:
         # update_or_create to avoid the race condition where several people
         # hit a new paper at the same time
         try:
-            paper, created = Paper.objects.update_or_create_from_arxiv_id(arxiv_id)
+            paper, _ = Paper.objects.update_or_create_from_arxiv_id(arxiv_id)
         except PaperNotFoundError:
             raise Http404(f"Paper '{arxiv_id}' not found on arXiv")
-        if created:
-            try:
-                paper.render()
-            except PaperIsNotRenderableError:
-                res = render(request, "papers/paper_detail_not_renderable.html",
-                             {"paper": paper}, status=404)
-                return add_paper_cache_control(res)
 
-    # First, try to get the latest succeeded paper -- this is always what
-    # we'll want to render.
+    # Get latest render that hasn't expired
     try:
-        r = paper.renders.succeeded().not_expired().latest()
+        r = paper.renders.not_expired().latest()
     except Render.DoesNotExist:
-        # See if there is a render running
         try:
-            r = paper.renders.not_expired().latest()
-        except Render.DoesNotExist:
-            try:
-                # Either rendering has not started or it has expired.
-                r = paper.render()
-            except PaperIsNotRenderableError:
-                res = render(request, "papers/paper_detail_not_renderable.html",
-                             {"paper": paper}, status=404)
-                return add_paper_cache_control(res)
-
-        # Stuck for some reason
-        if r.state == Render.STATE_UNSTARTED:
+            # If it has expired or hasn't been started yet, render it!
             r = paper.render()
+        except PaperIsNotRenderableError:
+            res = render(request, "papers/paper_detail_not_renderable.html",
+                         {"paper": paper}, status=404)
+            return add_paper_cache_control(res)
 
-        if r.state in Render.STATE_RUNNING:
-            res = render(request, "papers/paper_detail_rendering.html", {
-                'paper': paper,
-                'render': r,
-            }, status=503)
-            add_never_cache_headers(res)
-            return res
+    # Stuck for some reason, give it a boot
+    # This normally happens if there is an exception raised in render()
+    if r.state == Render.STATE_UNSTARTED:
+        r = paper.render()
 
+    elif r.state == Render.STATE_RUNNING:
+        res = render(request, "papers/paper_detail_rendering.html", {
+            'paper': paper,
+            'render': r,
+        }, status=503)
+        add_never_cache_headers(res)
+        return res
+
+    elif r.state == Render.STATE_FAILURE:
         # Fall back to error if there is no successful or running render
         res = render(request, "papers/paper_detail_error.html",
                      {"paper": paper}, status=500)
         return add_paper_cache_control(res)
 
-    processed_render = r.get_processed_render()
+    elif r.state == Render.STATE_SUCCESS:
+        processed_render = r.get_processed_render()
 
-    res = render(request, "papers/paper_detail.html", {
-        'paper': paper,
-        'render': r,
-        'body': processed_render['body'],
-        'links': processed_render['links'],
-        'scripts': processed_render['scripts'],
-        'styles': processed_render['styles'],
-        'abstract': processed_render['abstract'],
-        'first_image': processed_render['first_image'],
-    })
-    return add_paper_cache_control(res)
+        res = render(request, "papers/paper_detail.html", {
+            'paper': paper,
+            'render': r,
+            'body': processed_render['body'],
+            'links': processed_render['links'],
+            'scripts': processed_render['scripts'],
+            'styles': processed_render['styles'],
+            'abstract': processed_render['abstract'],
+            'first_image': processed_render['first_image'],
+        })
+        return add_paper_cache_control(res)
+
+    else:
+        raise Exception(f"Unknown render state: {r.state}")
 
 
 @never_cache
