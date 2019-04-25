@@ -4,3 +4,4 @@
 media
 docker-compose.override.yml
 local
+venv
