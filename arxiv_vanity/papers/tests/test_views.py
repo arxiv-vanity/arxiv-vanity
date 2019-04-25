@@ -135,6 +135,8 @@ class TestPaperConvert(TestCase):
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1709.04466v1.pdf'), '1709.04466v1')
         self.assertEqual(convert_query_to_arxiv_id('arxiv.org/pdf/1709.04466v1'), '1709.04466v1')
+        self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/pdf/1511.08861.pdf#page=10&zoom=100,0,732'), '1511.08861')
+        self.assertEqual(convert_query_to_arxiv_id('https://arxiv.org/abs/1711.01768#'), '1711.01768')
 
         # arxiv IDs
         self.assertEqual(convert_query_to_arxiv_id('1709.04466'), '1709.04466')
@@ -145,6 +147,7 @@ class TestPaperConvert(TestCase):
 
         # arxiv vanity URLs
         self.assertEqual(convert_query_to_arxiv_id('https://www.arxiv-vanity.com/papers/1707.08901v1/'), '1707.08901v1')
+        self.assertEqual(convert_query_to_arxiv_id('https://www.arxiv-vanity.com/papers/1707.08901v1/?foo=bar'), '1707.08901v1')
         self.assertEqual(convert_query_to_arxiv_id('http://localhost:8010/html/1707.08901v1/'), '1707.08901v1')
         self.assertEqual(convert_query_to_arxiv_id('http://localhost:8000/papers/1707.08901v1/'), '1707.08901v1')
 
