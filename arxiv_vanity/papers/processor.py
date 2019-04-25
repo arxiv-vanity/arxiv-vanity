@@ -34,6 +34,9 @@ def process_render(fh, path_prefix, context):
                 arxiv_id = match.group(1)
                 el['href'] = reverse('paper_detail', args=(arxiv_id,))
 
+            # Open all links in new windows
+            el['target'] = '_blank'
+
     # Stuff for opengraph tags
     abstract = None
     abstract_tag = soup.find("div", class_="ltx_abstract")
