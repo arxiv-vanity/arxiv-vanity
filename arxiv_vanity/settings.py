@@ -213,6 +213,7 @@ ENGRAFO_IMAGE = env('ENGRAFO_IMAGE', default='') or 'arxivvanity/engrafo:latest'
 ENGRAFO_WEBHOOK_URL_PREFIX = env('ENGRAFO_WEBHOOK_URL_PREFIX', default='http://web:8000')
 BIBLIO_GLUTTON_URL = env('BIBLIO_GLUTTON_URL', default='')
 GROBID_URL = env('GROBID_URL', default='')
+ENGRAFO_SENTRY_DSN = env('ENGRAFO_SENTRY_DSN', default='')
 
 # Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = env('GOOGLE_ANALYTICS_PROPERTY_ID', default='UA-107304984-2')

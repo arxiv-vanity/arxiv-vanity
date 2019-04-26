@@ -59,6 +59,7 @@ def render_paper(source, output_path, webhook_url=None, output_bucket=None, extr
     environment = {
         'BIBLIO_GLUTTON_URL': settings.BIBLIO_GLUTTON_URL,
         'GROBID_URL': settings.GROBID_URL,
+        'SENTRY_DSN': settings.ENGRAFO_SENTRY_DSN,
     }
     volumes = {}
     network = None
