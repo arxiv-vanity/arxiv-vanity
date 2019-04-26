@@ -58,9 +58,11 @@ def paper_detail(request, arxiv_id):
     # Stuck for some reason, give it a boot
     # This normally happens if there is an exception raised in render()
     if r.state == Render.STATE_UNSTARTED:
+        # This will put it into running state
         r = paper.render()
 
-    elif r.state == Render.STATE_RUNNING:
+    # Switch response based on state
+    if r.state == Render.STATE_RUNNING:
         res = render(request, "papers/paper_detail_rendering.html", {
             'paper': paper,
             'render': r,
