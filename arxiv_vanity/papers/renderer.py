@@ -56,7 +56,10 @@ def render_paper(source, output_path, webhook_url=None, output_bucket=None, extr
     client = create_client()
 
     labels = {}
-    environment = {}
+    environment = {
+        'BIBLIO_GLUTTON_URL': settings.BIBLIO_GLUTTON_URL,
+        'GROBID_URL': settings.GROBID_URL,
+    }
     volumes = {}
     network = None
 
