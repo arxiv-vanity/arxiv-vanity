@@ -19,10 +19,8 @@ def guess_extension_from_headers(h):
         return '.ps.gz'
     if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/x-eprint-tar':
         return '.tar.gz'
-    # content-encoding is x-gzip but this appears to normally be a lie - it's
-    # just plain text
-    if h.get('content-type') == 'application/x-eprint':
-        return '.tex'
+    if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/x-eprint':
+        return '.tex.gz'
     if h.get('content-encoding') == 'x-gzip' and h.get('content-type') == 'application/x-dvi':
         return '.dvi.gz'
     return None

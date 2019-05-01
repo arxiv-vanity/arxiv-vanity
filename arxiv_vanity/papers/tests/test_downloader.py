@@ -21,7 +21,7 @@ class DownloaderTest(unittest.TestCase):
         self.assertEqual(guess_extension_from_headers({
             'content-encoding': 'x-gzip',
             'content-type': 'application/x-eprint',
-        }), '.tex')
+        }), '.tex.gz')
         self.assertEqual(guess_extension_from_headers({
             'content-encoding': 'x-gzip',
             'content-type': 'application/x-dvi',
