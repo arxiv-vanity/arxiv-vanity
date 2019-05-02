@@ -40,36 +40,71 @@
       feedbackForm = new FeedbackForm(screenshooter);
     });
 
+    // God we need a javascript build system
+    function debounce(func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    };
+
     // Track reading a paper and how long spent reading paper
     // https://github.com/mixpanel/mixpanel-js/issues/184
-    var startTime;
+    function trackPaperView() {
+      var startTime;
+      var maxScroll;
 
-    function viewPaperStart() {
-      startTime = new Date().getTime();
-      mixpanel.track("View Paper", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
+      function handlePageshow() {
+        startTime = new Date().getTime();
+        maxScroll = 0;
+        mixpanel.track("View Paper", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
+      }
+      // pageshow event is used here instead of just running the code so it'll handles back/forward buttons
+      // when page is frozen
+      window.addEventListener('pageshow', handlePageshow, false);
+
+      // Track how far down page user has scrolled
+      // Based on https://github.com/googleanalytics/autotrack/blob/master/lib/plugins/max-scroll-tracker.js
+      function handleScroll(event) {
+        var html = document.documentElement;
+        var body = document.body;
+        var pageHeight = Math.max(html.offsetHeight, html.scrollHeight, body.offsetHeight, body.scrollHeight);
+        var scrollPos = window.pageYOffset; // scrollY isn't supported in IE.
+        var windowHeight = window.innerHeight;
+        maxScroll = Math.min(100, Math.max(0, Math.round(100 * (scrollPos / (pageHeight - windowHeight)))));
+      }
+      window.addEventListener('scroll', debounce(handleScroll, 500));
+
+      function handleUnload() {
+        var duration = new Date().getTime() - startTime;
+        var data = {
+          event: 'View Paper Exit',
+          properties: {
+            token: '{{ MIXPANEL_TOKEN }}',
+            arxiv_id: "{{ paper.arxiv_id|escapejs }}",
+            max_scroll: maxScroll,
+            // duration is in seconds.
+            $duration: parseFloat((duration / 1000).toFixed(3)),
+          }
+        };
+        Object.assign(data.properties, mixpanel._.info.properties());
+        Object.assign(data.properties, mixpanel['persistence'].properties());
+        var newdata = btoa(JSON.stringify(data));
+        navigator.sendBeacon('https://api.mixpanel.com/track/?ip=1&data=' + newdata);
+      }
+      window.addEventListener('beforeunload', handleUnload, false);
+    };
+    if (!mixpanel.has_opted_out_tracking()) {
+      trackPaperView();
     }
-    // pageshow event is used here instead of just running the code so it'll handles back/forward buttons
-    // when page is frozen
-    window.addEventListener('pageshow', viewPaperStart, false);
-
-
-    function viewPaperExit() {
-      var duration = new Date().getTime() - startTime;
-      var data = {
-        event: 'View Paper Exit',
-        properties: {
-          token: '{{ MIXPANEL_TOKEN }}',
-          arxiv_id: "{{ paper.arxiv_id|escapejs }}",
-          // duration is in seconds.
-          $duration: parseFloat((duration / 1000).toFixed(3)),
-        }
-      };
-      Object.assign(data.properties, mixpanel._.info.properties());
-      Object.assign(data.properties, mixpanel['persistence'].properties());
-      var newdata = btoa(JSON.stringify(data));
-      navigator.sendBeacon('https://api.mixpanel.com/track/?ip=1&data=' + newdata);
-    }
-    window.addEventListener('beforeunload', viewPaperExit, false);
 
     // Track clicking bibliography links
     mixpanel.track_links(".ltx_bibliography a", "Click Link In Bibliography", {
