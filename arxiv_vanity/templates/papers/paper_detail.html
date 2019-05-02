@@ -40,7 +40,38 @@
       feedbackForm = new FeedbackForm(screenshooter);
     });
 
-    mixpanel.track("View Paper", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
+    // Track reading a paper and how long spent reading paper
+    // https://github.com/mixpanel/mixpanel-js/issues/184
+    var startTime;
+
+    function viewPaperStart() {
+      startTime = new Date().getTime();
+      mixpanel.track("View Paper", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
+    }
+    // pageshow event is used here instead of just running the code so it'll handles back/forward buttons
+    // when page is frozen
+    window.addEventListener('pageshow', viewPaperStart, false);
+
+
+    function viewPaperExit() {
+      var duration = new Date().getTime() - startTime;
+      var data = {
+        event: 'View Paper Exit',
+        properties: {
+          token: '{{ MIXPANEL_TOKEN }}',
+          arxiv_id: "{{ paper.arxiv_id|escapejs }}",
+          // duration is in seconds.
+          $duration: parseFloat((duration / 1000).toFixed(3)),
+        }
+      };
+      Object.assign(data.properties, mixpanel._.info.properties());
+      Object.assign(data.properties, mixpanel['persistence'].properties());
+      var newdata = btoa(JSON.stringify(data));
+      navigator.sendBeacon('https://api.mixpanel.com/track/?ip=1&data=' + newdata);
+    }
+    window.addEventListener('beforeunload', viewPaperExit, false);
+
+    // Track clicking bibliography links
     mixpanel.track_links(".ltx_bibliography a", "Click Link In Bibliography", {
       "arxiv_id": "{{ paper.arxiv_id|escapejs }}",
       "tooltip": false
