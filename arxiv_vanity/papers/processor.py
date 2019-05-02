@@ -48,7 +48,6 @@ def process_render(fh, path_prefix, context):
     first_image = None
     for figure in soup.find_all("figure", class_="ltx_figure"):
         img = figure.find('img')
-        print(img)
         if img:
             first_image = img['src']
             break
