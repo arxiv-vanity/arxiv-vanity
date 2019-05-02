@@ -56,10 +56,11 @@ class PaperDetailViewTest(TestCase):
         res = self.client.get('/papers/1234.5678/')
         content = res.content.decode('utf-8')
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
-        self.assertIn('Some paper', content)
-        self.assertIn('script was inserted', content)
-        self.assertIn('style-was-inserted', content)
-        self.assertIn('body was inserted', content)
+        # using .count() because multiple copies of script were inserted at one point
+        self.assertEqual(content.count('Some paper'), 2) # title and opengraph
+        self.assertEqual(content.count('script was inserted'), 1)
+        self.assertEqual(content.count('style-was-inserted'), 1)
+        self.assertEqual(content.count('body was inserted'), 1)
 
         # literal new line, caused by django naively converting bytes to str
         self.assertNotIn('\\n', content)

@@ -12,14 +12,10 @@ def process_render(fh, path_prefix, context):
     """
     soup = BeautifulSoup(fh, 'lxml')
 
-    links = soup.find_all('link')
-    styles = soup.find_all('style')
-    scripts = soup.find_all('script')
-
     # Add prefixes
-    for el in links:
+    for el in soup.find_all('link'):
         el['href'] = os.path.join(path_prefix, el['href'])
-    for el in scripts:
+    for el in soup.find_all('script'):
         if el.get('src'):
             el['src'] = os.path.join(path_prefix, el['src'])
     for el in soup.find_all('img'):
@@ -57,9 +53,11 @@ def process_render(fh, path_prefix, context):
         # It's very odd - BeautifulSoup's docs insists everything is unicode,
         # and even trying to force the input to be utf-8 doesn't help.
         "body": soup.body.encode_contents().decode('utf-8'),
-        "links": ''.join(e.prettify() for e in links),
-        "styles": ''.join(e.prettify() for e in styles),
-        "scripts": ''.join(e.prettify() for e in scripts),
+        # just links, styles, and scripts in <head> so we can re-insert in arxiv vanity <head>
+        # stuff that's in the <body> gets included above
+        "links": ''.join(e.prettify() for e in soup.head.find_all('link')),
+        "styles": ''.join(e.prettify() for e in soup.head.find_all('style')),
+        "scripts": ''.join(e.prettify() for e in soup.head.find_all('scripts')),
         "abstract": abstract,
         "first_image": first_image,
     }
