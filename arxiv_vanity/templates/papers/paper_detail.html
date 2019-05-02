@@ -41,7 +41,10 @@
     });
 
     mixpanel.track("View Paper", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"});
-    mixpanel.track_links(".ltx_bibliography a", "Click Link In Bibliography", {"arxiv_id": "{{ paper.arxiv_id|escapejs }}"})
+    mixpanel.track_links(".ltx_bibliography a", "Click Link In Bibliography", {
+      "arxiv_id": "{{ paper.arxiv_id|escapejs }}",
+      "tooltip": false
+    });
 
     // track_links isn't live, so we need to re-run when tooltips are opened
     if (window.MutationObserver) {
