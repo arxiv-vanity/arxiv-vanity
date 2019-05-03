@@ -79,7 +79,10 @@
         var pageHeight = Math.max(html.offsetHeight, html.scrollHeight, body.offsetHeight, body.scrollHeight);
         var scrollPos = window.pageYOffset; // scrollY isn't supported in IE.
         var windowHeight = window.innerHeight;
-        maxScroll = Math.min(100, Math.max(0, Math.round(100 * (scrollPos / (pageHeight - windowHeight)))));
+        var scrollPercentage = Math.min(100, Math.max(0, Math.round(100 * (scrollPos / (pageHeight - windowHeight)))));
+        if (scrollPercentage > maxScroll) {
+          maxScroll = scrollPercentage;
+        }
       }
       window.addEventListener('scroll', debounce(handleScroll, 500));
 
