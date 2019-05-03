@@ -91,8 +91,8 @@
             token: '{{ MIXPANEL_TOKEN }}',
             arxiv_id: "{{ paper.arxiv_id|escapejs }}",
             max_scroll: maxScroll,
-            // duration is in seconds.
-            $duration: parseFloat((duration / 1000).toFixed(3)),
+            // time_reading is in seconds.
+            time_reading: parseFloat((duration / 1000).toFixed(3)),
           }
         };
         Object.assign(data.properties, mixpanel._.info.properties());
