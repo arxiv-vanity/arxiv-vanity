@@ -87,6 +87,13 @@ html, body {
   max-width: 800px;
 }
 
+.urls-example-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 10px;
+    font-size: smaller;
+}
+
 .page-container {
   margin-top: 4rem;
   margin-bottom: 4rem;
