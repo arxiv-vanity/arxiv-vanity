@@ -64,7 +64,11 @@ def query_page(search_query=None, id_list=None, start=0, max_results=100):
         url_args["search_query"] = search_query
     if id_list is not None:
         url_args["id_list"] = ','.join(id_list)
-    response = requests.get(ROOT_URL + 'query?' + urlencode(url_args))
+
+    headers = {
+        'User-Agent': 'arXivVanity (https://www.arxiv-vanity.com)',
+    }
+    response = requests.get(ROOT_URL + 'query?' + urlencode(url_args), headers=headers)
     response.raise_for_status()
     return parse(response.text)
 
