@@ -53,7 +53,10 @@ def download_source_file(arxiv_id):
     Download the LaTeX source of this paper and returns as ContentFile.
     """
     source_url = arxiv_id_to_source_url(arxiv_id)
-    res = requests.get(source_url)
+    headers = {
+        'User-Agent': 'arXivVanity (https://www.arxiv-vanity.com)',
+    }
+    res = requests.get(source_url, headers=headers)
     res.raise_for_status()
     extension = guess_extension_from_headers(res.headers)
     if not extension:
