@@ -3,7 +3,7 @@ psycopg2-binary==2.8.2
 django-environ==0.4.5
 gunicorn==19.9.0
 whitenoise==4.1.2
-requests==2.21.0
+requests==2.22.0
 python-dateutil==2.8.0
 docker==3.7.2
 beautifulsoup4==4.7.1
