@@ -2,6 +2,8 @@
 {% load static %}
 {% block title %}{{ paper.title }}{% endblock %}
 {% block extra_head %}
+  <meta name="description" content="Read this arXiv paper as a responsive web page with clickable citations.">
+
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:url" content="{{ ROOT_URL }}{{ paper.get_absolute_url }}">
   <meta property="og:title" content="{{ paper.title }}">
