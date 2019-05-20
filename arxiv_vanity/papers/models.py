@@ -214,7 +214,7 @@ class RenderQuerySet(models.QuerySet):
         Mark renders as expired even if they haven't. Useful for forcing
         re-rendering.
         """
-        for render in self:
+        for render in self.iterator():
             render.expire()
         return self
 
