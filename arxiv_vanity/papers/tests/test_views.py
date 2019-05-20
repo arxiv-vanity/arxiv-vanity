@@ -57,7 +57,7 @@ class PaperDetailViewTest(TestCase):
         content = res.content.decode('utf-8')
         self.assertEqual(res['Cache-Control'], 'public, max-age=60')
         # using .count() because multiple copies of script were inserted at one point
-        self.assertEqual(content.count('Some paper'), 2) # title and opengraph
+        self.assertEqual(content.count('Some paper'), 3) # title, opengraph, citation tags
         self.assertEqual(content.count('script was inserted'), 1)
         self.assertEqual(content.count('style-was-inserted'), 1)
         self.assertEqual(content.count('body was inserted'), 1)
