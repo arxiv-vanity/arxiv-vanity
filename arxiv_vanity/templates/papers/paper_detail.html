@@ -10,6 +10,21 @@
   <meta property="og:description" content="{{ abstract|default:'' }}">
   <meta property="og:image" content="{{ first_image|default:'' }}">
 
+  {% comment %}
+    https://scholar.google.com/intl/en/scholar/inclusion.html#indexing
+  {% endcomment %}
+  <meta name="citation_title" content="{{ paper.title }}">
+  {% spaceless %}
+    {% for author in paper.authors %}
+      {% if author.name %}
+        <meta name="citation_author" content="{{ author.name }}">
+      {% endif %}
+    {% endfor %}
+  {% endspaceless %}
+  <meta name="citation_date" content="{{ paper.published|date:"Y/m/d" }}>
+  <meta name="citation_pdf_url" content="{{ paper.get_https_pdf_url }}">
+  <meta name="citation_arxiv_id" content="{{ paper.arxiv_id }}">
+
   {{ links|safe }}
   {{ styles|safe }}
   {{ scripts|safe }}
