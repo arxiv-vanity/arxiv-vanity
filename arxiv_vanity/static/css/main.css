@@ -160,3 +160,9 @@ html, body {
     font-size: 2rem;
   }
 }
+
+
+.arxiv-vanity-wrapper .mailing-list-form {
+  text-align: center;
+  margin: 6em 0 2em 0;
+}
