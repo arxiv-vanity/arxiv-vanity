@@ -7,7 +7,7 @@ requests==2.22.0
 python-dateutil==2.8.0
 docker==4.0.1
 beautifulsoup4==4.7.1
-lxml==4.3.3
+lxml==4.3.4
 django-storages==1.7.1
 boto3==1.5.0
 PyGithub==1.43.7
