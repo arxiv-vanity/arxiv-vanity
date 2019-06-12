@@ -145,6 +145,10 @@
       "arxiv_id": "{{ paper.arxiv_id|escapejs }}",
       "tooltip": false
     });
+    mixpanel.track_links(".ltx_cite a", "Click Link In Bibliography", {
+      "arxiv_id": "{{ paper.arxiv_id|escapejs }}",
+      "tooltip": true
+    });
 
     // track_links isn't live, so we need to re-run when tooltips are opened
     if (window.MutationObserver) {
