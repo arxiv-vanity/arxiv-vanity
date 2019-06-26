@@ -29,7 +29,14 @@
           if (res.state === "running" || res.state === "unstarted") {
             _this.checkStateTimeout();
           } else {
-            window.location.reload();
+            var url = window.location.toString();
+            // Remove query string
+            var query = url.split("?")[1];
+            url = url.split("?")[0];
+            if (query === "render") {
+              url += "?nocache";
+            }
+            window.location.replace(url);
           }
         })
         .catch(function(error) {

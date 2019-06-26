@@ -13,8 +13,11 @@ from ..scraper.arxiv_ids import remove_version_from_arxiv_id, ARXIV_URL_RE, ARXI
 from ..scraper.query import PaperNotFoundError
 
 
-def add_paper_cache_control(response):
-    patch_cache_control(response, public=True, max_age=settings.PAPER_CACHE_SECONDS)
+def add_paper_cache_control(response, request=None):
+    if request and "nocache" in request.GET:
+        add_never_cache_headers(response)
+    else:
+        patch_cache_control(response, public=True, max_age=settings.PAPER_CACHE_SECONDS)
     return response
 
 
@@ -27,6 +30,8 @@ class HomeView(TemplateView):
 
 
 def paper_detail(request, arxiv_id):
+    force_render = "render" in request.GET
+
     arxiv_id, version = remove_version_from_arxiv_id(arxiv_id)
     if version is not None:
         return redirect("paper_detail", arxiv_id=arxiv_id)
@@ -45,15 +50,18 @@ def paper_detail(request, arxiv_id):
 
     # Get latest render that hasn't expired
     try:
-        r = paper.renders.not_expired().latest()
-    except Render.DoesNotExist:
-        try:
-            # If it has expired or hasn't been started yet, render it!
+        if force_render:
             r = paper.render()
-        except PaperIsNotRenderableError:
-            res = render(request, "papers/paper_detail_not_renderable.html",
-                         {"paper": paper}, status=404)
-            return add_paper_cache_control(res)
+        else:
+            try:
+                r = paper.renders.not_expired().latest()
+            except Render.DoesNotExist:
+                # If it has expired or hasn't been started yet, render it!
+                r = paper.render()
+    except PaperIsNotRenderableError:
+        res = render(request, "papers/paper_detail_not_renderable.html",
+                        {"paper": paper}, status=404)
+        return add_paper_cache_control(res, request)
 
     # Stuck for some reason, give it a boot
     # This normally happens if there is an exception raised in render()
@@ -74,7 +82,7 @@ def paper_detail(request, arxiv_id):
         # Fall back to error if there is no successful or running render
         res = render(request, "papers/paper_detail_error.html",
                      {"paper": paper}, status=500)
-        return add_paper_cache_control(res)
+        return add_paper_cache_control(res, request)
 
     elif r.state == Render.STATE_SUCCESS:
         processed_render = r.get_processed_render()
@@ -89,7 +97,7 @@ def paper_detail(request, arxiv_id):
             'abstract': processed_render['abstract'],
             'first_image': processed_render['first_image'],
         })
-        return add_paper_cache_control(res)
+        return add_paper_cache_control(res, request)
 
     else:
         raise Exception(f"Unknown render state: {r.state}")
