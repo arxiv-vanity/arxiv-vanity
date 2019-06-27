@@ -190,7 +190,8 @@ class RenderQuerySet(models.QuerySet):
         """
         Update the state of renders that have a container.
         """
-        for render in self.exclude(state=Render.STATE_UNSTARTED).filter(container_is_removed=False):
+        qs = self.exclude(state=Render.STATE_UNSTARTED).filter(container_is_removed=False)
+        for render in qs.iterator():
             try:
                 render.update_state()
             except:
@@ -205,7 +206,7 @@ class RenderQuerySet(models.QuerySet):
         expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
         expired_date = timezone.now() - expired_delta
         qs = self.filter(is_expired=False, created_at__lte=expired_date)
-        for render in qs:
+        for render in qs.iterator():
             render.expire()
         return qs
 
