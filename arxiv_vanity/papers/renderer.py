@@ -19,7 +19,8 @@ def create_client():
     Create a client to either a Docker instance.
     """
     kwargs = {
-        'base_url': os.environ.get('DOCKER_HOST')
+        'base_url': os.environ.get('DOCKER_HOST'),
+        'timeout': 15 # wait a bit, but give up before 30s Heroku request timeout
     }
 
     if os.environ.get('DOCKER_TLS_VERIFY'):
