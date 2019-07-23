@@ -48,7 +48,7 @@ class PaperAdmin(admin.ModelAdmin):
             render = obj.renders.latest()
         except Render.DoesNotExist:
             return ""
-        return format_html('<a href="../render/{}/">{}</a>', render.id, render.state)
+        return format_html('<a href="../render/{}/change/">{}</a>', render.id, render.state)
 
     def render(self, request, queryset):
         rendered = 0
