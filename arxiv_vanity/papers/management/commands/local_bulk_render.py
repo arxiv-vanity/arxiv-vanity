@@ -28,12 +28,12 @@ class BulkRenderer(object):
 
     @catch_exceptions
     def render(self, arxiv_id):
-        output_path = arxiv_id.replace('/', '')
+        output_path = arxiv_id.replace("/", "")
         container = render_paper(
-            source=f'source-files/{output_path}.gz',
+            source=f"source-files/{output_path}.gz",
             output_path=output_path,
             output_bucket=self.output_bucket,
-            extra_run_kwargs={'remove': True}
+            extra_run_kwargs={"remove": True},
         )
         exit_code = container.wait(timeout=30 * 60)
         return arxiv_id, exit_code
@@ -47,20 +47,31 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser):
-        parser.add_argument('output_bucket', nargs=1, help="S3 bucket to write result to.")
-        parser.add_argument('id_filename', nargs=1, help="Path to file containing arXiv IDs.")
-        parser.add_argument('--concurrency', type=int, default=10, help='number of parallel instances to run (default: 10)')
+        parser.add_argument(
+            "output_bucket", nargs=1, help="S3 bucket to write result to."
+        )
+        parser.add_argument(
+            "id_filename", nargs=1, help="Path to file containing arXiv IDs."
+        )
+        parser.add_argument(
+            "--concurrency",
+            type=int,
+            default=10,
+            help="number of parallel instances to run (default: 10)",
+        )
 
     def handle(self, *args, **options):
         if not settings.MEDIA_USE_S3:
-            raise CommandError("MEDIA_USE_S3 is False. This command is designed to work with S3.")
+            raise CommandError(
+                "MEDIA_USE_S3 is False. This command is designed to work with S3."
+            )
         renderer = BulkRenderer(
-            concurrency=options['concurrency'],
-            output_bucket=options['output_bucket'][0]
+            concurrency=options["concurrency"],
+            output_bucket=options["output_bucket"][0],
         )
 
         arxiv_ids = []
-        with open(options['id_filename'][0]) as f:
+        with open(options["id_filename"][0]) as f:
             for line in f:
                 line = line.strip()
                 if line:

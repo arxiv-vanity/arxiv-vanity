@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0009_auto_20171020_1015'),
-    ]
+    dependencies = [("papers", "0009_auto_20171020_1015")]
 
     operations = [
         migrations.AddField(
-            model_name='render',
-            name='is_expired',
+            model_name="render",
+            name="is_expired",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

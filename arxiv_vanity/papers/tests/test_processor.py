@@ -7,4 +7,7 @@ class ProcessorTest(unittest.TestCase):
         html = '<head></head><a href="https://arxiv.org/abs/1710.06542">Something</a>'
 
         output = process_render(html, "", {})
-        self.assertEqual(output['body'], '<a href="/papers/1710.06542/" target="_blank">Something</a>')
+        self.assertEqual(
+            output["body"],
+            '<a href="/papers/1710.06542/" target="_blank">Something</a>',
+        )

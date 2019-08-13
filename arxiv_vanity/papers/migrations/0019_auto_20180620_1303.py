@@ -6,7 +6,7 @@ from arxiv_vanity.scraper.bulk_sources import convert_source_file_to_arxiv_id
 
 # This is a fixed version of 0017, which didn't work as expected
 def generate_arxiv_ids(apps, schema_editor):
-    SourceFile = apps.get_model('papers', 'SourceFile')
+    SourceFile = apps.get_model("papers", "SourceFile")
     for sf in SourceFile.objects.iterator():
         sf.arxiv_id = convert_source_file_to_arxiv_id(sf.file.name)
         sf.save()
@@ -14,10 +14,6 @@ def generate_arxiv_ids(apps, schema_editor):
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0018_auto_20180620_1001'),
-    ]
+    dependencies = [("papers", "0018_auto_20180620_1001")]
 
-    operations = [
-        migrations.RunPython(generate_arxiv_ids),
-    ]
+    operations = [migrations.RunPython(generate_arxiv_ids)]

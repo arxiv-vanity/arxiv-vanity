@@ -3,7 +3,7 @@ from ...renderer import prune_images
 
 
 class Command(BaseCommand):
-    help = 'Prune unused images from Docker server'
+    help = "Prune unused images from Docker server"
 
     def handle(self, *args, **options):
         prune_images()

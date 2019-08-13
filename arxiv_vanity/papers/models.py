@@ -33,8 +33,9 @@ class RenderWrongStateError(RenderError):
 
 class PaperQuerySet(models.QuerySet):
     def _with_has_successful_render_annotation(self):
-        renders = Render.objects.filter(paper=models.OuterRef('pk'),
-                                        state=Render.STATE_SUCCESS)
+        renders = Render.objects.filter(
+            paper=models.OuterRef("pk"), state=Render.STATE_SUCCESS
+        )
         return self.annotate(has_successful_render=models.Exists(renders))
 
     def has_successful_render(self):
@@ -46,8 +47,7 @@ class PaperQuerySet(models.QuerySet):
         return qs.filter(has_successful_render=False)
 
     def _with_has_not_expired_render_annotation(self):
-        renders = Render.objects.filter(paper=models.OuterRef('pk'),
-                                        is_expired=False)
+        renders = Render.objects.filter(paper=models.OuterRef("pk"), is_expired=False)
         return self.annotate(has_not_expired_render=models.Exists(renders))
 
     def has_not_expired_render(self):
@@ -61,8 +61,7 @@ class PaperQuerySet(models.QuerySet):
         return self.filter(source_file__isnull=True)
 
     def update_or_create_from_api(self, result):
-        return self.update_or_create(arxiv_id=result['arxiv_id'],
-                                     defaults=result)
+        return self.update_or_create(arxiv_id=result["arxiv_id"], defaults=result)
 
     def update_or_create_from_arxiv_id(self, arxiv_id):
         """
@@ -77,7 +76,9 @@ class PaperQuerySet(models.QuerySet):
         """
         Return only machine learning papers.
         """
-        return self.filter(categories__overlap=settings.PAPERS_MACHINE_LEARNING_CATEGORIES)
+        return self.filter(
+            categories__overlap=settings.PAPERS_MACHINE_LEARNING_CATEGORIES
+        )
 
 
 class PaperManager(models.Manager):
@@ -107,35 +108,32 @@ class Paper(models.Model):
 
     # arXiv Vanity fields
     source_file = models.ForeignKey(
-        'SourceFile',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        "SourceFile", on_delete=models.SET_NULL, null=True, blank=True
     )
     is_deleted = models.BooleanField(default=False)
 
     objects = PaperManager.from_queryset(PaperQuerySet)()
 
     class Meta:
-        get_latest_by = 'updated'
-        ordering = ['-updated']
+        get_latest_by = "updated"
+        ordering = ["-updated"]
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('paper_detail', args=(self.arxiv_id,))
+        return reverse("paper_detail", args=(self.arxiv_id,))
 
     def get_https_arxiv_url(self):
         url = self.arxiv_url
-        if url.startswith('http://arxiv.org'):
-            url = 'https' + url.lstrip('http')
+        if url.startswith("http://arxiv.org"):
+            url = "https" + url.lstrip("http")
         return url
 
     def get_https_pdf_url(self):
         url = self.pdf_url
-        if url.startswith('http://arxiv.org'):
-            url = 'https' + url.lstrip('http')
+        if url.startswith("http://arxiv.org"):
+            url = "https" + url.lstrip("http")
         return url
 
     def is_renderable(self):
@@ -182,7 +180,7 @@ class RenderQuerySet(models.QuerySet):
         Renders which have occurred in the last PAPERS_EXPIRED_DAYS days.
         """
         return self.filter(is_expired=False)
-    
+
     def expired(self):
         return self.filter(is_expired=True)
 
@@ -190,7 +188,9 @@ class RenderQuerySet(models.QuerySet):
         """
         Update the state of renders that have a container.
         """
-        qs = self.exclude(state=Render.STATE_UNSTARTED).filter(container_is_removed=False)
+        qs = self.exclude(state=Render.STATE_UNSTARTED).filter(
+            container_is_removed=False
+        )
         for render in qs.iterator():
             try:
                 render.update_state()
@@ -221,19 +221,23 @@ class RenderQuerySet(models.QuerySet):
 
 
 class Render(models.Model):
-    STATE_UNSTARTED = 'unstarted'
-    STATE_RUNNING = 'running'
-    STATE_SUCCESS = 'success'
-    STATE_FAILURE = 'failure'
+    STATE_UNSTARTED = "unstarted"
+    STATE_RUNNING = "running"
+    STATE_SUCCESS = "success"
+    STATE_FAILURE = "failure"
 
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name='renders')
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name="renders")
     created_at = models.DateTimeField(auto_now_add=True)
-    state = models.CharField(max_length=20, default=STATE_UNSTARTED, choices=(
-        (STATE_UNSTARTED, 'Unstarted'),
-        (STATE_RUNNING, 'Running'),
-        (STATE_SUCCESS, 'Success'),
-        (STATE_FAILURE, 'Failure'),
-    ))
+    state = models.CharField(
+        max_length=20,
+        default=STATE_UNSTARTED,
+        choices=(
+            (STATE_UNSTARTED, "Unstarted"),
+            (STATE_RUNNING, "Running"),
+            (STATE_SUCCESS, "Success"),
+            (STATE_FAILURE, "Failure"),
+        ),
+    )
     is_expired = models.BooleanField(default=False)
     container_id = models.CharField(max_length=64, null=True, blank=True)
     container_inspect = JSONField(null=True, blank=True)
@@ -243,7 +247,7 @@ class Render(models.Model):
     objects = RenderQuerySet.as_manager()
 
     class Meta:
-        get_latest_by = 'created_at'
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.paper.title
@@ -255,7 +259,7 @@ class Render(models.Model):
         """
         Path to the directory that this render is in.
         """
-        return os.path.join('render-output', str(self.id))
+        return os.path.join("render-output", str(self.id))
 
     def get_html_path(self):
         """
@@ -278,7 +282,7 @@ class Render(models.Model):
         Get the webhook to call when the Engrafo job ends to update render
         state.
         """
-        path = reverse('render_update_state', args=(self.id,))
+        path = reverse("render_update_state", args=(self.id,))
         return settings.ENGRAFO_WEBHOOK_URL_PREFIX + path
 
     def run(self):
@@ -286,11 +290,13 @@ class Render(models.Model):
         Start running this render.
         """
         if self.state != Render.STATE_UNSTARTED:
-            raise RenderAlreadyStartedError(f"Render {self.id} has already been started")
+            raise RenderAlreadyStartedError(
+                f"Render {self.id} has already been started"
+            )
         self.container_id = render_paper(
             self.paper.source_file.file.name,
             self.get_output_path(),
-            webhook_url=self.get_webhook_url()
+            webhook_url=self.get_webhook_url(),
         ).id
         self.state = Render.STATE_RUNNING
         self.save()
@@ -317,7 +323,7 @@ class Render(models.Model):
         try:
             container = client.containers.get(self.container_id)
             self.container_inspect = container.attrs
-            self.container_logs = str(container.logs(), 'utf-8')
+            self.container_logs = str(container.logs(), "utf-8")
         except docker.errors.NotFound:
             # Container has been removed for some reason, so mark it as
             # removed so we don't try to update its state again
@@ -328,12 +334,12 @@ class Render(models.Model):
             self.save()
             return
 
-        if exit_code is None and container.status == 'exited':
-            exit_code = container.attrs['State']['ExitCode']
+        if exit_code is None and container.status == "exited":
+            exit_code = container.attrs["State"]["ExitCode"]
 
         if exit_code is not None:
             # Safer to convert int to str than other way round
-            if str(exit_code) == '0':
+            if str(exit_code) == "0":
                 self.state = Render.STATE_SUCCESS
             else:
                 self.state = Render.STATE_FAILURE
@@ -343,7 +349,7 @@ class Render(models.Model):
         # the update_render_state cron job.
         self.save()
 
-        if container.status == 'exited':
+        if container.status == "exited":
             try:
                 # Force, or Hyper.sh often throws a 500
                 container.remove(force=True)
@@ -358,10 +364,7 @@ class Render(models.Model):
         Do final processing on this render and returns it as a dictionary of
         {"body", "script", "styles"}.
         """
-        context = {
-            'render': self,
-            'paper': self.paper,
-        }
+        context = {"render": self, "paper": self.paper}
         with default_storage.open(self.get_html_path()) as fh:
             return process_render(fh, self.get_output_url(), context=context)
 
@@ -383,7 +386,6 @@ class Render(models.Model):
         storage_delete_path(default_storage, self.get_output_path())
 
 
-
 class SourceFileBulkTarball(models.Model):
     """
     A tarball of sources that is listed in arXiv's bulk sources manifest.
@@ -391,6 +393,7 @@ class SourceFileBulkTarball(models.Model):
     We keep track of these so we know which tarballs we have already
     downloaded. They're quite big so we don't want to get them every time.
     """
+
     filename = models.CharField(max_length=255, unique=True)
 
     content_md5sum = models.TextField()
@@ -432,13 +435,10 @@ class SourceFileQuerySet(models.QuerySet):
         SourceFile.
         """
         file = download_source_file(arxiv_id)
-        return self.create(
-            arxiv_id=arxiv_id,
-            file=file,
-        )
+        return self.create(arxiv_id=arxiv_id, file=file)
 
     def filename_exists(self, fn):
-        return self.filter(file=f'source-files/{fn}').exists()
+        return self.filter(file=f"source-files/{fn}").exists()
 
 
 class SourceFile(models.Model):
@@ -449,14 +449,15 @@ class SourceFile(models.Model):
     we are downloading arXiv's bulk papers into this model, then we can switch
     `Paper` to use this model.
     """
+
     arxiv_id = models.CharField(max_length=50, unique=True)
-    file = models.FileField(upload_to='source-files/', unique=True)
+    file = models.FileField(upload_to="source-files/", unique=True)
     bulk_tarball = models.ForeignKey(
         SourceFileBulkTarball,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text="If this source file is from arXiv's bulk download service, this is the tarball it was in. If null, this source file was downloaded individually."
+        help_text="If this source file is from arXiv's bulk download service, this is the tarball it was in. If null, this source file was downloaded individually.",
     )
 
     objects = SourceFileQuerySet.as_manager()
@@ -465,14 +466,16 @@ class SourceFile(models.Model):
         return str(self.file)
 
     def is_pdf(self):
-        return self.file.name.endswith('.pdf')
+        return self.file.name.endswith(".pdf")
 
     def is_renderable(self):
         """
         Returns whether it is possible to render this file.
         """
         name = self.file.name
-        return (name is not None
-                and name.endswith('.gz')
-                and not name.endswith('.ps.gz')
-                and not name.endswith('.dvi.gz'))
+        return (
+            name is not None
+            and name.endswith(".gz")
+            and not name.endswith(".ps.gz")
+            and not name.endswith(".dvi.gz")
+        )

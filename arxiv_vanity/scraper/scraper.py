@@ -40,5 +40,7 @@ def query_and_create_papers():
         if created:
             yield obj
         else:
-            print(f"Paper {obj.arxiv_id} already exists. Assuming we have scraped all new papers, so stopping.")
+            print(
+                f"Paper {obj.arxiv_id} already exists. Assuming we have scraped all new papers, so stopping."
+            )
             break

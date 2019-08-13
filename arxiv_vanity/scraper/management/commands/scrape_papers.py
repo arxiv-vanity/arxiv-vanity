@@ -3,7 +3,7 @@ from ...scraper import scrape_and_render_papers
 
 
 class Command(BaseCommand):
-    help = 'Scrape latest papers from arXiv'
+    help = "Scrape latest papers from arXiv"
 
     def handle(self, *args, **options):
         scrape_and_render_papers()

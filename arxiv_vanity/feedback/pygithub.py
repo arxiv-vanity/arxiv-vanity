@@ -2,34 +2,27 @@ import github
 
 # until projects make it into pygithub
 class MonkeyPatchedRepo(github.Repository.Repository):
-
     def get_projects(self):
         return github.PaginatedList.PaginatedList(
             GitHubProject,
             self._requester,
-            self.url + '/projects',
+            self.url + "/projects",
             None,
-            headers = {
-                'Accept': 'application/vnd.github.inertia-preview+json'
-            },
+            headers={"Accept": "application/vnd.github.inertia-preview+json"},
         )
 
     def get_project(self, id):
         assert isinstance(id, int), id
-        url = '%s/projects/%d' % (
-                github.MainClass.DEFAULT_BASE_URL, id)
+        url = "%s/projects/%d" % (github.MainClass.DEFAULT_BASE_URL, id)
         headers, data = self._requester.requestJsonAndCheck(
-            'GET',
+            "GET",
             url,
-            headers = {
-                'Accept': 'application/vnd.github.inertia-preview+json'
-            },
+            headers={"Accept": "application/vnd.github.inertia-preview+json"},
         )
         return GitHubProject(self._requester, headers, data, completed=True)
 
 
 class GitHubProject(github.GithubObject.CompletableGithubObject):
-
     def __repr__(self):
         return self.get__repr__({"id": self._id.value, "name": self._name.value})
 
@@ -97,22 +90,17 @@ class GitHubProject(github.GithubObject.CompletableGithubObject):
         return github.PaginatedList.PaginatedList(
             GitHubProjectColumn,
             self._requester,
-            self.url + '/columns',
+            self.url + "/columns",
             None,
-            headers = {
-                'Accept': 'application/vnd.github.inertia-preview+json'
-            },
+            headers={"Accept": "application/vnd.github.inertia-preview+json"},
         )
 
     def get_column(self, id):
-        url = '%s/projects/columns/%d' % (
-                github.MainClass.DEFAULT_BASE_URL, id)
+        url = "%s/projects/columns/%d" % (github.MainClass.DEFAULT_BASE_URL, id)
         headers, data = self._requester.requestJsonAndCheck(
-            'GET',
+            "GET",
             url,
-            headers = {
-                'Accept': 'application/vnd.github.inertia-preview+json'
-            },
+            headers={"Accept": "application/vnd.github.inertia-preview+json"},
         )
         return GitHubProjectColumn(self._requester, headers, data, completed=True)
 
@@ -131,34 +119,35 @@ class GitHubProject(github.GithubObject.CompletableGithubObject):
         self._updated_at = github.GithubObject.NotSet
 
     def _useAttributes(self, attributes):
-        if 'owner_url' in attributes:
-            self._owner_url = self._makeStringAttribute(attributes['owner_url'])
-        if 'url' in attributes:
-            self._url = self._makeStringAttribute(attributes['url'])
-        if 'html_url' in attributes:
-            self._html_url = self._makeStringAttribute(attributes['html_url'])
-        if 'columns_url' in attributes:
-            self._columns_url = self._makeStringAttribute(attributes['columns_url'])
-        if 'id' in attributes:
-            self._id = self._makeIntAttribute(attributes['id'])
-        if 'name' in attributes:
-            self._name = self._makeStringAttribute(attributes['name'])
-        if 'body' in attributes:
-            self._body = self._makeStringAttribute(attributes['body'])
-        if 'number' in attributes:
-            self._number = self._makeIntAttribute(attributes['number'])
-        if 'state' in attributes:
-            self._state = self._makeStringAttribute(attributes['state'])
-        if 'creator' in attributes:
-            self._creator = self._makeClassAttribute(github.NamedUser.NamedUser, attributes['creator'])
-        if 'created_at' in attributes:
-            self._created_at = self._makeDatetimeAttribute(attributes['created_at'])
-        if 'updated_at' in attributes:
-            self._updated_at = self._makeDatetimeAttribute(attributes['updated_at'])
+        if "owner_url" in attributes:
+            self._owner_url = self._makeStringAttribute(attributes["owner_url"])
+        if "url" in attributes:
+            self._url = self._makeStringAttribute(attributes["url"])
+        if "html_url" in attributes:
+            self._html_url = self._makeStringAttribute(attributes["html_url"])
+        if "columns_url" in attributes:
+            self._columns_url = self._makeStringAttribute(attributes["columns_url"])
+        if "id" in attributes:
+            self._id = self._makeIntAttribute(attributes["id"])
+        if "name" in attributes:
+            self._name = self._makeStringAttribute(attributes["name"])
+        if "body" in attributes:
+            self._body = self._makeStringAttribute(attributes["body"])
+        if "number" in attributes:
+            self._number = self._makeIntAttribute(attributes["number"])
+        if "state" in attributes:
+            self._state = self._makeStringAttribute(attributes["state"])
+        if "creator" in attributes:
+            self._creator = self._makeClassAttribute(
+                github.NamedUser.NamedUser, attributes["creator"]
+            )
+        if "created_at" in attributes:
+            self._created_at = self._makeDatetimeAttribute(attributes["created_at"])
+        if "updated_at" in attributes:
+            self._updated_at = self._makeDatetimeAttribute(attributes["updated_at"])
 
 
 class GitHubProjectColumn(github.GithubObject.CompletableGithubObject):
-
     def __repr__(self):
         return self.get__repr__({"id": self._id.value, "name": self._name.value})
 
@@ -199,19 +188,16 @@ class GitHubProjectColumn(github.GithubObject.CompletableGithubObject):
 
     def create_card_for_issue(self, issue_id):
         assert isinstance(issue_id, int), issue_id
-        post_parameters = {
-            'content_id': issue_id,
-            'content_type': 'Issue',
-        }
-        url = '%s/projects/columns/%d/cards' % (
-                github.MainClass.DEFAULT_BASE_URL, self.id)
+        post_parameters = {"content_id": issue_id, "content_type": "Issue"}
+        url = "%s/projects/columns/%d/cards" % (
+            github.MainClass.DEFAULT_BASE_URL,
+            self.id,
+        )
         headers, data = self._requester.requestJsonAndCheck(
-            'POST',
-            self.url + '/cards',
+            "POST",
+            self.url + "/cards",
             input=post_parameters,
-            headers = {
-                'Accept': 'application/vnd.github.inertia-preview+json'
-            },
+            headers={"Accept": "application/vnd.github.inertia-preview+json"},
         )
 
     def _initAttributes(self):
@@ -224,20 +210,20 @@ class GitHubProjectColumn(github.GithubObject.CompletableGithubObject):
         self._updated_at = github.GithubObject.NotSet
 
     def _useAttributes(self, attributes):
-        if 'id' in attributes:
-            self._id = self._makeIntAttribute(attributes['id'])
-        if 'name' in attributes:
-            self._name = self._makeStringAttribute(attributes['name'])
-        if 'url' in attributes:
-            self._url = self._makeStringAttribute(attributes['url'])
-        if 'project_url' in attributes:
-            self._project_url = self._makeStringAttribute(attributes['project_url'])
-        if 'cards_url' in attributes:
-            self._cards_url = self._makeStringAttribute(attributes['cards_url'])
-        if 'created_at' in attributes:
-            self._created_at = self._makeDatetimeAttribute(attributes['created_at'])
-        if 'updated_at' in attributes:
-            self._updated_at = self._makeDatetimeAttribute(attributes['updated_at'])
+        if "id" in attributes:
+            self._id = self._makeIntAttribute(attributes["id"])
+        if "name" in attributes:
+            self._name = self._makeStringAttribute(attributes["name"])
+        if "url" in attributes:
+            self._url = self._makeStringAttribute(attributes["url"])
+        if "project_url" in attributes:
+            self._project_url = self._makeStringAttribute(attributes["project_url"])
+        if "cards_url" in attributes:
+            self._cards_url = self._makeStringAttribute(attributes["cards_url"])
+        if "created_at" in attributes:
+            self._created_at = self._makeDatetimeAttribute(attributes["created_at"])
+        if "updated_at" in attributes:
+            self._updated_at = self._makeDatetimeAttribute(attributes["updated_at"])
 
 
 github.Repository.Repository = MonkeyPatchedRepo

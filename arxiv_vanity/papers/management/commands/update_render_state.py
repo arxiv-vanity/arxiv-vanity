@@ -4,7 +4,7 @@ from ...renderer import remove_long_running_containers
 
 
 class Command(BaseCommand):
-    help = 'Sync the state of renders in the database with what is on Docker'
+    help = "Sync the state of renders in the database with what is on Docker"
 
     def handle(self, *args, **options):
         print("Updating state...")

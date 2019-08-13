@@ -5,15 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0011_auto_20180111_1631'),
-    ]
+    dependencies = [("papers", "0011_auto_20180111_1631")]
 
     operations = [
         migrations.AddField(
-            model_name='paper',
-            name='arxiv_version',
+            model_name="paper",
+            name="arxiv_version",
             field=models.IntegerField(default=0),
             preserve_default=False,
-        ),
+        )
     ]

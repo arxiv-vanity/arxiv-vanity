@@ -6,14 +6,17 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0020_auto_20180621_1426'),
-    ]
+    dependencies = [("papers", "0020_auto_20180621_1426")]
 
     operations = [
         migrations.AddField(
-            model_name='paper',
-            name='source_file',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='papers.SourceFile'),
-        ),
+            model_name="paper",
+            name="source_file",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="papers.SourceFile",
+            ),
+        )
     ]

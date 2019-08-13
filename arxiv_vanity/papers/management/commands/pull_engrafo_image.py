@@ -3,7 +3,7 @@ from ...renderer import pull_image
 
 
 class Command(BaseCommand):
-    help = 'Pull the configured Engrafo image'
+    help = "Pull the configured Engrafo image"
 
     def handle(self, *args, **options):
         image = pull_image()

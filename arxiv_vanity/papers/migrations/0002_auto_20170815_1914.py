@@ -8,30 +8,50 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0001_initial'),
-    ]
+    dependencies = [("papers", "0001_initial")]
 
     operations = [
         migrations.CreateModel(
-            name='Render',
+            name="Render",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('state', models.CharField(choices=[('unstarted', 'Unstarted'), ('running', 'Running'), ('success', 'Success'), ('failure', 'Failure')], default='unstarted', max_length=20)),
-                ('container_id', models.CharField(blank=True, max_length=64, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "state",
+                    models.CharField(
+                        choices=[
+                            ("unstarted", "Unstarted"),
+                            ("running", "Running"),
+                            ("success", "Success"),
+                            ("failure", "Failure"),
+                        ],
+                        default="unstarted",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "container_id",
+                    models.CharField(blank=True, max_length=64, null=True),
+                ),
             ],
-            options={
-                'get_latest_by': 'created_at',
-            },
+            options={"get_latest_by": "created_at"},
         ),
         migrations.AlterModelOptions(
-            name='paper',
-            options={'get_latest_by': 'updated', 'ordering': ['-updated']},
+            name="paper", options={"get_latest_by": "updated", "ordering": ["-updated"]}
         ),
         migrations.AddField(
-            model_name='render',
-            name='paper',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='papers.Paper'),
+            model_name="render",
+            name="paper",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="papers.Paper"
+            ),
         ),
     ]

@@ -40,7 +40,7 @@ class BulkRenderer(object):
     def run(self, id_filename):
         s3 = S3Boto3Storage().connection
         obj = s3.Object(self.output_bucket, id_filename)
-        arxiv_id_str = obj.get()['Body'].read().decode('utf-8')
+        arxiv_id_str = obj.get()["Body"].read().decode("utf-8")
         arxiv_ids = [s.strip() for s in arxiv_id_str.split() if s.strip()]
 
         # We can't access database inside our gevent pool because of max
@@ -83,7 +83,7 @@ class BulkRenderer(object):
     @catch_exceptions
     def render(self, arxiv_id, source_path):
         print(f"Rendering {arxiv_id}", file=sys.stderr)
-        output_path = arxiv_id.replace('/', '')
+        output_path = arxiv_id.replace("/", "")
         container = keep_on_trying(
             render_paper,
             source=source_path,
@@ -103,27 +103,27 @@ class BulkRenderer(object):
                 pass
 
         if exit_code == 0:
-            return {
-                'arxiv_id': arxiv_id,
-                'output_path': output_path
-            }
+            return {"arxiv_id": arxiv_id, "output_path": output_path}
 
     def write_manifest(self, manifest):
         s3 = S3Boto3Storage().connection
         manifest_json = json.dumps(manifest, indent=2)
-        s3.Object(self.output_bucket, 'manifest.json').put(Body=manifest_json)
+        s3.Object(self.output_bucket, "manifest.json").put(Body=manifest_json)
 
 
 class Command(BaseCommand):
-    help = 'Render a set of arXiv IDs to an S3 bucket, keyed by arXiv ID. arXiv IDs are read from a file in the bucket, one per line.'
+    help = "Render a set of arXiv IDs to an S3 bucket, keyed by arXiv ID. arXiv IDs are read from a file in the bucket, one per line."
 
     def add_arguments(self, parser):
-        parser.add_argument('output_bucket', nargs=1, help="S3 bucket to write result to.")
-        parser.add_argument('id_filename', nargs=1, help="File in S3 containing arXiv IDs.")
+        parser.add_argument(
+            "output_bucket", nargs=1, help="S3 bucket to write result to."
+        )
+        parser.add_argument(
+            "id_filename", nargs=1, help="File in S3 containing arXiv IDs."
+        )
 
     def handle(self, *args, **options):
         renderer = BulkRenderer(
-            concurrency=500,
-            output_bucket=options['output_bucket'][0]
+            concurrency=500, output_bucket=options["output_bucket"][0]
         )
-        renderer.run(options['id_filename'][0])
+        renderer.run(options["id_filename"][0])

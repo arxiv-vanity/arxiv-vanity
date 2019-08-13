@@ -8,19 +8,17 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0003_auto_20170816_1457'),
-    ]
+    dependencies = [("papers", "0003_auto_20170816_1457")]
 
     operations = [
         migrations.AddField(
-            model_name='render',
-            name='container_inspect',
+            model_name="render",
+            name="container_inspect",
             field=django.contrib.postgres.fields.jsonb.JSONField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='render',
-            name='container_logs',
+            model_name="render",
+            name="container_logs",
             field=models.TextField(blank=True, null=True),
         ),
     ]

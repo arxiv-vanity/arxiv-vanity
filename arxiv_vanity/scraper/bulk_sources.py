@@ -15,11 +15,11 @@ def convert_source_file_to_arxiv_id(filename):
     """
     Converts a source file name into an ArXiV ID.
     """
-    # Remove folder and extension
+    #  Remove folder and extension
     arxiv_id, _ = os.path.splitext(os.path.basename(filename))
 
     # Add a slash to old arxiv ID format
-    match = re.match(r'([a-z-]+)([0-9]+)', arxiv_id)
+    match = re.match(r"([a-z-]+)([0-9]+)", arxiv_id)
     if match:
         return f"{match.group(1)}/{match.group(2)}"
 
@@ -41,7 +41,7 @@ def update_bulk_sources():
         # TODO: Re-process files which have been updated. (i.e. where md5 has
         # changed)
         try:
-            tarball = SourceFileBulkTarball.objects.get(filename=f['filename'])
+            tarball = SourceFileBulkTarball.objects.get(filename=f["filename"])
         except SourceFileBulkTarball.DoesNotExist:
             # This is a new file
             pass
@@ -50,19 +50,20 @@ def update_bulk_sources():
                 print(f"Skipping {f['filename']}")
                 continue
             else:
-                print(f"Reprocessing {f['filename']} because it has incorrect number of files")
+                print(
+                    f"Reprocessing {f['filename']} because it has incorrect number of files"
+                )
 
-        with tempfile.NamedTemporaryFile(suffix='tar') as tarfh:
+        with tempfile.NamedTemporaryFile(suffix="tar") as tarfh:
 
             # Download new sources
             print(f"Downloading {f['filename']}...")
-            download_tarball(f['filename'], tarfh.name)
+            download_tarball(f["filename"], tarfh.name)
             tarfh.flush()
 
             # Mark database as downloaded
             bulk_tarball, _ = SourceFileBulkTarball.objects.get_or_create(
-                filename=f['filename'],
-                defaults=f
+                filename=f["filename"], defaults=f
             )
 
             print(f"Extracting {f['filename']}...")
@@ -81,9 +82,7 @@ def update_bulk_sources():
                 wrapped_f.name = name
                 arxiv_id = convert_source_file_to_arxiv_id(name)
                 source_file = SourceFile.objects.create(
-                    arxiv_id=arxiv_id,
-                    file=wrapped_f,
-                    bulk_tarball=bulk_tarball
+                    arxiv_id=arxiv_id, file=wrapped_f, bulk_tarball=bulk_tarball
                 )
 
 
@@ -92,8 +91,8 @@ def get_manifest():
     Download and parse manifest from arxiv S3 bucket.
     """
     connection = S3Boto3Storage().connection
-    obj = connection.Object('arxiv', 'src/arXiv_src_manifest.xml')
-    s = obj.get(RequestPayer='requester')['Body'].read()
+    obj = connection.Object("arxiv", "src/arXiv_src_manifest.xml")
+    s = obj.get(RequestPayer="requester")["Body"].read()
     return parse_manifest(s)
 
 
@@ -107,7 +106,7 @@ def parse_manifest(s):
         # Turn it into a sensible dictionary
         d = {child.tag: child.text for child in f}
         # All the fields are text, apart from these which should be int
-        for k in ('num_items', 'seq_num', 'size'):
+        for k in ("num_items", "seq_num", "size"):
             d[k] = int(d[k])
         result.append(d)
     return result
@@ -115,8 +114,8 @@ def parse_manifest(s):
 
 def download_tarball(key, local_filename):
     connection = S3Boto3Storage().connection
-    bucket = connection.Bucket('arxiv')
-    bucket.download_file(key, local_filename, {'RequestPayer': 'requester'})
+    bucket = connection.Bucket("arxiv")
+    bucket.download_file(key, local_filename, {"RequestPayer": "requester"})
 
 
 def extract_tarball(path):
@@ -124,7 +123,7 @@ def extract_tarball(path):
     Returns an iterator of (filename, file object) tuples given a path to
     a tarball.
     """
-    with tarfile.open(path, 'r:') as tar:
+    with tarfile.open(path, "r:") as tar:
         for member in tar.getmembers():
             if member.isreg():
                 yield os.path.basename(member.name), tar.extractfile(member.name)

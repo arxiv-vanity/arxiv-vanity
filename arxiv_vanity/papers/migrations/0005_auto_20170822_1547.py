@@ -6,18 +6,14 @@ from django.db import migrations
 
 
 def shorten_arxiv_id(apps, schema_editor):
-    Paper = apps.get_model('papers', 'Paper')
+    Paper = apps.get_model("papers", "Paper")
     for paper in Paper.objects.all():
-        paper.arxiv_id = paper.arxiv_id.split('/')[-1]
+        paper.arxiv_id = paper.arxiv_id.split("/")[-1]
         paper.save()
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0004_auto_20170818_2013'),
-    ]
+    dependencies = [("papers", "0004_auto_20170818_2013")]
 
-    operations = [
-        migrations.RunPython(shorten_arxiv_id)
-    ]
+    operations = [migrations.RunPython(shorten_arxiv_id)]

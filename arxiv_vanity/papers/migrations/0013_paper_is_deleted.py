@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0012_paper_arxiv_version'),
-    ]
+    dependencies = [("papers", "0012_paper_arxiv_version")]
 
     operations = [
         migrations.AddField(
-            model_name='paper',
-            name='is_deleted',
+            model_name="paper",
+            name="is_deleted",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

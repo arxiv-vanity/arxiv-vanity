@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0017_auto_20180619_1657'),
-    ]
+    dependencies = [("papers", "0017_auto_20180619_1657")]
 
     operations = [
         migrations.AlterField(
-            model_name='sourcefile',
-            name='arxiv_id',
+            model_name="sourcefile",
+            name="arxiv_id",
             field=models.CharField(max_length=50, unique=True),
-        ),
+        )
     ]

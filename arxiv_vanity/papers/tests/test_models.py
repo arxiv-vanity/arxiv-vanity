@@ -5,28 +5,36 @@ from django.utils import timezone
 import os
 import shutil
 from ..models import Render, Paper, SourceFile
-from .utils import create_paper, create_render, create_source_file_bulk_tarball, create_source_file, create_render_with_html
+from .utils import (
+    create_paper,
+    create_render,
+    create_source_file_bulk_tarball,
+    create_source_file,
+    create_render_with_html,
+)
 
 
 class PaperTest(TestCase):
     def test_get_https_arxiv_url(self):
-        paper = create_paper(arxiv_url='http://arxiv.org/abs/1708.03313')
-        self.assertEqual(paper.get_https_arxiv_url(), 'https://arxiv.org/abs/1708.03313')
+        paper = create_paper(arxiv_url="http://arxiv.org/abs/1708.03313")
+        self.assertEqual(
+            paper.get_https_arxiv_url(), "https://arxiv.org/abs/1708.03313"
+        )
 
     def test_get_https_pdf_url(self):
-        paper = create_paper(pdf_url='http://arxiv.org/pdf/1708.03313')
-        self.assertEqual(paper.get_https_pdf_url(), 'https://arxiv.org/pdf/1708.03313')
+        paper = create_paper(pdf_url="http://arxiv.org/pdf/1708.03313")
+        self.assertEqual(paper.get_https_pdf_url(), "https://arxiv.org/pdf/1708.03313")
 
     def test_is_renderable(self):
         paper = create_paper(source_file=None)
         self.assertFalse(paper.is_renderable())
 
-        source_file = create_source_file(file='foo.tar.gz')
+        source_file = create_source_file(file="foo.tar.gz")
         paper = create_paper(source_file=source_file)
         self.assertTrue(paper.is_renderable())
 
     def test_is_deleted(self):
-        paper = create_paper(arxiv_id='1708.03313')
+        paper = create_paper(arxiv_id="1708.03313")
         self.assertEqual(Paper.objects.count(), 1)
         self.assertEqual(Paper.objects.deleted().count(), 0)
         paper.is_deleted = True
@@ -35,7 +43,8 @@ class PaperTest(TestCase):
         self.assertEqual(Paper.objects.deleted().count(), 1)
 
 
-TEST_MEDIA_ROOT = os.path.join(settings.MEDIA_ROOT, 'test')
+TEST_MEDIA_ROOT = os.path.join(settings.MEDIA_ROOT, "test")
+
 
 @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
 class RenderTest(TestCase):
@@ -48,7 +57,10 @@ class RenderTest(TestCase):
     def test_get_webhook_url(self):
         paper = create_paper()
         render = create_render(paper=paper)
-        self.assertEqual(render.get_webhook_url(), f"http://web:8000/renders/{render.pk}/update-state/")
+        self.assertEqual(
+            render.get_webhook_url(),
+            f"http://web:8000/renders/{render.pk}/update-state/",
+        )
 
     def test_not_expired(self):
         paper = create_paper()
@@ -70,20 +82,24 @@ class RenderTest(TestCase):
         self.assertNotIn(render1, qs)
         self.assertIn(render2, qs)
 
-
     def test_expired_deletes_render_output(self):
-        source_file = create_source_file(arxiv_id='1234.5678', file='foo.tar.gz')
+        source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")
         paper = create_paper(
             arxiv_id="1234.5678",
             title="Some paper",
             source_file=source_file,
-            updated=datetime.datetime(2017, 8, 5, 17, 46, 28,
-                                      tzinfo=datetime.timezone.utc),
+            updated=datetime.datetime(
+                2017, 8, 5, 17, 46, 28, tzinfo=datetime.timezone.utc
+            ),
         )
         render = create_render_with_html(paper=paper)
-        self.assertTrue(os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path())))
+        self.assertTrue(
+            os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path()))
+        )
         render.expire()
-        self.assertFalse(os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path())))
+        self.assertFalse(
+            os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path()))
+        )
 
 
 class SourceFileBulkTarballTest(TestCase):
@@ -97,9 +113,9 @@ class SourceFileBulkTarballTest(TestCase):
 
 class SourceFileTest(TestCase):
     def test_is_pdf(self):
-        sf = create_source_file(arxiv_id='1234.5678', file='source-files/1234.5678.pdf')
+        sf = create_source_file(arxiv_id="1234.5678", file="source-files/1234.5678.pdf")
         self.assertTrue(sf.is_pdf())
-        sf = create_source_file(arxiv_id='1234.5679', file='source-files/1234.5679.gz')
+        sf = create_source_file(arxiv_id="1234.5679", file="source-files/1234.5679.gz")
         self.assertFalse(sf.is_pdf())
 
     def test_is_renderable(self):

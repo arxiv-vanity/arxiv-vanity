@@ -4,19 +4,15 @@ from django.db import migrations
 
 
 def generate_arxiv_ids(apps, schema_editor):
-    SourceFile = apps.get_model('papers', 'SourceFile')
+    SourceFile = apps.get_model("papers", "SourceFile")
     for sf in SourceFile.objects.iterator():
         if not sf.arxiv_id:
-            sf.arxiv_id = sf.file.name.rsplit('.', 1)[0]
+            sf.arxiv_id = sf.file.name.rsplit(".", 1)[0]
             sf.save()
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0016_auto_20180619_1655'),
-    ]
+    dependencies = [("papers", "0016_auto_20180619_1655")]
 
-    operations = [
-        migrations.RunPython(generate_arxiv_ids),
-    ]
+    operations = [migrations.RunPython(generate_arxiv_ids)]

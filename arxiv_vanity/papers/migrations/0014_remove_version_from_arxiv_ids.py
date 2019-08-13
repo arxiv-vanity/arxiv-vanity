@@ -2,7 +2,10 @@
 
 from collections import defaultdict
 from django.db import migrations, transaction, IntegrityError
-from ...scraper.arxiv_ids import remove_version_from_arxiv_id, remove_version_from_arxiv_url
+from ...scraper.arxiv_ids import (
+    remove_version_from_arxiv_id,
+    remove_version_from_arxiv_url,
+)
 
 
 def remove_version_from_arxiv_ids(Paper):
@@ -39,15 +42,11 @@ def remove_version_from_arxiv_ids(Paper):
 
 
 def run_migration(apps, schema_editor):
-    remove_version_from_arxiv_ids(apps.get_model('papers', 'Paper'))
+    remove_version_from_arxiv_ids(apps.get_model("papers", "Paper"))
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0013_paper_is_deleted'),
-    ]
+    dependencies = [("papers", "0013_paper_is_deleted")]
 
-    operations = [
-        migrations.RunPython(run_migration),
-    ]
+    operations = [migrations.RunPython(run_migration)]

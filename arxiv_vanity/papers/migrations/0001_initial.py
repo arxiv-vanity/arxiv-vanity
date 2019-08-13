@@ -11,30 +11,43 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Paper',
+            name="Paper",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('arxiv_id', models.CharField(max_length=200, unique=True)),
-                ('title', models.TextField()),
-                ('published', models.DateTimeField()),
-                ('updated', models.DateTimeField()),
-                ('summary', models.TextField()),
-                ('authors', django.contrib.postgres.fields.jsonb.JSONField()),
-                ('arxiv_url', models.URLField()),
-                ('pdf_url', models.URLField()),
-                ('primary_category', models.CharField(max_length=50)),
-                ('categories', django.contrib.postgres.fields.ArrayField(base_field=models.CharField(max_length=50), size=None)),
-                ('comment', models.TextField(blank=True, null=True)),
-                ('doi', models.CharField(blank=True, max_length=100, null=True)),
-                ('journal_ref', models.TextField(blank=True, max_length=100, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("arxiv_id", models.CharField(max_length=200, unique=True)),
+                ("title", models.TextField()),
+                ("published", models.DateTimeField()),
+                ("updated", models.DateTimeField()),
+                ("summary", models.TextField()),
+                ("authors", django.contrib.postgres.fields.jsonb.JSONField()),
+                ("arxiv_url", models.URLField()),
+                ("pdf_url", models.URLField()),
+                ("primary_category", models.CharField(max_length=50)),
+                (
+                    "categories",
+                    django.contrib.postgres.fields.ArrayField(
+                        base_field=models.CharField(max_length=50), size=None
+                    ),
+                ),
+                ("comment", models.TextField(blank=True, null=True)),
+                ("doi", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "journal_ref",
+                    models.TextField(blank=True, max_length=100, null=True),
+                ),
             ],
-            options={
-                'get_latest_by': 'updated',
-            },
-        ),
+            options={"get_latest_by": "updated"},
+        )
     ]

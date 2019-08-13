@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0007_auto_20170904_0929'),
-    ]
+    dependencies = [("papers", "0007_auto_20170904_0929")]
 
     operations = [
         migrations.AddField(
-            model_name='render',
-            name='container_is_removed',
+            model_name="render",
+            name="container_is_removed",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

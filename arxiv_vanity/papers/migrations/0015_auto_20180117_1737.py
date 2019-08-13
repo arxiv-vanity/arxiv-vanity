@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0014_remove_version_from_arxiv_ids'),
-    ]
+    dependencies = [("papers", "0014_remove_version_from_arxiv_ids")]
 
     operations = [
         migrations.AlterField(
-            model_name='sourcefile',
-            name='file',
-            field=models.FileField(unique=True, upload_to='source-files/'),
-        ),
+            model_name="sourcefile",
+            name="file",
+            field=models.FileField(unique=True, upload_to="source-files/"),
+        )
     ]

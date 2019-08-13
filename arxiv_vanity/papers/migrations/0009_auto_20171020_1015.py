@@ -6,16 +6,12 @@ from django.db import migrations
 
 
 def mark_all_renders_as_removed(apps, schema_editor):
-    Render = apps.get_model('papers', 'Render')
+    Render = apps.get_model("papers", "Render")
     Render.objects.all().update(container_is_removed=True)
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('papers', '0008_render_container_is_removed'),
-    ]
+    dependencies = [("papers", "0008_render_container_is_removed")]
 
-    operations = [
-        migrations.RunPython(mark_all_renders_as_removed),
-    ]
+    operations = [migrations.RunPython(mark_all_renders_as_removed)]
