@@ -1,0 +1,10 @@
+// See https://aka.ms/vscode-remote/devcontainer.json for format details.
+{
+  "dockerFile": "Dockerfile",
+  "extensions": [
+    "ms-python.python",
+    "sibiraj-s.vscode-scss-formatter",
+    "esbenp.prettier-vscode",
+    "batisteo.vscode-django"
+  ]
+}

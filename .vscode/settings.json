@@ -1,6 +1,13 @@
 {
-    "python.pythonPath": "venv/bin/python",
-    "python.linting.pylintArgs": [
-        "--load-plugins=pylint_django"
-   ]
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**/*": "django-txt"
+  },
+  "python.formatting.provider": "black",
+  "python.linting.pylintArgs": [
+    "--load-plugins=pylint_django"
+  ],
+  "python.pythonPath": "/usr/local/bin/python"
 }

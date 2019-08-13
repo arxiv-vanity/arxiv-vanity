@@ -53,13 +53,9 @@ Then, in the arXiv Vanity directory (the same one this readme is in), create a f
 ENGRAFO_IMAGE=engrafo-dev
 ```
 
-## Getting VSCode completions
+## VS Code development environment
 
-VSCode can't use the Python dependencies inside the Docker container, so if you want VSCode smarts, you need to make a normal virtualenv with the dependencies inside. There's a script to help with that:
-
-    $ script/create-venv
-
-VSCode is configured to use the interpreter in there.
+This project is configured with a dev container to get completions, etc inside VS Code. When VS Code opens, click "reopen in container" in the popup and it'll run the development environment inside the same container used by `docker-compose`.
 
 ## Sponsors
 
