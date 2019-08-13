@@ -89,7 +89,7 @@ class FeedbackForm {
 
   makeLip() {
     const $a = $(
-      '<button class="feedback-lip-button btn btn-primary" data-toggle="modal" data-target="#feedbackModal">Report a bug</button>'
+      '<button class="feedback-lip-button btn btn-primary" data-toggle="modal" data-target="#feedbackModal">Feedback</button>'
     );
     $("body").append($a);
     return $a;
@@ -113,14 +113,17 @@ class FeedbackForm {
   resetModal() {
     this.$modal.find(".modal-content").html(`
       <div class="modal-header">
-        <h5 class="modal-title">Report a bug</h5>
+        <h5 class="modal-title">Feedback</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
+        <p>Any general comments? Email us at <a href="mailto:feedback@arxiv-vanity.com">feedback@arxiv-vanity.com</a>
+
+        <p></p>
         <div class="form-group">
-          <label for="feedback-text">Describe the issue</label>
+          <label for="feedback-text">If you want to report a specific rendering bug, use this form to describe the problem:</label>
           <textarea id="feedback-text" class="form-control" rows="5"></textarea>
         </div>
 
