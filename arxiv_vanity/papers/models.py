@@ -191,7 +191,7 @@ class RenderQuerySet(models.QuerySet):
         qs = self.exclude(state=Render.STATE_UNSTARTED).filter(
             container_is_removed=False
         )
-        for render in qs.iterator():
+        for render in qs.iterator(chunk_size=100):
             try:
                 render.update_state()
             except:
