@@ -1,7 +1,11 @@
 from bs4 import BeautifulSoup
 from django.urls import reverse
 import os
+import re
 from ..scraper.arxiv_ids import ARXIV_URL_RE
+
+
+EMAIL_RE = re.compile(r"[a-z0-9!#$%&'*+/=?^_`{|}~,-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|},~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
 
 
 def process_render(fh, path_prefix, context):
@@ -25,6 +29,11 @@ def process_render(fh, path_prefix, context):
     #  Turn arxiv.org links into vanity links
     for el in soup.find_all("a"):
         if el.get("href"):
+            # remove mailto: links
+            if el.get("href").startswith("mailto:"):
+                el.unwrap()
+                continue
+
             match = ARXIV_URL_RE.search(el["href"])
             if match:
                 arxiv_id = match.group(1)
@@ -47,6 +56,13 @@ def process_render(fh, path_prefix, context):
         if img:
             first_image = img["src"]
             break
+    
+    # Remove all emails
+    for el in soup.findAll(text=True):
+        text = str(el)
+        new_text = EMAIL_RE.sub('', text)
+        if new_text != text:
+            el.replaceWith(new_text)
 
     return {
         # FIXME: This should be str but it's bytes for some reason.

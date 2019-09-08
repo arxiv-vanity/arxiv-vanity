@@ -11,3 +11,12 @@ class ProcessorTest(unittest.TestCase):
             output["body"],
             '<a href="/papers/1710.06542/" target="_blank">Something</a>',
         )
+
+    def test_emails_are_removed(self):
+        html = '<head></head><a href="mailto:foo@bar.com">some email link</a> another@email.com'
+        output = process_render(html, "", {})
+        self.assertEqual(
+            output["body"],
+            'some email link ',
+        )
+
