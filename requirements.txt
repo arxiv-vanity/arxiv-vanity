@@ -8,7 +8,7 @@ python-dateutil==2.8.0
 docker==4.0.2
 beautifulsoup4==4.8.0
 lxml==4.4.1
-django-storages==1.7.1
+django-storages==1.7.2
 boto3==1.5.0
 PyGithub==1.43.8
 sentry-sdk==0.11.2
