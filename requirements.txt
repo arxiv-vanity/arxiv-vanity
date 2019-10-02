@@ -1,4 +1,4 @@
-Django==2.2.5
+Django==2.2.6
 psycopg2-binary==2.8.3
 django-environ==0.4.5
 gunicorn==19.9.0
