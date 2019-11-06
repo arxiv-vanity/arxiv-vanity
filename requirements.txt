@@ -17,4 +17,4 @@ django-db-geventpool==3.1.0
 gevent==1.4.0
 pylint==2.4.2
 pylint-django==2.0.12
-black==19.3b0
+black==19.10b0
