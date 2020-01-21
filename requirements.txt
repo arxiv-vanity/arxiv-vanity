@@ -16,5 +16,5 @@ vcrpy==2.0.1
 django-db-geventpool==3.2.0
 gevent==1.4.0
 pylint==2.4.4
-pylint-django==2.0.12
+pylint-django==2.0.13
 black==19.10b0
