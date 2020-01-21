@@ -9,8 +9,10 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic.base import TemplateView, RedirectView
 from .feedback.views import submit_feedback
+from .papers.feeds import LatestPapersFeed
 from .papers.views import (
     HomeView,
+    PaperListView,
     paper_detail,
     paper_convert,
     paper_render_state,
@@ -21,6 +23,8 @@ from .scraper.arxiv_ids import ARXIV_ID_PATTERN
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
+    path("papers/", PaperListView.as_view(), name="paper_list"),
+    path("papers/feed/", LatestPapersFeed(), name="paper_feed"),
     re_path(
         fr"papers/(?P<arxiv_id>{ARXIV_ID_PATTERN})/$", paper_detail, name="paper_detail"
     ),

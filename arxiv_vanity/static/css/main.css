@@ -1,6 +1,7 @@
 /* Layout */
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -17,7 +18,7 @@ html, body {
 
 .arxiv-vanity-wrapper a,
 .arxiv-vanity-wrapper a:hover {
-  color: rgba(0,0,0,0.8);
+  color: rgba(0, 0, 0, 0.8);
   text-decoration: none;
   color: inherit;
   border-bottom: 1px solid rgba(0, 0, 0, 0.4);
@@ -38,18 +39,57 @@ html, body {
 
 .arxiv-vanity-wrapper .btn-primary,
 .arxiv-vanity-wrapper .btn-primary:hover {
-  background-color: rgba(0,0,0,0.8);
-  border-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
+  border-color: rgba(0, 0, 0, 0.8);
   color: #fff;
 }
 
-
 /* Components */
 
+.badge {
+  padding: 0.4rem 0.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: normal;
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+}
+
+.navbar-container {
+  background-color: hsla(0, 59%, 40%, 0.9);
+}
+
+.navbar {
+  padding: 1em 0;
+}
+
+.navbar .navbar-brand {
+  color: rgba(255, 255, 255, 1) !important;
+  font-size: 1em;
+  letter-spacing: 0.01rem;
+  font-weight: 400;
+  margin-right: 0;
+  border-bottom: none;
+}
+
+.navbar .navbar-brand:hover {
+  border-bottom: none;
+}
+
+.navbar .nav-link {
+  font-size: 0.9em;
+  border-bottom: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (min-width: 768px) {
+  .navbar .nav-link {
+    padding-right: 1em !important;
+  }
+}
 
 .arxiv-vanity-wrapper footer {
   font-size: 12px;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
   padding-top: 26px;
   padding-bottom: 60px;
   text-align: center;
@@ -72,6 +112,59 @@ html, body {
   margin-right: 0.5em;
 }
 
+.paper-list {
+  font-family: Georgia, serif;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+.paper-list h1,
+.paper-list h2,
+.paper-list h3 {
+  font-family: Baskerville, Georgia, serif;
+}
+
+.paper-list > .row {
+  margin-bottom: 4rem;
+}
+
+.paper-list-item {
+  margin-bottom: 2rem;
+}
+.paper-list-item img {
+  width: 100%;
+  margin-top: 2rem;
+}
+.paper-list-item h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+@media (min-width: 768px) {
+  .paper-list-item h3 {
+    font-size: 1.75rem;
+  }
+}
+
+.paper-list-item h3 a,
+.paper-list-item h3 a:hover {
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: normal;
+  border-bottom: none;
+}
+
+.paper-list-item .abstract,
+.paper-list-item .abstract a {
+  color: rgba(0, 0, 0, 0.8);
+}
+.paper-list-item .author {
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.5);
+}
+.paper-list-item.abstract a {
+  text-decoration: underline;
+}
+
 .paper-detail-status {
   display: flex;
   align-items: center;
@@ -88,10 +181,10 @@ html, body {
 }
 
 .urls-example-list {
-    list-style: none;
-    padding-left: 0;
-    margin-bottom: 10px;
-    font-size: smaller;
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 10px;
+  font-size: smaller;
 }
 
 .page-container {
@@ -100,7 +193,7 @@ html, body {
 }
 
 .wtf-is-this-bar {
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   /*color: rgba(0,0,0,0.5);*/
   background: rgb(250, 250, 250);
   position: relative;
@@ -136,7 +229,7 @@ html, body {
   font-weight: 300;
 }
 .page-home input:focus {
-  border: 1px solid rgba(0,0,0,.15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .page-home .bookmarklet {
@@ -160,7 +253,6 @@ html, body {
     font-size: 2rem;
   }
 }
-
 
 .arxiv-vanity-wrapper .mailing-list-form {
   text-align: center;

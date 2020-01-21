@@ -18,3 +18,4 @@ gevent==1.4.0
 pylint==2.4.4
 pylint-django==2.0.13
 black==19.10b0
+randomcolor==0.4.4.5

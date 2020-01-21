@@ -7,7 +7,7 @@ from django.utils.cache import add_never_cache_headers, patch_cache_control
 from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from .models import Paper, Render, PaperIsNotRenderableError
 from ..scraper.arxiv_ids import (
     remove_version_from_arxiv_id,
@@ -31,6 +31,19 @@ class HomeView(TemplateView):
 
     def dispatch(self, *args, **kwargs):
         res = super(HomeView, self).dispatch(*args, **kwargs)
+        return add_paper_cache_control(res)
+
+
+class PaperListView(ListView):
+    model = Paper
+    paginate_by = 25
+
+    def get_queryset(self):
+        qs = super(PaperListView, self).get_queryset()
+        return qs.machine_learning().has_successful_render()
+
+    def dispatch(self, *args, **kwargs):
+        res = super(PaperListView, self).dispatch(*args, **kwargs)
         return add_paper_cache_control(res)
 
 
