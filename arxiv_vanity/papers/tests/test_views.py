@@ -5,13 +5,15 @@ import unittest
 from unittest import mock
 from django.conf import settings
 from django.test import TestCase, override_settings
-from ..models import Render
+from ..models import Render, Paper
 from ..views import convert_query_to_arxiv_id
 from .utils import (
     create_paper,
     create_render,
     create_render_with_html,
     create_source_file,
+    patch_update_or_create_from_arxiv_id,
+    patch_render_run,
 )
 
 
@@ -50,15 +52,11 @@ class PaperDetailViewTest(TestCase):
     def test_it_outputs_rendered_papers(self):
         source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")
         paper = create_paper(
-            arxiv_id="1234.5678",
-            title="Some paper",
-            source_file=source_file,
-            updated=datetime.datetime(
-                2017, 8, 5, 17, 46, 28, tzinfo=datetime.timezone.utc
-            ),
+            arxiv_id="1234.5678", title="Some paper", source_file=source_file,
         )
         render = create_render_with_html(paper=paper)
         res = self.client.get("/papers/1234.5678/")
+        self.assertEqual(res.status_code, 200)
         content = res.content.decode("utf-8")
         self.assertEqual(res["Cache-Control"], "public, max-age=60")
         # using .count() because multiple copies of script were inserted at one point
@@ -86,9 +84,22 @@ class PaperDetailViewTest(TestCase):
         self.assertIn("have LaTeX source code", str(res.content))
         self.assertIn("https://arxiv.org/pdf/1234.5678", str(res.content))
 
-    def test_it_creates_new_papers_if_they_dont_exist(self):
-        # TODO(bfirsh): needs mocking of the arxiv API and creating new renders
-        pass
+    @patch_update_or_create_from_arxiv_id()
+    @patch_render_run()
+    def test_it_creates_new_papers_if_they_dont_exist(self, mock_create, mock_run):
+        res = self.client.get("/papers/1234.5678/")
+        self.assertEqual(res.status_code, 503)
+        self.assertIn("This paper is rendering!", str(res.content))
+        self.assertEqual(
+            res["Cache-Control"], "max-age=0, no-cache, no-store, must-revalidate"
+        )
+
+        mock_create.assert_called_once()
+        mock_run.assert_called_once()
+
+        render = Render.objects.latest()
+        self.assertEqual(render.paper.arxiv_id, "1234.5678")
+        self.assertEqual(render.state, Render.STATE_RUNNING)
 
     def test_it_shows_a_message_if_the_paper_is_being_rendered(self):
         source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")

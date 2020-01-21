@@ -1,9 +1,10 @@
 import datetime
 import os
 import shutil
+from unittest import mock
 import uuid
 from django.conf import settings
-from ..models import Paper, Render, SourceFileBulkTarball, SourceFile
+from ..models import Paper, Render, SourceFileBulkTarball, SourceFile, PaperQuerySet
 
 
 def create_paper(
@@ -87,3 +88,22 @@ def create_source_file_bulk_tarball(num_items=None):
 
 def create_source_file(arxiv_id=None, file=None):
     return SourceFile.objects.create(arxiv_id=arxiv_id or uuid.uuid4(), file=file)
+
+
+def patch_render_run():
+    def f(self):
+        self.container_id = "abc123"
+        self.state = Render.STATE_RUNNING
+        self.save()
+
+    return mock.patch.object(Render, "run", side_effect=f, autospec=True)
+
+
+def patch_update_or_create_from_arxiv_id():
+    def f(self, arxiv_id):
+        source_file = create_source_file(arxiv_id=arxiv_id, file="foo.tar.gz")
+        return create_paper(arxiv_id=arxiv_id, source_file=source_file), None
+
+    return mock.patch.object(
+        PaperQuerySet, "update_or_create_from_arxiv_id", side_effect=f, autospec=True
+    )
