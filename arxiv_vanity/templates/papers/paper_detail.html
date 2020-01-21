@@ -21,7 +21,7 @@
       {% endif %}
     {% endfor %}
   {% endspaceless %}
-  <meta name="citation_date" content="{{ paper.published|date:"Y/m/d" }}>
+  <meta name="citation_date" content="{{ paper.published|date:'Y/m/d' }}">
   <meta name="citation_pdf_url" content="{{ paper.get_https_pdf_url }}">
   <meta name="citation_arxiv_id" content="{{ paper.arxiv_id }}">
 
