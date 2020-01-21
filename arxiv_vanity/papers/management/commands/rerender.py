@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Rendering papers", end="")
-        for i, paper in enumerate(Paper.objects.has_not_expired_render()):
+        for i, paper in enumerate(Paper.objects.has_not_deleted_render()):
             paper.render()
             print(".", end="", flush=True)
 

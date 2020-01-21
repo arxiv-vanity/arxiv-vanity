@@ -10,6 +10,6 @@ class Command(BaseCommand):
         print("Updating state...")
         Render.objects.update_state()
         print("Updating expired status...")
-        Render.objects.update_is_expired()
+        Render.objects.delete_expired()
         print("Removing long running containers...")
         remove_long_running_containers()

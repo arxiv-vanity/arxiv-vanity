@@ -3,7 +3,7 @@ from ...models import Render
 
 
 class Command(BaseCommand):
-    help = "Deletes output of all expired renders"
+    help = "Deletes output of all deleted renders. For when the deleting breaks, or we haven't deleted it already for some reason."
 
     def add_arguments(self, parser):
         parser.add_argument("--start", type=int, default=0, help="ID to start at")
@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         pointer = options["start"]
         batch_size = 1000
-        qs = Render.objects.expired()
+        qs = Render.objects.deleted()
 
         while True:
             # Batch because Django just seems to consume loads of memory and lock up
