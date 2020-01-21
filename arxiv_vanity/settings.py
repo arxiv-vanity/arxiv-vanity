@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "django_rangepaginator",
     "arxiv_vanity.feedback",
     "arxiv_vanity.papers",
     "arxiv_vanity.scraper",
@@ -231,3 +232,5 @@ PAPERS_EXPIRED_DAYS = env.int("PAPERS_EXPIRED_DAYS", default=7)
 PAPER_CACHE_SECONDS = env.int("PAPER_CACHE_SECONDS", default=60)
 
 ROOT_URL = env("ROOT_URL", default="http://localhost:8000")
+
+RANGE_PAGINATOR_TEMPLATE = 'django_rangepaginator/bootstrap4.html'

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% load papers %}
+{% load rangepaginator %}
 
 {% block title %}Latest Papers{% endblock %}
 
@@ -31,7 +32,7 @@
     </div>
     <div class="row justify-content-left">
       <div class="col-lg-9">
-        {% include "includes/pagination.html" with page_obj=page_obj only %}
+        {% paginate page_obj request=request %}
       </div>
     </div>
   </div>
