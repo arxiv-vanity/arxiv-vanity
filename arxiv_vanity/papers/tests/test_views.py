@@ -16,7 +16,6 @@ from .utils import (
 
 
 class PaperListViewTest(TestCase):
-    @unittest.skip
     def test_view(self):
         paper1 = create_paper(title="Paper no render")
         paper2 = create_paper(title="Paper unstarted render")
