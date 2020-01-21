@@ -18,6 +18,7 @@
         {% for paper in object_list %}
           <div class="paper-list-item">
             <h3><a href="{{ paper.get_absolute_url }}">{{ paper.title }}</a></h3>
+            <p class="text-secondary">{{ paper.published|date:"j F Y" }}</p>
             <!-- <p class="author">{% for author in paper.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
             <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
             <p>
