@@ -31,14 +31,7 @@
   <link rel="stylesheet" href="{% static "css/feedback.css" %}" media="screen" title="no title" charset="utf-8">
 {% endblock %}
 {% block before_content %}
-  <div class="arxiv-vanity-wrapper">
-    <div class="wtf-is-this-bar">
-      <p>
-        <a href="/">arXiv Vanity</a> renders academic papers from <a href="https://arxiv.org/">arXiv</a> as responsive web pages so you don&rsquo;t have to squint at a PDF.
-        <a href="{{ paper.get_https_arxiv_url }}" class="ml-1">Read this paper on arXiv.org.</a>
-      </p>
-    </div>
-  </div>
+  {% include "includes/wtf_is_this.html" %}
 {% endblock %}
 {% block content %}
   {{ body|safe }}

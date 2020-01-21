@@ -4,33 +4,34 @@
 
 {% block title %}Latest Papers{% endblock %}
 
+{% block before_content %}
+  {% include "includes/wtf_is_this.html" %}
+{% endblock %}
 
 {% block content %}
   <div class="container">
-    <div class="paper-list">
-      <div class="row justify-content-left">
-        <div class="col-lg-9">
-          <h2>Latest Papers</h2>
+    <div class="row justify-content-left">
+      <div class="col-lg-9 my-5">
+        <h2>Latest Papers</h2>
+        <hr>
+        {% for paper in object_list %}
+          <div class="paper-list-item">
+            <h3><a href="{{ paper.get_absolute_url }}">{{ paper.title }}</a></h3>
+            <!-- <p class="author">{% for author in paper.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
+            <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
+            <p>
+              {% for category in paper.categories %}
+                {% category_badge category %}
+              {% endfor %}
+            </p>
+          </div>
           <hr>
-          {% for paper in object_list %}
-            <div class="paper-list-item">
-              <h3><a href="{{ paper.get_absolute_url }}">{{ paper.title }}</a></h3>
-              <!-- <p class="author">{% for author in paper.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
-              <p class="abstract">{{ paper.summary|truncatechars:200 }}</p>
-              <p>
-                {% for category in paper.categories %}
-                  {% category_badge category %}
-                {% endfor %}
-              </p>
-            </div>
-            <hr>
-          {% endfor %}
-        </div>
+        {% endfor %}
       </div>
-      <div class="row justify-content-left">
-        <div class="col-lg-9">
-          {% include "includes/pagination.html" with page_obj=page_obj only %}
-        </div>
+    </div>
+    <div class="row justify-content-left">
+      <div class="col-lg-9">
+        {% include "includes/pagination.html" with page_obj=page_obj only %}
       </div>
     </div>
   </div>
