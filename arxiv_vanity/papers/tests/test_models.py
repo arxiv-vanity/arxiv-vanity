@@ -62,7 +62,7 @@ class RenderTest(TestCase):
             f"http://web:8000/renders/{render.pk}/update-state/",
         )
 
-    def test_not_expired(self):
+    def test_not_deleted(self):
         paper = create_paper()
         render1 = create_render(paper=paper)
         render1.created_at = datetime.datetime(1900, 1, 1).replace(tzinfo=timezone.utc)
@@ -70,15 +70,15 @@ class RenderTest(TestCase):
         render2 = create_render(paper=paper)
 
         # haven't updated expired status yet
-        qs = Render.objects.not_expired()
+        qs = Render.objects.not_deleted()
         self.assertIn(render1, qs)
         self.assertIn(render2, qs)
 
-        # batch job which updates the expired flag
-        Render.objects.update_is_expired()
+        # batch job which updates the deleted flag
+        Render.objects.delete_expired()
 
         # render1 should have expired now
-        qs = Render.objects.not_expired()
+        qs = Render.objects.not_deleted()
         self.assertNotIn(render1, qs)
         self.assertIn(render2, qs)
 
@@ -96,7 +96,7 @@ class RenderTest(TestCase):
         self.assertTrue(
             os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path()))
         )
-        render.expire()
+        render.mark_as_deleted()
         self.assertFalse(
             os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path()))
         )

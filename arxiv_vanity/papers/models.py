@@ -46,13 +46,13 @@ class PaperQuerySet(models.QuerySet):
         qs = self._with_has_successful_render_annotation()
         return qs.filter(has_successful_render=False)
 
-    def _with_has_not_expired_render_annotation(self):
-        renders = Render.objects.filter(paper=models.OuterRef("pk"), is_expired=False)
-        return self.annotate(has_not_expired_render=models.Exists(renders))
+    def _with_has_not_deleted_render_annotation(self):
+        renders = Render.objects.filter(paper=models.OuterRef("pk"), is_deleted=False)
+        return self.annotate(has_not_deleted_render=models.Exists(renders))
 
-    def has_not_expired_render(self):
-        qs = self._with_has_not_expired_render_annotation()
-        return qs.filter(has_not_expired_render=True)
+    def has_not_deleted_render(self):
+        qs = self._with_has_not_deleted_render_annotation()
+        return qs.filter(has_not_deleted_render=True)
 
     def downloaded(self):
         return self.filter(source_file__isnull=False)
@@ -175,14 +175,11 @@ class RenderQuerySet(models.QuerySet):
     def failed(self):
         return self.filter(state=Render.STATE_FAILURE)
 
-    def not_expired(self):
-        """
-        Renders which have occurred in the last PAPERS_EXPIRED_DAYS days.
-        """
-        return self.filter(is_expired=False)
+    def not_deleted(self):
+        return self.filter(is_deleted=False)
 
-    def expired(self):
-        return self.filter(is_expired=True)
+    def deleted(self):
+        return self.filter(is_deleted=True)
 
     def update_state(self):
         """
@@ -198,25 +195,24 @@ class RenderQuerySet(models.QuerySet):
                 log_exception()
         return self
 
-    def update_is_expired(self):
+    def delete_expired(self):
         """
         Set renders as expired if they were rendered more than PAPERS_EXPIRED_DAYS
         ago.
         """
         expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
         expired_date = timezone.now() - expired_delta
-        qs = self.filter(is_expired=False, created_at__lte=expired_date)
+        qs = self.filter(is_deleted=False, created_at__lte=expired_date)
         for render in qs.iterator():
-            render.expire()
+            render.mark_as_deleted()
         return qs
 
-    def force_expire(self):
+    def mark_as_deleted(self):
         """
-        Mark renders as expired even if they haven't. Useful for forcing
-        re-rendering.
+        Mark renders as deleted. Useful for forcing re-rendering.
         """
         for render in self.iterator():
-            render.expire()
+            render.mark_as_deleted()
         return self
 
 
@@ -238,7 +234,7 @@ class Render(models.Model):
             (STATE_FAILURE, "Failure"),
         ),
     )
-    is_expired = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     container_id = models.CharField(max_length=64, null=True, blank=True)
     container_inspect = JSONField(null=True, blank=True)
     container_logs = models.TextField(null=True, blank=True)
@@ -368,16 +364,16 @@ class Render(models.Model):
         with default_storage.open(self.get_html_path()) as fh:
             return process_render(fh, self.get_output_url(), context=context)
 
-    def expire(self):
+    def mark_as_deleted(self):
         """
-        Mark render as expired.
+        Delete render's output and mark is as deleted.
         """
-        self.is_expired = True
-        self.save()
         try:
             self.delete_output()
         except FileNotFoundError:
             log_exception()
+        self.is_deleted = True
+        self.save()
 
     def delete_output(self):
         """
