@@ -69,20 +69,38 @@ class RenderTest(TestCase):
         render1.save()
         render2 = create_render(paper=paper)
 
-        # haven't updated expired status yet
+        # haven't updated deleted status yet
         qs = Render.objects.not_deleted()
         self.assertIn(render1, qs)
         self.assertIn(render2, qs)
 
         # batch job which updates the deleted flag
-        Render.objects.delete_expired()
+        render1.mark_as_deleted()
 
-        # render1 should have expired now
+        # render1 should have been deleted now
         qs = Render.objects.not_deleted()
         self.assertNotIn(render1, qs)
         self.assertIn(render2, qs)
 
-    def test_expired_deletes_render_output(self):
+    def test_expired(self):
+        paper = create_paper()
+        render1 = create_render(paper=paper)
+        render1.created_at = datetime.datetime(1900, 1, 1).replace(tzinfo=timezone.utc)
+        render1.save()
+        render2 = create_render(paper=paper)
+
+        self.assertTrue(render1.is_expired())
+        self.assertFalse(render2.is_expired())
+
+        expired = Render.objects.expired()
+        self.assertIn(render1, expired)
+        self.assertNotIn(render2, expired)
+
+        not_expired = Render.objects.not_expired()
+        self.assertNotIn(render1, not_expired)
+        self.assertIn(render2, not_expired)
+
+    def test_mark_as_deleted_deletes_render_output(self):
         source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")
         paper = create_paper(
             arxiv_id="1234.5678",

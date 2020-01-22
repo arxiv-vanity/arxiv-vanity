@@ -165,6 +165,11 @@ class Paper(models.Model):
         return render
 
 
+def _get_expired_date():
+    expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
+    return timezone.now() - expired_delta
+
+
 class RenderQuerySet(models.QuerySet):
     def running(self):
         return self.filter(state=Render.STATE_RUNNING)
@@ -195,17 +200,17 @@ class RenderQuerySet(models.QuerySet):
                 log_exception()
         return self
 
-    def delete_expired(self):
+    def expired(self):
         """
-        Set renders as expired if they were rendered more than PAPERS_EXPIRED_DAYS
-        ago.
+        Returns renders that ran more than PAPERS_EXPIRED_DAYS ago.
         """
-        expired_delta = datetime.timedelta(days=settings.PAPERS_EXPIRED_DAYS)
-        expired_date = timezone.now() - expired_delta
-        qs = self.filter(is_deleted=False, created_at__lte=expired_date)
-        for render in qs.iterator():
-            render.mark_as_deleted()
-        return qs
+        return self.filter(created_at__lte=_get_expired_date())
+
+    def not_expired(self):
+        """
+        Returns renders than ran less than PAPERS_EXPIRED_DAYS ago.
+        """
+        return self.filter(created_at__gt=_get_expired_date())
 
     def mark_as_deleted(self):
         """
@@ -363,6 +368,12 @@ class Render(models.Model):
         context = {"render": self, "paper": self.paper}
         with default_storage.open(self.get_html_path()) as fh:
             return process_render(fh, self.get_output_url(), context=context)
+
+    def is_expired(self):
+        """
+        Returns True if this render was run more than PAPERS_EXPIRED_DAYS ago.
+        """
+        return self.created_at <= _get_expired_date()
 
     def mark_as_deleted(self):
         """

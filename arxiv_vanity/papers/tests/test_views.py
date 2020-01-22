@@ -49,7 +49,8 @@ class PaperDetailViewTest(TestCase):
         except FileNotFoundError:
             pass
 
-    def test_it_outputs_rendered_papers(self):
+    @patch_render_run()
+    def test_it_outputs_rendered_papers(self, mock_run):
         source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")
         paper = create_paper(
             arxiv_id="1234.5678", title="Some paper", source_file=source_file,
@@ -69,6 +70,9 @@ class PaperDetailViewTest(TestCase):
 
         # literal new line, caused by django naively converting bytes to str
         self.assertNotIn("\\n", content)
+
+        # ensure we haven't spun off a new render job
+        mock_run.assert_not_called()
 
     def test_it_shows_an_error_if_a_paper_is_not_renderable(self):
         source_file = create_source_file(arxiv_id="1234.5678", file="foo.pdf")
