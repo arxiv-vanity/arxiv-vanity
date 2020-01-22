@@ -74,6 +74,30 @@ class PaperDetailViewTest(TestCase):
         # ensure we haven't spun off a new render job
         mock_run.assert_not_called()
 
+    @patch_render_run()
+    def test_expired_render_gets_displayed_and_rerendered(self, mock_run):
+        source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")
+        paper = create_paper(
+            arxiv_id="1234.5678",
+            title="Some paper",
+            source_file=source_file,
+            updated=datetime.datetime(
+                2017, 8, 5, 17, 46, 28, tzinfo=datetime.timezone.utc
+            ),
+        )
+        render = create_render_with_html(paper=paper, is_expired=True)
+
+        res = self.client.get("/papers/1234.5678/")
+        content = res.content.decode("utf-8")
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("Some paper", content)
+
+        mock_run.assert_called_once()
+
+        self.assertEqual(paper.renders.count(), 2)
+        render = paper.renders.latest()
+        self.assertEqual(render.state, Render.STATE_RUNNING)
+
     def test_it_shows_an_error_if_a_paper_is_not_renderable(self):
         source_file = create_source_file(arxiv_id="1234.5678", file="foo.pdf")
         paper = create_paper(
@@ -110,6 +134,7 @@ class PaperDetailViewTest(TestCase):
         paper = create_paper(arxiv_id="1234.5678", source_file=source_file)
         render = create_render(paper=paper, state=Render.STATE_RUNNING)
         res = self.client.get("/papers/1234.5678/")
+        self.assertEqual(res.status_code, 503)
         self.assertEqual(
             res["Cache-Control"], "max-age=0, no-cache, no-store, must-revalidate"
         )
@@ -127,6 +152,20 @@ class PaperDetailViewTest(TestCase):
         self.assertIn(
             'The paper "Theory of everything" failed to render', str(res.content)
         )
+
+    @patch_render_run()
+    def test_it_shows_an_error_and_rerenders_if_there_is_failed_expired_render(
+        self, mock_run
+    ):
+        source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")
+        paper = create_paper(
+            arxiv_id="1234.5678", source_file=source_file, title="Theory of everything"
+        )
+        render = create_render(paper=paper, state=Render.STATE_FAILURE, is_expired=True)
+        res = self.client.get("/papers/1234.5678/")
+        self.assertEqual(res.status_code, 503)
+        self.assertIn("This paper is rendering", str(res.content))
+        mock_run.assert_called_once()
 
     def test_it_redirects_different_versions_to_a_canonical_one(self):
         source_file = create_source_file(arxiv_id="1234.5678", file="foo.tar.gz")

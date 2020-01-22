@@ -66,16 +66,8 @@ def paper_detail(request, arxiv_id):
         except PaperNotFoundError:
             raise Http404(f"Paper '{arxiv_id}' not found on arXiv")
 
-    # Get latest render that hasn't expired
     try:
-        if force_render:
-            r = paper.render()
-        else:
-            try:
-                r = paper.renders.not_deleted().latest()
-            except Render.DoesNotExist:
-                #  If it hasn't been started yet, render it!
-                r = paper.render()
+        render_to_display = paper.get_render_to_display_and_render_if_needed(force_render=force_render)
     except PaperIsNotRenderableError:
         res = render(
             request,
@@ -85,39 +77,32 @@ def paper_detail(request, arxiv_id):
         )
         return add_paper_cache_control(res, request)
 
-    # Stuck for some reason, give it a boot
-    # This normally happens if there is an exception raised in render()
-    if r.state == Render.STATE_UNSTARTED:
-        # This will put it into running state
-        r = paper.render()
-
     # Switch response based on state
-    if r.state == Render.STATE_RUNNING:
+    if render_to_display.state == Render.STATE_RUNNING:
         res = render(
             request,
             "papers/paper_detail_rendering.html",
-            {"paper": paper, "render": r},
+            {"paper": paper, "render": render_to_display},
             status=503,
         )
         add_never_cache_headers(res)
         return res
 
-    elif r.state == Render.STATE_FAILURE:
-        # Fall back to error if there is no successful or running render
+    elif render_to_display.state == Render.STATE_FAILURE:
         res = render(
             request, "papers/paper_detail_error.html", {"paper": paper}, status=500
         )
         return add_paper_cache_control(res, request)
 
-    elif r.state == Render.STATE_SUCCESS:
-        processed_render = r.get_processed_render()
+    elif render_to_display.state == Render.STATE_SUCCESS:
+        processed_render = render_to_display.get_processed_render()
 
         res = render(
             request,
             "papers/paper_detail.html",
             {
                 "paper": paper,
-                "render": r,
+                "render": render_to_display,
                 "body": processed_render["body"],
                 "links": processed_render["links"],
                 "scripts": processed_render["scripts"],
@@ -129,7 +114,7 @@ def paper_detail(request, arxiv_id):
         return add_paper_cache_control(res, request)
 
     else:
-        raise Exception(f"Unknown render state: {r.state}")
+        raise Exception(f"Unknown render state: {render_to_display.state}")
 
 
 @never_cache

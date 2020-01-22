@@ -10,6 +10,7 @@ from .utils import (
     create_source_file_bulk_tarball,
     create_source_file,
     create_render_with_html,
+    patch_render_run,
 )
 
 
@@ -40,6 +41,90 @@ class PaperTest(TestCase):
         paper.save()
         self.assertEqual(Paper.objects.count(), 0)
         self.assertEqual(Paper.objects.deleted().count(), 1)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_no_renders(self, mock_run):
+        paper = create_paper(arxiv_id="1708.03313")
+        render = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_called_once()
+        self.assertEqual(render.state, Render.STATE_RUNNING)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_unexpired_successful_render(self, mock_run):
+        paper = create_paper(arxiv_id="1708.03313")
+        render = create_render(paper=paper, state=Render.STATE_SUCCESS)
+        render_returned = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_not_called()
+        self.assertEqual(render, render_returned)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_unexpired_failed_render(self, mock_run):
+        paper = create_paper(arxiv_id="1708.03313")
+        render = create_render(paper=paper, state=Render.STATE_FAILURE)
+        render_returned = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_not_called()
+        self.assertEqual(render, render_returned)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_expired_successful_render(self, mock_run):
+        paper = create_paper(arxiv_id="1708.03313")
+        render = create_render(paper=paper, state=Render.STATE_SUCCESS, is_expired=True)
+        render_returned = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_called_once()
+        self.assertEqual(render, render_returned)
+        self.assertEqual(paper.renders.count(), 2)
+        self.assertEqual(paper.renders.latest().state, Render.STATE_RUNNING)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_expired_failed_render(self, mock_run):
+        paper = create_paper(arxiv_id="1708.03313")
+        expired_render = create_render(
+            paper=paper, state=Render.STATE_FAILURE, is_expired=True
+        )
+        render_returned = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_called_once()
+        self.assertEqual(paper.renders.count(), 2)
+        new_render = paper.renders.latest()
+        self.assertEqual(new_render.state, Render.STATE_RUNNING)
+        self.assertEqual(new_render, render_returned)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_failed_and_successful_render(self, mock_run):
+        paper = create_paper(arxiv_id="1708.03313")
+        #  older successful render
+        successful_render = create_render(paper=paper, state=Render.STATE_SUCCESS)
+        failed_render = create_render(paper=paper, state=Render.STATE_FAILURE)
+        render_returned = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_not_called()
+        self.assertEqual(render_returned, successful_render)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_failed_render_and_expired_successful(
+        self, mock_run
+    ):
+        paper = create_paper(arxiv_id="1708.03313")
+        successful_render = create_render(
+            paper=paper, state=Render.STATE_SUCCESS, is_expired=True
+        )
+        failed_render = create_render(paper=paper, state=Render.STATE_FAILURE)
+        render_returned = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_not_called()
+        self.assertEqual(render_returned, successful_render)
+
+    @patch_render_run()
+    def test_get_render_to_display_with_expired_failed_and_successful_renders(
+        self, mock_run
+    ):
+        paper = create_paper(arxiv_id="1708.03313")
+        successful_render = create_render(
+            paper=paper, state=Render.STATE_SUCCESS, is_expired=True
+        )
+        failed_render = create_render(
+            paper=paper, state=Render.STATE_FAILURE, is_expired=True
+        )
+        render_returned = paper.get_render_to_display_and_render_if_needed()
+        mock_run.assert_called_once()
+        self.assertEqual(render_returned, successful_render)
 
 
 TEST_MEDIA_ROOT = os.path.join(settings.MEDIA_ROOT, "test")
