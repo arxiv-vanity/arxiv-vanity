@@ -151,6 +151,52 @@ class Paper(models.Model):
         self.save()
         return self.source_file
 
+    def get_render_to_display_and_render_if_needed(self, force_render=False):
+        """
+        Returns the render that should display for this paper, and kicks off
+        a new render if need be.
+        """
+        try:
+            render = self.renders.not_deleted().latest()
+        except Render.DoesNotExist:
+            render = None
+        if not render:
+            return self.render()
+
+        # Stuck for some reason, give it a boot
+        # This normally happens if there is an exception raised in render()
+        if render.state == Render.STATE_UNSTARTED:
+            # This will put it into running state
+            render = self.render()
+
+        # There is already a render running, so try and get the most recent one that isn't running
+        if render.state == Render.STATE_RUNNING:
+            try:
+                return self.renders.not_deleted().succeeded().latest()
+            except Render.DoesNotExist:
+                # If this is the only render or the other renders errored, display loading render
+                return render
+
+        elif render.state == Render.STATE_FAILURE:
+            # Kick off render if this one has expired
+            if render.is_expired() or force_render:
+                render = self.render()
+            # Try and display a successful render
+            try:
+                return self.renders.not_deleted().succeeded().latest()
+            # Otherwise, display the failed or running render
+            except Render.DoesNotExist:
+                return render
+
+        elif render.state == Render.STATE_SUCCESS:
+            # Kick off render in background if it has expired
+            if render.is_expired() or force_render:
+                self.render()
+            return render
+
+        else:
+            raise Exception(f"Unknown render state: {render.state}")
+
     def render(self):
         """
         Make a new render of this paper. Will download the source file and save
