@@ -74,7 +74,7 @@ def paper_detail(request, arxiv_id):
             try:
                 r = paper.renders.not_deleted().latest()
             except Render.DoesNotExist:
-                #  If it has expired or hasn't been started yet, render it!
+                #  If it hasn't been started yet, render it!
                 r = paper.render()
     except PaperIsNotRenderableError:
         res = render(

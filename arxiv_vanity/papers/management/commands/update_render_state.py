@@ -9,7 +9,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("Updating state...")
         Render.objects.update_state()
-        print("Updating expired status...")
-        Render.objects.delete_expired()
         print("Removing long running containers...")
         remove_long_running_containers()
