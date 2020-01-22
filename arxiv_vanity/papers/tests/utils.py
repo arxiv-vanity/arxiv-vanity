@@ -4,6 +4,7 @@ import shutil
 from unittest import mock
 import uuid
 from django.conf import settings
+from django.utils import timezone
 from ..models import Paper, Render, SourceFileBulkTarball, SourceFile, PaperQuerySet
 
 
@@ -56,14 +57,21 @@ def create_paper(
     )
 
 
-def create_render(paper=None, state=None):
-    return Render.objects.create(
+def create_render(paper=None, state=None, is_expired=False):
+    render = Render.objects.create(
         paper=paper or create_paper(), state=state or Render.STATE_UNSTARTED
     )
+    if is_expired:
+        render.created_at = datetime.datetime(1900, 1, 1).replace(tzinfo=timezone.utc)
+        render.save()
+        assert render.is_expired()
+    return render
 
 
-def create_render_with_html(paper=None):
-    render = create_render(paper=paper, state=Render.STATE_SUCCESS)
+def create_render_with_html(paper=None, is_expired=False):
+    render = create_render(
+        paper=paper, state=Render.STATE_SUCCESS, is_expired=is_expired
+    )
     source_path = os.path.join(os.path.dirname(__file__), "fixtures", "render.html")
     output_dir = os.path.join(settings.MEDIA_ROOT, "render-output", str(render.id))
     os.makedirs(output_dir)

@@ -1,7 +1,6 @@
 import datetime
 from django.conf import settings
 from django.test import TestCase, override_settings
-from django.utils import timezone
 import os
 import shutil
 from ..models import Render, Paper, SourceFile
@@ -65,8 +64,6 @@ class RenderTest(TestCase):
     def test_not_deleted(self):
         paper = create_paper()
         render1 = create_render(paper=paper)
-        render1.created_at = datetime.datetime(1900, 1, 1).replace(tzinfo=timezone.utc)
-        render1.save()
         render2 = create_render(paper=paper)
 
         # haven't updated deleted status yet
@@ -84,9 +81,7 @@ class RenderTest(TestCase):
 
     def test_expired(self):
         paper = create_paper()
-        render1 = create_render(paper=paper)
-        render1.created_at = datetime.datetime(1900, 1, 1).replace(tzinfo=timezone.utc)
-        render1.save()
+        render1 = create_render(paper=paper, is_expired=True)
         render2 = create_render(paper=paper)
 
         self.assertTrue(render1.is_expired())
