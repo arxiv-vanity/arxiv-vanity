@@ -1,9 +1,10 @@
+import datetime
 from django.contrib.sitemaps import Sitemap
+from django.utils import timezone
 from .papers.models import Paper
 
 
 class PaperSitemap(Sitemap):
-    changefreq = "monthly"
     priority = 0.5
     limit = 2000
 
@@ -12,6 +13,12 @@ class PaperSitemap(Sitemap):
 
     def lastmod(self, obj):
         return obj.updated
+
+    def changefreq(self, obj):
+        #  greater than 5 years ago, assume it ain't gonna change
+        if obj.updated < timezone.now() - datetime.timedelta(days=5 * 365):
+            return "yearly"
+        return "monthly"
 
 
 sitemaps = {"papers": PaperSitemap}
