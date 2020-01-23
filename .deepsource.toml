@@ -1,7 +1,16 @@
-  version = 1
+version = 1
 
-  [[analyzers]]
-  name = "python"
-  enabled = true
-  runtime_version = "3.x.x"
-  
+exclude_patterns = [
+  "arxiv_vanity/papers/migrations/**"
+]
+
+test_patterns = [
+  "arxiv_vanity/papers/tests/**",
+  "arxiv_vanity/scraper/tests/**",
+  "arxiv_vanity/tests/**"
+]
+
+[[analyzers]]
+name = "python"
+enabled = true
+runtime_version = "3.x.x"
