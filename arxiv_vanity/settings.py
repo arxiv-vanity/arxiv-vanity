@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sitemaps",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "django_rangepaginator",
@@ -233,4 +234,5 @@ PAPER_CACHE_SECONDS = env.int("PAPER_CACHE_SECONDS", default=60)
 
 ROOT_URL = env("ROOT_URL", default="http://localhost:8000")
 
-RANGE_PAGINATOR_TEMPLATE = 'django_rangepaginator/bootstrap4.html'
+RANGE_PAGINATOR_TEMPLATE = "django_rangepaginator/bootstrap4.html"
+

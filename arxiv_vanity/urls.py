@@ -6,6 +6,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, re_path
 from django.views.generic.base import TemplateView, RedirectView
 from .feedback.views import submit_feedback
@@ -20,6 +21,7 @@ from .papers.views import (
     stats,
 )
 from .scraper.arxiv_ids import ARXIV_ID_PATTERN
+from .sitemaps import PaperSitemap
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
@@ -57,6 +59,12 @@ urlpatterns = [
     path(
         "robots.txt",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+    ),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": {"papers": PaperSitemap}},
+        name="django.contrib.sitemaps.views.sitemap",
     ),
 ]
 
