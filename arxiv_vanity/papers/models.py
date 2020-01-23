@@ -103,8 +103,8 @@ class Paper(models.Model):
     primary_category = models.CharField(max_length=100)
     categories = ArrayField(models.CharField(max_length=100))
     comment = models.TextField(null=True, blank=True)
-    doi = models.CharField(null=True, blank=True, max_length=100)
-    journal_ref = models.TextField(null=True, blank=True, max_length=100)
+    doi = models.CharField(null=True, blank=True, max_length=255)
+    journal_ref = models.TextField(null=True, blank=True, max_length=255)
 
     # arXiv Vanity fields
     source_file = models.ForeignKey(
