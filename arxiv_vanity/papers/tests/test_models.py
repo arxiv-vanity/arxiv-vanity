@@ -199,6 +199,29 @@ class RenderTest(TestCase):
             os.path.exists(os.path.join(settings.MEDIA_ROOT, render.get_html_path()))
         )
 
+    def test_delete_older_renders_if_successful(self):
+        paper = create_paper()
+        render1 = create_render(paper=paper, state=Render.STATE_SUCCESS)
+        render2 = create_render(paper=paper, state=Render.STATE_SUCCESS)
+
+        render2.delete_older_renders_if_successful()
+
+        render1.refresh_from_db()
+        render2.refresh_from_db()
+        self.assertEqual(render1.is_deleted, True)
+        self.assertEqual(render2.is_deleted, False)
+
+    def test_delete_older_renders_if_not_successful(self):
+        paper = create_paper()
+        render1 = create_render(paper=paper, state=Render.STATE_SUCCESS)
+        render2 = create_render(paper=paper, state=Render.STATE_FAILURE)
+
+        render2.delete_older_renders_if_successful()
+
+        render1.refresh_from_db()
+        render2.refresh_from_db()
+        self.assertEqual(render1.is_deleted, False)
+        self.assertEqual(render2.is_deleted, False)
 
 class SourceFileBulkTarballTest(TestCase):
     def test_has_correct_number_of_items(self):

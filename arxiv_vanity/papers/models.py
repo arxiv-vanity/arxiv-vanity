@@ -242,6 +242,7 @@ class RenderQuerySet(models.QuerySet):
         for render in qs.iterator(chunk_size=100):
             try:
                 render.update_state()
+                render.delete_older_renders_if_successful()
             except:
                 log_exception()
         return self
@@ -437,6 +438,15 @@ class Render(models.Model):
         Delete output path.
         """
         storage_delete_path(default_storage, self.get_output_path())
+
+    def delete_older_renders_if_successful(self):
+        """
+        Delete any older undeleted renders if this render was successful.
+        """
+        if not self.state == Render.STATE_SUCCESS:
+            return
+        for render in self.paper.renders.not_deleted().filter(pk__lt=self.pk):
+            render.mark_as_deleted()
 
 
 class SourceFileBulkTarball(models.Model):

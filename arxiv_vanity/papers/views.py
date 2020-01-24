@@ -67,7 +67,9 @@ def paper_detail(request, arxiv_id):
             raise Http404(f"Paper '{arxiv_id}' not found on arXiv")
 
     try:
-        render_to_display = paper.get_render_to_display_and_render_if_needed(force_render=force_render)
+        render_to_display = paper.get_render_to_display_and_render_if_needed(
+            force_render=force_render
+        )
     except PaperIsNotRenderableError:
         res = render(
             request,
@@ -132,6 +134,7 @@ def paper_render_state(request, arxiv_id):
 def render_update_state(request, pk):
     r = get_object_or_404(Render, pk=pk, container_is_removed=False)
     r.update_state(exit_code=request.POST.get("exit_code"))
+    r.delete_older_renders_if_successful()
     return HttpResponse()
 
 
