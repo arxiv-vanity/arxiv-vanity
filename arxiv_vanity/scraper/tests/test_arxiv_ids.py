@@ -7,6 +7,9 @@ class ArxivIdsTest(TestCase):
         id, version = remove_version_from_arxiv_id("1709.09354v1")
         self.assertEqual((id, version), ("1709.09354", 1))
 
+        id, version = remove_version_from_arxiv_id("1709.09354V1")
+        self.assertEqual((id, version), ("1709.09354", 1))
+
         id, version = remove_version_from_arxiv_id("1709.09354")
         self.assertEqual((id, version), ("1709.09354", None))
 
@@ -15,3 +18,6 @@ class ArxivIdsTest(TestCase):
 
         id, version = remove_version_from_arxiv_id("astro-ph/0601001v402")
         self.assertEqual((id, version), ("astro-ph/0601001", 402))
+
+        id, version = remove_version_from_arxiv_id("Astro-ph/0601001v402")
+        self.assertEqual((id, version), ("Astro-ph/0601001", 402))

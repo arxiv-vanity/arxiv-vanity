@@ -1,7 +1,9 @@
 import re
 
-ARXIV_ID_PATTERN = r"([a-z\-]+(?:\.[A-Z]{2})?/\d{7}|\d+\.\d+)(v\d+)?"
-ARXIV_ID_RE = re.compile(ARXIV_ID_PATTERN, re.I)
+# These patterns need to be implemented case insensitive (e.g. [vV])
+# because Django doesn't let us add re.I to re_path() in URLs
+ARXIV_ID_PATTERN = r"([a-zA-Z\-]+(?:\.[a-zA-Z]{2})?/\d{7}|\d+\.\d+)([vV]\d+)?"
+ARXIV_ID_RE = re.compile(ARXIV_ID_PATTERN)
 ARXIV_URL_RE = re.compile(fr"arxiv.org/[^\/]+/({ARXIV_ID_PATTERN})(\.pdf)?", re.I)
 ARXIV_DOI_RE = re.compile(fr"^(?:arxiv:)?({ARXIV_ID_PATTERN})$", re.I)
 ARXIV_VANITY_RE = re.compile(
