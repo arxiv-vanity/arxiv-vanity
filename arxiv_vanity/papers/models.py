@@ -365,7 +365,11 @@ class Render(models.Model):
             that have reported their state in (1).
         """
         if self.state == Render.STATE_UNSTARTED:
-            raise RenderWrongStateError(f"Render {self.id} has not been started")
+            # The create container timeed out, but container ran anyway
+            # Clean up after it...
+            self.mark_as_deleted()
+            return
+
         client = create_client()
 
         try:
