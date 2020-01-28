@@ -12,7 +12,7 @@ from ..storage import storage_delete_path
 from ..utils import log_exception
 from .downloader import download_source_file
 from .processor import process_render
-from .renderer import render_paper, create_client
+from .renderer import render_paper, create_client, TooManyRendersRunningError
 
 
 class RenderError(Exception):
@@ -180,7 +180,13 @@ class Paper(models.Model):
         elif render.state == Render.STATE_FAILURE:
             # Kick off render if this one has expired
             if render.is_expired() or force_render:
-                render = self.render()
+                try:
+                    render = self.render()
+                except TooManyRendersRunningError:
+                    pass
+                except:
+                    # Don't block displaying render if kicking off failed
+                    log_exception()
             # Try and display a successful render
             try:
                 return self.renders.not_deleted().succeeded().latest()
@@ -191,7 +197,13 @@ class Paper(models.Model):
         elif render.state == Render.STATE_SUCCESS:
             # Kick off render in background if it has expired
             if render.is_expired() or force_render:
-                self.render()
+                try:
+                    self.render()
+                except TooManyRendersRunningError:
+                    pass
+                except:
+                    # Don't block displaying render if kicking off failed
+                    log_exception()
             return render
 
         else:

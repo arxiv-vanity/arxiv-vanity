@@ -236,3 +236,5 @@ ROOT_URL = env("ROOT_URL", default="http://localhost:8000")
 
 RANGE_PAGINATOR_TEMPLATE = "django_rangepaginator/bootstrap4.html"
 
+
+PAPERS_MAX_RENDERS_RUNNING = env.int("PAPERS_MAX_RENDERS_RUNNING", default=100)

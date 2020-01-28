@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView, ListView
 from .models import Paper, Render, PaperIsNotRenderableError
+from .renderer import TooManyRendersRunningError
 from ..scraper.arxiv_ids import (
     remove_version_from_arxiv_id,
     ARXIV_URL_RE,
@@ -78,6 +79,15 @@ def paper_detail(request, arxiv_id):
             status=404,
         )
         return add_paper_cache_control(res, request)
+    except TooManyRendersRunningError:
+        res = render(
+            request,
+            "papers/paper_detail_too_many_renders.html",
+            {"paper": paper},
+            status=503,
+        )
+        add_never_cache_headers(res)
+        return res
 
     # Switch response based on state
     if render_to_display.state == Render.STATE_RUNNING:

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ paper.title }}{% endblock %}
+{% block footer_class %}fixed{% endblock %}
+{% block content %}
+  <div class="arxiv-vanity-wrapper paper-detail-status">
+    <div class="paper-detail-status-inner">
+      <p>arXiv Vanity is under high load right now, so can't render this paper. Take a look at the <a href="{{ paper.get_https_pdf_url }}">original PDF</a> instead.</p>
+      <p><a href="/">Go back home</a></p>
+    </div>
+  </div>
+{% endblock %}

@@ -8,6 +8,10 @@ import tempfile
 from ..utils import log_exception
 
 
+class TooManyRendersRunningError(Exception):
+    """More than PAPERS_MAX_RENDERS_RUNNING are running"""
+
+
 def env_to_file(env):
     with tempfile.NamedTemporaryFile(delete=False) as f:
         f.write(os.environ[env].encode("utf-8"))
@@ -62,6 +66,10 @@ def render_paper(
     Render a source directory using Engrafo.
     """
     client = create_client()
+
+    renders_running = client.info()["ContainersRunning"]
+    if renders_running >= settings.PAPERS_MAX_RENDERS_RUNNING:
+        raise TooManyRendersRunningError(f"{renders_running} renders running, which is more than PAPERS_MAX_RENDERS_RUNNING")
 
     labels = {}
     environment = {
