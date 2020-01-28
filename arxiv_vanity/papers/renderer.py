@@ -69,7 +69,9 @@ def render_paper(
 
     renders_running = client.info()["ContainersRunning"]
     if renders_running >= settings.PAPERS_MAX_RENDERS_RUNNING:
-        raise TooManyRendersRunningError(f"{renders_running} renders running, which is more than PAPERS_MAX_RENDERS_RUNNING")
+        raise TooManyRendersRunningError(
+            f"{renders_running} renders running, which is more than PAPERS_MAX_RENDERS_RUNNING"
+        )
 
     labels = {}
     environment = {
@@ -150,9 +152,9 @@ def remove_long_running_containers():
         delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(
             container["Created"]
         )
-        if delta > datetime.timedelta(minutes=5):
+        if delta > datetime.timedelta(minutes=settings.PAPERS_MAX_RENDER_TIME_MINS):
             print(
-                f"Container {container['Id'][:12]} has been running for >5 mins, force removing"
+                f"Container {container['Id'][:12]} has been running for >{settings.PAPERS_MAX_RENDER_TIME_MINS} mins, force removing"
             )
             try:
                 client.api.remove_container(container["Id"], force=True)
