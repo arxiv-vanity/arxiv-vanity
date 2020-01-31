@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.template.defaultfilters import truncatechars
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 import json
 from .models import (
     Paper,
@@ -117,13 +116,13 @@ class RenderAdmin(admin.ModelAdmin):
     readonly_fields = RENDER_FIELDS
 
     def formatted_container_logs(self, obj):
-        return mark_safe(f"<pre>{obj.container_logs}</pre>")
+        return format_html("<pre>{}</pre>", obj.container_logs)
 
     formatted_container_logs.short_description = "Container logs"
 
     def formatted_container_inspect(self, obj):
         formatted = json.dumps(obj.container_inspect, indent=2)
-        return mark_safe(f"<pre>{formatted}</pre>")
+        return format_html("<pre>{}</pre>", formatted)
 
     formatted_container_inspect.short_description = "Container inspect"
 
