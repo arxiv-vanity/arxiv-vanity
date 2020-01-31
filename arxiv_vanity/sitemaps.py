@@ -1,4 +1,5 @@
 import datetime
+from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 from django.utils import timezone
 from .papers.models import Paper
@@ -7,6 +8,7 @@ from .papers.models import Paper
 class PaperSitemap(Sitemap):
     priority = 0.5
     limit = 2000
+    protocol = 'https' if settings.ENABLE_SSL else 'http'
 
     def items(self):
         return Paper.objects.only("arxiv_id", "updated").all()
