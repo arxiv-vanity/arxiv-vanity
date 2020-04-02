@@ -2,6 +2,8 @@ version: '3'
 services:
   db:
     image: postgres:10
+    environment:
+      POSTGRES_PASSWORD: postgres
   web:
     build: .
     stdin_open: true
@@ -17,6 +19,7 @@ services:
     environment:
       DEBUG: "true"
       SECRET_KEY: "not secure only use for development"
+      DATABASE_URL: "psql://postgres:postgres@db:5432/postgres"
       DOCKER_HOST: "unix:///var/run/docker.sock"
       HOST_PWD: "${PWD}"
       GITHUB_ACCESS_TOKEN: "${GITHUB_ACCESS_TOKEN}"
