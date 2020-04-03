@@ -16,7 +16,7 @@ vcrpy==2.0.1
 django-db-geventpool==3.2.0
 gevent==1.4.0
 pylint==2.4.4
-pylint-django==2.0.13
+pylint-django==2.0.14
 black==19.10b0
 randomcolor==0.4.4.5
 django-rangepaginator==1.2.0
