@@ -242,3 +242,5 @@ PAPERS_MAX_RENDERS_RUNNING = env.int("PAPERS_MAX_RENDERS_RUNNING", default=100)
 
 # Max time a render can run in mins
 PAPERS_MAX_RENDER_TIME_MINS = env.int("PAPERS_MAX_RENDER_TIME_MINS", default=10)
+
+SITEMAP_LIMIT = env.int("SITEMAP_LIMIT", default=45000)

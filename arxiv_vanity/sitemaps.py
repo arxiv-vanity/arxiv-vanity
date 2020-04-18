@@ -7,7 +7,7 @@ from .papers.models import Paper
 
 class PaperSitemap(Sitemap):
     priority = 0.5
-    limit = 10000
+    limit = settings.SITEMAP_LIMIT
     protocol = "https" if settings.ENABLE_SSL else "http"
 
     def items(self):
