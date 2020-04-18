@@ -52,6 +52,11 @@ urlpatterns = [
         render_update_state,
         name="render_update_state",
     ),
+    re_path(
+        fr"papers/(?P<arxiv_id>{ARXIV_ID_PATTERN})/update-version/",
+        paper_render_state,
+        name="paper_render_state",
+    ),
     path("convert/", paper_convert, name="paper_convert"),
     path("submit-feedback/", submit_feedback),
     path("stats/", stats),
