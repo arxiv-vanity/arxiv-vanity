@@ -95,7 +95,7 @@ class Paper(models.Model):
     arxiv_version = models.IntegerField()
     title = models.TextField()
     published = models.DateTimeField()
-    updated = models.DateTimeField()
+    updated = models.DateTimeField(db_index=True)
     summary = models.TextField()
     authors = JSONField()
     arxiv_url = models.URLField()
@@ -116,7 +116,6 @@ class Paper(models.Model):
 
     class Meta:
         get_latest_by = "updated"
-        ordering = ["-updated"]
 
     def __str__(self):
         return self.title
@@ -185,7 +184,7 @@ class Paper(models.Model):
                 except TooManyRendersRunningError:
                     pass
                 except:
-                    # Don't block displaying render if kicking off failed
+                    #  Don't block displaying render if kicking off failed
                     log_exception()
             # Try and display a successful render
             try:
@@ -202,7 +201,7 @@ class Paper(models.Model):
                 except TooManyRendersRunningError:
                     pass
                 except:
-                    # Don't block displaying render if kicking off failed
+                    #  Don't block displaying render if kicking off failed
                     log_exception()
             return render
 

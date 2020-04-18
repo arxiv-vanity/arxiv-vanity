@@ -41,7 +41,7 @@ class PaperListView(ListView):
 
     def get_queryset(self):
         qs = super(PaperListView, self).get_queryset()
-        return qs.machine_learning().has_successful_render()
+        return qs.machine_learning().has_successful_render().order_by("-updated")
 
     def dispatch(self, *args, **kwargs):
         res = super(PaperListView, self).dispatch(*args, **kwargs)
