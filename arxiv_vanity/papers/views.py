@@ -140,7 +140,7 @@ def paper_update(request, arxiv_id):
         return redirect("paper_update", arxiv_id=arxiv_id)
 
     try:
-        paper, _ = Paper.objects.update_or_create_from_arxiv_id(arxiv_id)
+        _, _ = Paper.objects.update_or_create_from_arxiv_id(arxiv_id)
     except PaperNotFoundError:
         raise Http404(f"Paper '{arxiv_id}' not found on arXiv")
     return redirect("paper_detail", arxiv_id=arxiv_id)
