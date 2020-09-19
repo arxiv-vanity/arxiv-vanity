@@ -150,11 +150,15 @@ class Paper(models.Model):
         self.save()
         return self.source_file
 
-    def get_render_to_display_and_render_if_needed(self, force_render=False):
+    def get_render_to_display_and_render_if_needed(self, force_render=False, no_render=False):
         """
         Returns the render that should display for this paper, and kicks off
         a new render if need be.
         """
+        # If we're not doing any rendering, just return the latest succeeded render
+        if no_render:
+            return self.renders.not_deleted().succeeded().latest()
+
         try:
             render = self.renders.not_deleted().latest()
         except Render.DoesNotExist:

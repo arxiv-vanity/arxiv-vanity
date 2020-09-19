@@ -50,6 +50,7 @@ class PaperListView(ListView):
 
 def paper_detail(request, arxiv_id):
     force_render = "render" in request.GET
+    no_render = "no-render" in request.GET
 
     arxiv_id, version = remove_version_from_arxiv_id(arxiv_id)
     if version is not None:
@@ -69,8 +70,12 @@ def paper_detail(request, arxiv_id):
 
     try:
         render_to_display = paper.get_render_to_display_and_render_if_needed(
-            force_render=force_render
+            force_render=force_render,
+            no_render=no_render,
         )
+    # This will only get raised when no_render is true
+    except Render.DoesNotExist:
+        raise Http404("No render found for this paper, and not rendering")
     except PaperIsNotRenderableError:
         res = render(
             request,
