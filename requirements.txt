@@ -1,5 +1,5 @@
 Django==2.2.13
-psycopg2-binary==2.8.4
+psycopg2-binary==2.8.6
 django-environ==0.4.5
 gunicorn==20.0.4
 whitenoise==4.1.4
@@ -13,8 +13,8 @@ boto3==1.5.0
 PyGithub==1.43.8
 sentry-sdk==0.14.1
 vcrpy==2.0.1
-django-db-geventpool==3.2.0
-gevent==1.4.0
+django-db-geventpool==3.2.3
+gevent==20.9.0
 pylint==2.4.4
 pylint-django==2.0.13
 black==19.10b0
