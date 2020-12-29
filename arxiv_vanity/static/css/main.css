@@ -18,10 +18,13 @@ body {
 
 .arxiv-vanity-wrapper a,
 .arxiv-vanity-wrapper a:hover {
-  color: rgba(0, 0, 0, 0.8);
-  text-decoration: none;
-  color: inherit;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  color: #7c7ec1;
+}
+
+.arxiv-vanity-wrapper a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .arxiv-vanity-wrapper a.image-link {
@@ -46,45 +49,21 @@ body {
 
 /* Components */
 
+.arxiv-vanity-wrapper .navbar {
+  padding: 1em;
+  border-bottom: 1px solid #666;
+}
+
+.arxiv-vanity-wrapper .navbar-brand {
+  white-space: inherit;
+}
+
 .badge {
   padding: 0.4rem 0.5rem;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
   font-weight: normal;
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-}
-
-.navbar-container {
-  background-color: hsla(0, 59%, 40%, 0.9);
-}
-
-.navbar {
-  padding: 1em 0;
-}
-
-.navbar .navbar-brand {
-  color: rgba(255, 255, 255, 1) !important;
-  font-size: 1em;
-  letter-spacing: 0.01rem;
-  font-weight: 400;
-  margin-right: 0;
-  border-bottom: none;
-}
-
-.navbar .navbar-brand:hover {
-  border-bottom: none;
-}
-
-.navbar .nav-link {
-  font-size: 0.9em;
-  border-bottom: 0;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-@media (min-width: 768px) {
-  .navbar .nav-link {
-    padding-right: 1em !important;
-  }
 }
 
 .arxiv-vanity-wrapper footer {
@@ -192,29 +171,28 @@ body {
   margin-bottom: 4rem;
 }
 
-.wtf-is-this-bar {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  /*color: rgba(0,0,0,0.5);*/
-  background: rgb(250, 250, 250);
-  position: relative;
-  padding: 1rem 14px;
-  font-size: 14px;
-  text-align: center;
+.arxiv-vanity-wrapper nav {
+  border-bottom: 1px solid #666;
+  padding: 1rem;
+}
+
+.arxiv-vanity-wrapper nav p {
+  padding-top: 0.3rem;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 @media (min-width: 768px) {
-  .wtf-is-this-bar {
-    font-size: 16px;
-    padding: 1rem 2rem;
+  .arxiv-vanity-wrapper nav {
+    display: flex;
+    align-items: start;
   }
-}
 
-.wtf-is-this-bar p:last-child {
-  margin-bottom: 0;
-}
-
-.wtf-is-this-bar strong {
-  font-weight: 600;
+  .arxiv-vanity-wrapper nav p {
+    flex: 1;
+    margin: 0;
+    margin-right: 1em;
+  }
 }
 
 .page-home-inner {
