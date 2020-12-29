@@ -1,2 +1,0 @@
-dist: xenial
-script: script/test
