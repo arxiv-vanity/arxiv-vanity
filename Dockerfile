@@ -10,4 +10,5 @@ RUN SECRET_KEY=unset python manage.py collectstatic --no-input
 ENV WEB_CONCURRENCY 3
 ENV WORKER_CONNECTIONS 100
 ENV PORT 8000
+ENV NEW_RELIC_CONFIG_FILE=newrelic.ini
 CMD newrelic-admin run-program gunicorn arxiv_vanity.wsgi -k gevent --worker-connections $WORKER_CONNECTIONS --bind 0.0.0.0:$PORT --config gunicorn_config.py --max-requests 10000 --max-requests-jitter 1000 --access-logfile -
