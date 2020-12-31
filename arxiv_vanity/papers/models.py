@@ -300,6 +300,7 @@ class Render(models.Model):
             (STATE_SUCCESS, "Success"),
             (STATE_FAILURE, "Failure"),
         ),
+        db_index=True,
     )
     is_deleted = models.BooleanField(default=False)
     container_id = models.CharField(max_length=64, null=True, blank=True)
