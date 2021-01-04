@@ -9,5 +9,7 @@
   "python.linting.pylintArgs": [
     "--load-plugins=pylint_django"
   ],
-  "python.pythonPath": "/usr/local/bin/python"
+  "python.pythonPath": "/usr/local/bin/python",
+  "python.testing.unittestEnabled": true,
+  "python.languageServer": "Pylance"
 }

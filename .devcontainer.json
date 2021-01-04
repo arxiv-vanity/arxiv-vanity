@@ -5,6 +5,7 @@
     "ms-python.python",
     "sibiraj-s.vscode-scss-formatter",
     "esbenp.prettier-vscode",
-    "batisteo.vscode-django"
+    "batisteo.vscode-django",
+    "ms-python.vscode-pylance"
   ]
 }
