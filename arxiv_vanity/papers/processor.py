@@ -5,7 +5,9 @@ import re
 from ..scraper.arxiv_ids import ARXIV_URL_RE
 
 
-EMAIL_RE = re.compile(r"[a-z0-9!#$%&'*+/=?^_`{|}~,-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|},~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+EMAIL_RE = re.compile(
+    r"[a-z0-9!#$%&'*+/=?^_`{|}~,-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|},~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+)
 
 
 def process_render(fh, path_prefix, context):
@@ -56,11 +58,11 @@ def process_render(fh, path_prefix, context):
         if img:
             first_image = img["src"]
             break
-    
+
     # Remove all emails
     for el in soup.findAll(text=True):
         text = str(el)
-        new_text = EMAIL_RE.sub('', text)
+        new_text = EMAIL_RE.sub("", text)
         if new_text != text:
             el.replaceWith(new_text)
 
@@ -73,7 +75,7 @@ def process_render(fh, path_prefix, context):
         #  stuff that's in the <body> gets included above
         "links": "".join(e.prettify() for e in soup.head.find_all("link")),
         "styles": "".join(e.prettify() for e in soup.head.find_all("style")),
-        "scripts": "".join(e.prettify() for e in soup.head.find_all("scripts")),
+        "scripts": "".join(e.prettify() for e in soup.head.find_all("script")),
         "abstract": abstract,
         "first_image": first_image,
     }
