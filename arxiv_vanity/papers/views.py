@@ -41,7 +41,8 @@ class PaperListView(ListView):
 
     def get_queryset(self):
         qs = super(PaperListView, self).get_queryset()
-        return qs.machine_learning().has_successful_render().order_by("-updated")
+        # FIXME: this used to call has_successful_render() but was way to inefficient. reinstate when that is efficient.
+        return qs.machine_learning().order_by("-updated")
 
     def dispatch(self, *args, **kwargs):
         res = super(PaperListView, self).dispatch(*args, **kwargs)
@@ -70,8 +71,7 @@ def paper_detail(request, arxiv_id):
 
     try:
         render_to_display = paper.get_render_to_display_and_render_if_needed(
-            force_render=force_render,
-            no_render=no_render,
+            force_render=force_render, no_render=no_render,
         )
     # This will only get raised when no_render is true
     except Render.DoesNotExist:

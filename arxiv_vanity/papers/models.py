@@ -39,6 +39,7 @@ class PaperQuerySet(models.QuerySet):
         return self.annotate(has_successful_render=models.Exists(renders))
 
     def has_successful_render(self):
+        # FIXME: this is insanely inefficient. should probably be replaced with `has_successful_render` calculated field
         qs = self._with_has_successful_render_annotation()
         return qs.filter(has_successful_render=True)
 
@@ -150,7 +151,9 @@ class Paper(models.Model):
         self.save()
         return self.source_file
 
-    def get_render_to_display_and_render_if_needed(self, force_render=False, no_render=False):
+    def get_render_to_display_and_render_if_needed(
+        self, force_render=False, no_render=False
+    ):
         """
         Returns the render that should display for this paper, and kicks off
         a new render if need be.
