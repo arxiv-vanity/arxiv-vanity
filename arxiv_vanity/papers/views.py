@@ -32,7 +32,8 @@ class HomeView(TemplateView):
 
     def dispatch(self, *args, **kwargs):
         res = super(HomeView, self).dispatch(*args, **kwargs)
-        return add_paper_cache_control(res)
+        patch_cache_control(res, public=True, max_age=24 * 60 * 60)
+        return res
 
 
 class PaperListView(ListView):
@@ -46,7 +47,8 @@ class PaperListView(ListView):
 
     def dispatch(self, *args, **kwargs):
         res = super(PaperListView, self).dispatch(*args, **kwargs)
-        return add_paper_cache_control(res)
+        patch_cache_control(res, public=True, max_age=24 * 60 * 60)
+        return res
 
 
 def paper_detail(request, arxiv_id):

@@ -28,7 +28,7 @@ urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path(
         "papers/",
-        cache_control(public=True, max_age=24 * 60 * 60)(PaperListView.as_view()),
+        PaperListView.as_view(),
         name="paper_list",
     ),
     path("papers/feed/", LatestPapersFeed(), name="paper_feed"),

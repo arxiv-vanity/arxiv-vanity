@@ -31,7 +31,7 @@ class PaperListViewTest(TestCase):
         )
         create_render(paper=paper5, state=Render.STATE_SUCCESS)
         res = self.client.get("/papers/")
-        self.assertEqual(res["Cache-Control"], "public, max-age=60")
+        self.assertEqual(res["Cache-Control"], f"public, max-age=86400")
         # FIXME: has_success_render() is too slow
         # self.assertNotIn("Paper no render", str(res.content))
         # self.assertNotIn("Paper unstarted render", str(res.content))
@@ -62,7 +62,9 @@ class PaperDetailViewTest(TestCase):
         res = self.client.get("/papers/1234.5678/")
         self.assertEqual(res.status_code, 200)
         content = res.content.decode("utf-8")
-        self.assertEqual(res["Cache-Control"], "public, max-age=60")
+        self.assertEqual(
+            res["Cache-Control"], f"public, max-age={settings.PAPER_CACHE_SECONDS}"
+        )
         # using .count() because multiple copies of script were inserted at one point
         self.assertEqual(
             content.count("Some paper"), 3
@@ -110,7 +112,9 @@ class PaperDetailViewTest(TestCase):
         )
         res = self.client.get("/papers/1234.5678/")
         self.assertEqual(res.status_code, 404)
-        self.assertEqual(res["Cache-Control"], "public, max-age=60")
+        self.assertEqual(
+            res["Cache-Control"], f"public, max-age={settings.PAPER_CACHE_SECONDS}"
+        )
         # FIXME: quotes aren't working in this, so just check this substr
         self.assertIn("have LaTeX source code", str(res.content))
         self.assertIn("https://arxiv.org/pdf/1234.5678", str(res.content))
@@ -151,7 +155,9 @@ class PaperDetailViewTest(TestCase):
         render = create_render(paper=paper, state=Render.STATE_FAILURE)
         res = self.client.get("/papers/1234.5678/")
         self.assertEqual(res.status_code, 500)
-        self.assertEqual(res["Cache-Control"], "public, max-age=60")
+        self.assertEqual(
+            res["Cache-Control"], f"public, max-age={settings.PAPER_CACHE_SECONDS}"
+        )
         self.assertIn(
             'The paper "Theory of everything" failed to render', str(res.content)
         )
