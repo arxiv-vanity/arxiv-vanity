@@ -90,13 +90,17 @@ DATABASES = {
     "default": env.db("DATABASE_URL", default="psql://postgres@db:5432/postgres")
 }
 DATABASES["default"].update(
-    {
-        "ENGINE": "django_db_geventpool.backends.postgresql_psycopg2",
-        "ATOMIC_REQUESTS": False,
-        "CONN_MAX_AGE": 0,
-        "OPTIONS": {"MAX_CONNS": env.int("DATABASE_MAX_CONNS", default=4)},
-    }
+    {"ATOMIC_REQUESTS": False,}
 )
+
+if os.environ.get("WORKER_CLASS") == "gevent":
+    DATABASES["default"].update(
+        {
+            "ENGINE": "django_db_geventpool.backends.postgresql_psycopg2",
+            "CONN_MAX_AGE": 0,
+            "OPTIONS": {"MAX_CONNS": env.int("DATABASE_MAX_CONNS", default=4)},
+        }
+    )
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
