@@ -1,3 +1,10 @@
-Sitemap: https://www.arxiv-vanity.com/sitemap.xml
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
 User-agent: *
 Allow: /
+
+Sitemap: https://www.arxiv-vanity.com/sitemap.xml
