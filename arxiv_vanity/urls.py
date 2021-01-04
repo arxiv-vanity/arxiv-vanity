@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from fastsitemaps import views as sitemap_views
 from django.urls import path, re_path
+from django.views.decorators.cache import cache_control, never_cache
 from django.views.generic.base import TemplateView, RedirectView
 from .feedback.views import submit_feedback
 from .papers.feeds import LatestPapersFeed
@@ -25,7 +26,11 @@ from .sitemaps import sitemaps
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
-    path("papers/", PaperListView.as_view(), name="paper_list"),
+    path(
+        "papers/",
+        cache_control(public=True, max_age=24 * 60 * 60)(PaperListView.as_view()),
+        name="paper_list",
+    ),
     path("papers/feed/", LatestPapersFeed(), name="paper_feed"),
     re_path(
         fr"papers/(?P<arxiv_id>{ARXIV_ID_PATTERN})/$", paper_detail, name="paper_detail"
@@ -60,10 +65,14 @@ urlpatterns = [
         "robots.txt",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
-    path("sitemap.xml", sitemap_views.index, {"sitemaps": sitemaps}),
+    path(
+        "sitemap.xml",
+        cache_control(public=True, max_age=7 * 24 * 60 * 60)(sitemap_views.index),
+        {"sitemaps": sitemaps},
+    ),
     path(
         "sitemap-<section>.xml",
-        sitemap_views.sitemap,
+        cache_control(public=True, max_age=7 * 24 * 60 * 60)(sitemap_views.sitemap),
         {"sitemaps": sitemaps},
         name="fastsitemaps.views.sitemap",
     ),

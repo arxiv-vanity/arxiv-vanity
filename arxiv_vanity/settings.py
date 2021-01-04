@@ -230,7 +230,7 @@ PAPERS_EXPIRED_DAYS = env.int("PAPERS_EXPIRED_DAYS", default=7)
 
 
 # Caching
-PAPER_CACHE_SECONDS = env.int("PAPER_CACHE_SECONDS", default=60)
+PAPER_CACHE_SECONDS = env.int("PAPER_CACHE_SECONDS", default=7 * 24 * 60 * 60)
 
 ROOT_URL = env("ROOT_URL", default="http://localhost:8000")
 
