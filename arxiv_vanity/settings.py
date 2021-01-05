@@ -90,7 +90,7 @@ DATABASES = {
     "default": env.db("DATABASE_URL", default="psql://postgres@db:5432/postgres")
 }
 DATABASES["default"].update(
-    {"ATOMIC_REQUESTS": False,}
+    {"ATOMIC_REQUESTS": False, "CONN_MAX_AGE": 60,}
 )
 
 if os.environ.get("WORKER_CLASS") == "gevent":
