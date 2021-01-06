@@ -31,7 +31,7 @@ class ProcessorTest(unittest.TestCase):
 <a href="http://example.com" target="_blank">Hello</a>
 <div class="ltx_abstract"><p>Science was done</p></div>
 <figure class="ltx_figure"><img src="prefix/first_image.gif"/></figure>
-<script src="prefix/script.js"/>
+<script src="prefix/script.js"></script>
 """,
         )
         self.assertEqual(output["links"], '<link href="prefix/style.css">\n')

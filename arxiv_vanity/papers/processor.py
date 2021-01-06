@@ -28,6 +28,8 @@ def process_render(fh, path_prefix, context):
 
     for el in html.xpath("//script[@src]"):
         el.attrib["src"] = os.path.join(path_prefix, el.attrib["src"])
+        # lxml will turn it into <script /> without this, which seems to be invalid html
+        el.text = ""
 
     for el in html.xpath("//img[@src]"):
         if not el.attrib["src"].startswith("data:"):
