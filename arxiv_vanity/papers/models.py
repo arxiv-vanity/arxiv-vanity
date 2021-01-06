@@ -111,7 +111,7 @@ class Paper(models.Model):
     source_file = models.ForeignKey(
         "SourceFile", on_delete=models.SET_NULL, null=True, blank=True
     )
-    is_deleted = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False, db_index=True)
 
     objects = PaperManager.from_queryset(PaperQuerySet)()
 
