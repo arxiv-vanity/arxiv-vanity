@@ -3,7 +3,6 @@
 html,
 body {
   height: 100%;
-  color: black;
 }
 
 .arxiv-vanity-wrapper {
@@ -43,7 +42,7 @@ body {
 
 .arxiv-vanity-wrapper .btn-primary,
 .arxiv-vanity-wrapper .btn-primary:hover {
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.8);
   border-color: rgba(0, 0, 0, 0.8);
   color: #fff;
 }
@@ -196,18 +195,6 @@ body {
   }
 }
 
-.arxiv-vanity-wrapper .promo {
-  background: black;
-  color: white;
-  padding: 1rem;
-}
-.arxiv-vanity-wrapper .promo a, 
-.arxiv-vanity-wrapper .promo a:hover  {
-  color: white;
-  text-decoration: underline;
-  text-underline-offset: 1px;
-}
-
 .page-home-inner {
   margin: 2em;
   margin-top: 6em;
@@ -249,4 +236,3 @@ body {
   text-align: center;
   margin: 6em 0 2em 0;
 }
-
