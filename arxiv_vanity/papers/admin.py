@@ -25,6 +25,14 @@ class HasSuccessfulRenderListFilter(admin.SimpleListFilter):
             return queryset.has_no_successful_render()
 
 
+class RenderInline(admin.TabularInline):
+    model = Render
+    fields = ["id", "created_at", "state", "is_deleted", "container_id", "container_is_removed"]
+    readonly_fields = ["created_at"]
+    show_change_link = True
+    extra = 0
+
+
 class PaperAdmin(admin.ModelAdmin):
     actions = ["render"]
     list_display = [
@@ -40,6 +48,9 @@ class PaperAdmin(admin.ModelAdmin):
     search_fields = ["arxiv_id", "title"]
     raw_id_fields = ("source_file",)
     ordering = ["-updated"]
+    inlines = [
+        RenderInline,
+    ]
 
     def has_source_file(self, obj):
         return bool(obj.source_file)
@@ -97,7 +108,7 @@ mark_as_deleted.short_description = "Mark selected renders as deleted"
 class RenderAdmin(admin.ModelAdmin):
     list_display = [
         "created_at",
-        "short_paper_title",
+        "paper_link",
         "state",
         "short_container_id",
         "is_deleted",
@@ -131,6 +142,10 @@ class RenderAdmin(admin.ModelAdmin):
         return truncatechars(obj.paper.title, 70)
 
     short_paper_title.short_description = "Paper"
+
+    def paper_link(self, obj):
+        return format_html("<a href='../paper/{}/'>{}</a>", obj.paper.pk, self.short_paper_title(obj))
+    paper_link.short_description = "Paper"
 
 
 admin.site.register(Render, RenderAdmin)
