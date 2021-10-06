@@ -17,7 +17,7 @@ from ..scraper.arxiv_ids import (
     ARXIV_VANITY_RE,
 )
 from ..scraper.query import PaperNotFoundError
-
+import requests
 
 def add_paper_cache_control(response, request=None):
     if request and "nocache" in request.GET:
@@ -156,12 +156,19 @@ def render_update_state(request, pk):
 
 
 def convert_query_to_arxiv_id(query):
+    # follow redirects?
     query = query.strip()
     for regex in [ARXIV_URL_RE, ARXIV_DOI_RE, ARXIV_VANITY_RE]:
         match = regex.search(query)
         if match:
             return match.group(1)
 
+def get_redirected_url(query):
+    try:
+        resp = requests.get("https://linkunshorten.com/api/link?url=" + query)
+        return resp.json().get('redirectUrl')
+    except:
+        return query
 
 @never_cache
 def paper_convert(request):
@@ -174,6 +181,9 @@ def paper_convert(request):
             },
         )
     arxiv_id = convert_query_to_arxiv_id(request.GET["query"])
+    if not arxiv_id:
+        # follow redirects
+        arxiv_id = convert_query_to_arxiv_id(get_redirected_url(request.GET["query"]))
     if not arxiv_id:
         return render(
             request,
