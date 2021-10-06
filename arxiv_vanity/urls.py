@@ -13,6 +13,7 @@ from django.views.generic.base import TemplateView, RedirectView
 from .feedback.views import submit_feedback
 from .papers.feeds import LatestPapersFeed
 from .papers.views import (
+    AboutView,
     HomeView,
     PaperListView,
     paper_detail,
@@ -26,6 +27,7 @@ from .sitemaps import sitemaps
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
+    re_path("about?/", AboutView.as_view(), name="about"),
     path(
         "papers/",
         PaperListView.as_view(),

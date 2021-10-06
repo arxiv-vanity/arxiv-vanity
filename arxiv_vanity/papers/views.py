@@ -35,6 +35,14 @@ class HomeView(TemplateView):
         patch_cache_control(res, public=True, max_age=24 * 60 * 60)
         return res
 
+class AboutView(TemplateView):
+    template_name = "papers/about.html"
+
+    def dispatch(self, *args, **kwargs):
+        res = super(AboutView, self).dispatch(*args, **kwargs)
+        patch_cache_control(res, public=True, max_age=24 * 60 * 60)
+        return res
+
 
 class PaperListView(ListView):
     model = Paper
