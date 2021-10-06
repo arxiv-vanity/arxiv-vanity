@@ -12,7 +12,11 @@ Into this:
 
 This is the web interface for viewing papers. The actual LaTeX to HTML conversion (the interesting bit) is done by [Engrafo](https://github.com/arxiv-vanity/engrafo).
 
-## Running in development
+## Contributing
+
+Anyone can contribute to this project.
+
+### Running in development
 
 Install Docker for Mac or Windows.
 
@@ -37,11 +41,11 @@ You can scrape the latest papers from arXiv by running:
 
 It'll probably fetch quite a lot, so hit `ctrl-C` when you've got enough.
 
-## Running tests
+### Running tests
 
     $ script/test
 
-## Using a development version of Engrafo
+### Using a development version of Engrafo
 
 [Engrafo](https://github.com/arxiv-vanity/engrafo) is the LaTeX to HTML converter. If you are working on Engrafo, you might want to use the version you are working on locally.
 
@@ -53,7 +57,7 @@ Then, in the arXiv Vanity directory (the same one this readme is in), create a f
 ENGRAFO_IMAGE=engrafo-dev
 ```
 
-## VS Code development environment
+### VS Code development environment
 
 This project is configured with a dev container to get completions, etc inside VS Code. When VS Code opens, click "reopen in container" in the popup and it'll run the development environment inside the same container used by `docker-compose`.
 
