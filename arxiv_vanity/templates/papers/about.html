@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% load humanize %} {% load papers %} {% block
+whole_title %}arXiv Vanity – Read academic papers from arXiv as web pages{%
+endblock %} {% block footer_class %}fixed{% endblock %} {% block extra_head %}
+<meta name="description" content="About the arXiv vanity website." />
+{% endblock %} {% block content %}
+<div class="arxiv-vanity-wrapper">
+  <div class="page-home">
+    <div class="page-home-inner text-center">
+      <p class="tagline">About arXiv Vanity</p>
+      <div class="d-block">
+        <p>
+          arXiv Vanity started as a project by
+          <a href="https://fir.sh/" target="_blank">Ben Firshman</a> to read
+          research papers a little more clearly. Now it has helped more than
+          ____ users to read ___ papers as web pages, not PDFs.
+        </p>
+        <p>
+          This tool is open-source. See how it works (or request an improvement)
+          on <a href="https://github.com/arxiv-vanity/arxiv-vanity">GitHub</a>.
+        </p>
+        <p>
+          <a href="/">Visit the tool here</a>. You can also use it as a
+          <a href="/" target="_blank">bookmarklet</a>,
+          <a
+            href="https://github.com/arxiv-vanity/arxiv-vanity/issues/67"
+            target="_blank"
+            >browser extension</a
+          >, or
+          <a
+            href="https://play.google.com/store/apps/details?id=com.arxivvanity.application"
+            target="_blank"
+            >Android app</a
+          >.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  mixpanel.track("View About Page");
+</script>
+
+{% endblock %}
