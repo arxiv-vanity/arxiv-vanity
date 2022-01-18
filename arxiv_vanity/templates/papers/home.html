@@ -7,83 +7,213 @@
 {% block footer_class %}fixed{% endblock %}
 
 {% block extra_head %}
-  <meta name="description" content="Renders papers from arXiv as responsive web pages so you don't have to squint at a PDF.">
+<meta name="description"
+  content="Renders papers from arXiv as responsive web pages so you don't have to squint at a PDF.">
 {% endblock %}
 
 {% block content %}
-  <div class="arxiv-vanity-wrapper">
-    <div class="page-home">
-      <div class="page-home-inner text-center">
-        <p class="tagline">arXiv Vanity renders academic papers from <a href="https://arxiv.org/">arXiv</a> as responsive web pages so you don&rsquo;t have to squint at a PDF. <!-- <a href="/about/">Learn more.</a> --></p>
-        <div class="d-none d-md-block">
-          <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
-            <div class="input-group input-group-lg">
-              <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL" autofocus>
-              <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary">Convert to web page</button>
-              </span>
-            </div>
-          </form>
-        </div>
-        <div class="d-md-none">
-          <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
-            <div class="form-group">
-              <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
-            </div>
-            <button type="submit" class="btn btn-primary">Convert to web page</button>
-          </form>
-        </div>
-        <p><small>For example, <a href="/papers/1710.07035/" class="home-example-paper">Generative Adversarial Networks: An Overview</a></small></p>
-        <p class="bookmarklet"><small>To convert papers with one click, drag this bookmarklet to your bookmarks bar:</p><p><a href="javascript:(function(){window.location='https://www.arxiv-vanity.com/convert/?query='+encodeURIComponent(window.location)})()" class="btn btn-primary ml-1">arXiv to web page 💅</a></small></p>
+<div class="arxiv-vanity-wrapper">
+  <div class="page-home">
+    <div class="page-home-inner text-center">
+      <p class="tagline">arXiv Vanity renders academic papers from <a href="https://arxiv.org/">arXiv</a> as responsive
+        web pages so you don&rsquo;t have to squint at a PDF.
+        <!-- <a href="/about/">Learn more.</a> -->
+      </p>
+      <div class="d-none d-md-block">
+        <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
+          <div class="input-group input-group-lg">
+            <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL" autofocus>
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary">Convert to web page</button>
+            </span>
+          </div>
+        </form>
       </div>
+      <div class="d-md-none">
+        <form class="mt-5 mb-3" method="get" action="{% url 'paper_convert' %}">
+          <div class="form-group">
+            <input type="text" name="query" value="" class="form-control" placeholder="Enter an arXiv URL">
+          </div>
+          <button type="submit" class="btn btn-primary">Convert to web page</button>
+        </form>
+      </div>
+      <p><small>For example, <a href="/papers/1710.07035/" class="home-example-paper">Generative Adversarial Networks:
+            An Overview</a></small></p>
+      <p class="bookmarklet"><small>To convert papers with one click, drag this bookmarklet to your bookmarks bar:</p>
+      <p><a
+          href="javascript:(function(){window.location='https://www.arxiv-vanity.com/convert/?query='+encodeURIComponent(window.location)})()"
+          class="btn btn-primary ml-1">arXiv to web page 💅</a></small></p>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  var HOME_EXAMPLE_PAPERS = [
-    {"id": "1710.07035", "title": "Generative Adversarial Networks: An Overview"},
-    {"id": "1708.00884", "title": "Efficient Fingerprint Extraction and Matching Using Smartphone Camera"},
-    {"id": "1709.00440", "title": "PassGAN: A Deep Learning Approach for Password Guessing"},
-    {"id": "1710.06542", "title": "Asymmetric Actor Critic for Image-Based Robot Learning"},
-    {"id": "1703.07815", "title": "Cross-View Image Matching for Geo-localization in Urban Environments"},
-    {"id": "1603.09382", "title": "Deep Networks with Stochastic Depth"},
-    {"id": "1709.06126", "title": "How intelligent are convolutional neural networks?"},
-    {"id": "1811.11707", "title": "Few-Shot Generalization Across Dialogue Tasks"},
-    {"id": "1605.07683", "title": "Learning End-to-End Goal-Oriented Dialog"},
-    {"id": "1512.03385", "title": "Deep Residual Learning for Image Recognition"},
-    {"id": "1708.05866", "title": "A Brief Survey of Deep Reinforcement Learning"},
-    {"id": "1712.01208", "title": "The Case for Learned Index Structures"},
-    {"id": "1801.04486", "title": "Can Computers Create Art?"},
-    {"id": "1603.04467", "title": "TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems"},
-    {"id": "1904.01766", "title": "VideoBERT: A Joint Model for Video and Language Representation Learning"},
-    {"id": "1308.0850", "title": "Generating Sequences With Recurrent Neural Networks"},
-    {"id": "1408.2927", "title": "Hashing for Similarity Search: A Survey"},
-    {"id": "1205.2930", "title": "Density Sensitive Hashing"},
-    {"id": "1904.08653", "title": "Fooling automated surveillance cameras: adversarial patches to attack person detection"},
-    {"id": "1509.01147", "title": "The Information Paradox for Black Holes"},
-    {"id": "hep-th/9808085", "title": "Gravitational Entropy and Global Structure"},
-    {"id": "1503.02531", "title": "Distilling the Knowledge in a Neural Network"},
-    {"id": "1312.6082", "title": "Multi-digit Number Recognition from Street View Imagery using Deep Convolutional Neural Networks"},
-    {"id": "1406.2661", "title": "Generative Adversarial Nets"},
-    {"id": "1409.1556", "title": "Very Deep Convolutional Networks for Large-Scale Image Recognition"},
-    {"id": "1512.02595", "title": "Deep Speech 2: End-to-End Speech Recognition in English and Mandarin"},
-    {"id": "1312.5602", "title": "Playing Atari with Deep Reinforcement Learning"},
-    {"id": "1712.00080", "title": "Super SloMo: High Quality Estimation of Multiple Intermediate Frames for Video Interpolation"},
-    {"id": "1502.03808", "title": "Gravitational Lensing by Spinning Black Holes in Astrophysics, and in the Movie Interstellar"},
-    {"id": "1704.04861", "title": "MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications"},
-    {"id": "1108.2700", "title": "It was twenty years ago today…"},
-    {"id": "1502.03167", "title": "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift"},
-    {"id": "1511.06434", "title": "Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks"},
-    {"id": "1311.2901", "title": "Visualizing and Understanding Convolutional Networks"},
-    {"id": "1506.08126", "title": "Humor in Collective Discourse: Unsupervised Funniness Detection in the New Yorker Cartoon Caption Contest"},
-    {"id": "1807.10553", "title": "Blueberry Earth"},
-    {"id": "1705.04085v3", "title": "Automatic Extrinsic Calibration for Lidar-Stereo Vehicle Sensor Setups"},
-    {"id": "1708.06733", "title": "BadNets: Identifying Vulnerabilities in the Machine Learning Model Supply Chain"},
-    {"id": "1710.07505", "title": "Probabilistic Analysis of the Dual-Pivot Quicksort “Count”"},
-    {"id": "1911.07246", "title": "IKEA Furniture Assembly Environment for Long-Horizon Complex Manipulation Tasks"},
-    {"id": "1412.6980", "title": "Adam: A Method for Stochastic Optimization"},
+  var HOME_EXAMPLE_PAPERS = [{
+      "id": "1710.07035",
+      "title": "Generative Adversarial Networks: An Overview"
+    },
+    {
+      "id": "1708.00884",
+      "title": "Efficient Fingerprint Extraction and Matching Using Smartphone Camera"
+    },
+    {
+      "id": "1709.00440",
+      "title": "PassGAN: A Deep Learning Approach for Password Guessing"
+    },
+    {
+      "id": "1710.06542",
+      "title": "Asymmetric Actor Critic for Image-Based Robot Learning"
+    },
+    {
+      "id": "1703.07815",
+      "title": "Cross-View Image Matching for Geo-localization in Urban Environments"
+    },
+    {
+      "id": "1603.09382",
+      "title": "Deep Networks with Stochastic Depth"
+    },
+    {
+      "id": "1709.06126",
+      "title": "How intelligent are convolutional neural networks?"
+    },
+    {
+      "id": "1811.11707",
+      "title": "Few-Shot Generalization Across Dialogue Tasks"
+    },
+    {
+      "id": "1605.07683",
+      "title": "Learning End-to-End Goal-Oriented Dialog"
+    },
+    {
+      "id": "1512.03385",
+      "title": "Deep Residual Learning for Image Recognition"
+    },
+    {
+      "id": "1708.05866",
+      "title": "A Brief Survey of Deep Reinforcement Learning"
+    },
+    {
+      "id": "1712.01208",
+      "title": "The Case for Learned Index Structures"
+    },
+    {
+      "id": "1801.04486",
+      "title": "Can Computers Create Art?"
+    },
+    {
+      "id": "1603.04467",
+      "title": "TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems"
+    },
+    {
+      "id": "1904.01766",
+      "title": "VideoBERT: A Joint Model for Video and Language Representation Learning"
+    },
+    {
+      "id": "1308.0850",
+      "title": "Generating Sequences With Recurrent Neural Networks"
+    },
+    {
+      "id": "1408.2927",
+      "title": "Hashing for Similarity Search: A Survey"
+    },
+    {
+      "id": "1205.2930",
+      "title": "Density Sensitive Hashing"
+    },
+    {
+      "id": "1904.08653",
+      "title": "Fooling automated surveillance cameras: adversarial patches to attack person detection"
+    },
+    {
+      "id": "1509.01147",
+      "title": "The Information Paradox for Black Holes"
+    },
+    {
+      "id": "hep-th/9808085",
+      "title": "Gravitational Entropy and Global Structure"
+    },
+    {
+      "id": "1503.02531",
+      "title": "Distilling the Knowledge in a Neural Network"
+    },
+    {
+      "id": "1312.6082",
+      "title": "Multi-digit Number Recognition from Street View Imagery using Deep Convolutional Neural Networks"
+    },
+    {
+      "id": "1406.2661",
+      "title": "Generative Adversarial Nets"
+    },
+    {
+      "id": "1409.1556",
+      "title": "Very Deep Convolutional Networks for Large-Scale Image Recognition"
+    },
+    {
+      "id": "1512.02595",
+      "title": "Deep Speech 2: End-to-End Speech Recognition in English and Mandarin"
+    },
+    {
+      "id": "1312.5602",
+      "title": "Playing Atari with Deep Reinforcement Learning"
+    },
+    {
+      "id": "1712.00080",
+      "title": "Super SloMo: High Quality Estimation of Multiple Intermediate Frames for Video Interpolation"
+    },
+    {
+      "id": "1502.03808",
+      "title": "Gravitational Lensing by Spinning Black Holes in Astrophysics, and in the Movie Interstellar"
+    },
+    {
+      "id": "1704.04861",
+      "title": "MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications"
+    },
+    {
+      "id": "1108.2700",
+      "title": "It was twenty years ago today…"
+    },
+    {
+      "id": "1502.03167",
+      "title": "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift"
+    },
+    {
+      "id": "1511.06434",
+      "title": "Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks"
+    },
+    {
+      "id": "1311.2901",
+      "title": "Visualizing and Understanding Convolutional Networks"
+    },
+    {
+      "id": "1506.08126",
+      "title": "Humor in Collective Discourse: Unsupervised Funniness Detection in the New Yorker Cartoon Caption Contest"
+    },
+    {
+      "id": "1807.10553",
+      "title": "Blueberry Earth"
+    },
+    {
+      "id": "1705.04085v3",
+      "title": "Automatic Extrinsic Calibration for Lidar-Stereo Vehicle Sensor Setups"
+    },
+    {
+      "id": "1708.06733",
+      "title": "BadNets: Identifying Vulnerabilities in the Machine Learning Model Supply Chain"
+    },
+    {
+      "id": "1710.07505",
+      "title": "Probabilistic Analysis of the Dual-Pivot Quicksort “Count”"
+    },
+    {
+      "id": "1911.07246",
+      "title": "IKEA Furniture Assembly Environment for Long-Horizon Complex Manipulation Tasks"
+    },
+    {
+      "id": "1412.6980",
+      "title": "Adam: A Method for Stochastic Optimization"
+    },
 
     // disabled
     // \shortcite
@@ -100,7 +230,7 @@
     // {"id": "1710.06363", "title": "The Case for Future Hadron Colliders From B → K(*)μ+μ- Decays"},
 
   ];
-  (function() {
+  (function () {
     var example = HOME_EXAMPLE_PAPERS[Math.floor(Math.random() * HOME_EXAMPLE_PAPERS.length)];
     var exampleEl = document.querySelector(".home-example-paper");
     exampleEl.setAttribute("href", "/papers/" + example.id + "/");
