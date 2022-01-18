@@ -6,6 +6,12 @@
     "sibiraj-s.vscode-scss-formatter",
     "esbenp.prettier-vscode",
     "batisteo.vscode-django",
-    "ms-python.vscode-pylance"
+    "dbaeumer.vscode-eslint",
+    "ms-python.vscode-pylance",
+    "hookyqr.beautify",
+    "bradlc.vscode-tailwindcss",
+    "ms-azuretools.vscode-docker",
+    "csstools.postcss",
+    "knisterpeter.vscode-github"
   ]
 }

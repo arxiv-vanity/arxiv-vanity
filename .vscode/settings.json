@@ -1,15 +1,70 @@
 {
+  "beautify.language": {
+    "html": ["htm", "html", "django-html"]
+  },
   "editor.formatOnSave": true,
+  "editor.renderControlCharacters": true,
+  "editor.suggest.localityBonus": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
   "files.associations": {
     "**/*.html": "html",
     "**/templates/**/*.html": "django-html",
     "**/templates/**/*": "django-txt"
   },
+  "tailwindCSS.includeLanguages": {
+    "django-html": "html"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[django-html]": {
+    "editor.tabSize": 2,
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.wordWrap": "on",
+    "editor.defaultFormatter": "HookyQR.beautify"
+  },
+  "[html]": {
+    "editor.tabSize": 2,
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.defaultFormatter": "HookyQR.beautify"
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "python.formatting.provider": "black",
+  "python.languageServer": "Pylance",
   "python.linting.pylintArgs": [
-    "--load-plugins=pylint_django"
+    "--load-plugins",
+    "pylint_django",
+    "--disable=C0111"
   ],
-  "python.pythonPath": "/usr/local/bin/python",
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.pytestEnabled": false,
+  "python.pythonPath": "/usr/local/bin/python3",
   "python.testing.unittestEnabled": true,
-  "python.languageServer": "Pylance"
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./replicate_web",
+    "-p",
+    "test_*.py"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  }
 }
