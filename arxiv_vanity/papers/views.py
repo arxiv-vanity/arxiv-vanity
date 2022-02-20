@@ -61,7 +61,8 @@ def paper_detail(request, arxiv_id):
 
     # Get the requested paper
     try:
-        paper = Paper.objects.get(arxiv_id=arxiv_id)
+        version = get_latest_version(arxiv_id)
+        paper = Paper.objects.get(arxiv_id=arxiv_id, arxiv_version=version)
     # If it doesn't exist, fetch from arXiv API
     except Paper.DoesNotExist:
         # update_or_create to avoid the race condition where several people
@@ -134,6 +135,12 @@ def paper_detail(request, arxiv_id):
 
     else:
         raise Exception(f"Unknown render state: {render_to_display.state}")
+
+
+def get_latest_version(arxiv_id):
+    resp = requests.get("https://export.arxiv.org/api/query?id_list=" + arxiv_id)
+    version = resp.text[resp.text.find('title="pdf" ')+18:].split('"')[0].split('v')[-1]
+    return int(version)
 
 
 @never_cache
