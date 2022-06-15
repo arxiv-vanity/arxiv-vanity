@@ -1,6 +1,6 @@
 Django==2.2.26
 psycopg2-binary==2.8.6
-django-environ==0.4.5
+django-environ==0.9.0
 gunicorn==20.0.4
 whitenoise==4.1.4
 requests==2.25.1
