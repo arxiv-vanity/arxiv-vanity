@@ -6,7 +6,7 @@ whitenoise==4.1.4
 requests==2.25.1
 python-dateutil==2.8.2
 docker==4.1.0
-lxml==4.6.5
+lxml==4.9.1
 lxml-stubs==0.3.0
 django-storages==1.11.1
 boto3==1.5.0
