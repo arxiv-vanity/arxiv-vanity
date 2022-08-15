@@ -20,5 +20,5 @@ pylint-django==2.3.0
 black==21.12b0
 randomcolor==0.4.4.6
 django-rangepaginator==1.2.0
-newrelic==5.24.0.153
+newrelic==8.0.0.179
 git+https://github.com/FullFact/django-fastsitemaps.git@b9e53399dce0fa113d9cb1ef74e333b09d50d339#egg=django-fastsitemaps
